@@ -3,6 +3,8 @@ import QuestionHeader from "./header/headerView";
 import Question from "./question/questionView";
 import { useQuestionPage } from "../../../hooks/useQuestionPage";
 import { QuestionPageProps } from "../../../types/pageTypes";
+import Box from "@mui/material/Box";
+import { Typography } from "@mui/material";
 
 /**
  * A container component that displays a list of questions
@@ -29,7 +31,7 @@ const QuestionPage = ({
         setQuestionOrder={setQuestionOrder}
         handleNewQuestion={handleNewQuestion}
       />
-      <div id="question_list" className="question_list">
+      <Box id="question_list" className="question_list">
         {qlist.map((q, idx) => (
           <Question
             q={q}
@@ -38,9 +40,11 @@ const QuestionPage = ({
             handleAnswer={handleAnswer}
           />
         ))}
-      </div>
+      </Box>
       {title_text === "Search Results" && !qlist.length && (
-        <div className="bold_title right_padding">No Questions Found</div>
+        <Typography variant="h6" className="bold_title right_padding">
+          <strong>No Questions Found</strong>
+        </Typography>
       )}
     </>
   );

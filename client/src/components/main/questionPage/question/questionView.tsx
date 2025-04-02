@@ -1,6 +1,9 @@
 import "./questionView.css";
 import { getMetaData } from "../../../../utils";
 import { QuestionProps } from "../../../../types/pageTypes";
+import Box from "@mui/material/Box";
+import Button from "@mui/material/Button";
+import { Typography } from "@mui/material";
 
 /**
  * A component to display a question
@@ -10,43 +13,45 @@ import { QuestionProps } from "../../../../types/pageTypes";
  */
 const Question = ({ q, clickTag, handleAnswer }: QuestionProps) => {
   return (
-    <div
+    <Box
       className="question right_padding"
       onClick={() => {
         handleAnswer(q._id);
       }}
     >
-      <div className="postStats">
-        <div>{q.answers.length || 0} answers</div>
-        <div>{q.views} views</div>
-      </div>
-      <div className="question_mid">
-        <div className="postTitle">{q.title}</div>
-        <div className="question_tags">
+      <Box className="postStats">
+        <Typography>{q.answers.length || 0} answers</Typography>
+        <Typography>{q.views} views</Typography>
+      </Box>
+      <Box className="question_mid">
+        <Typography className="postTitle">{q.title}</Typography>
+        <Box className="question_tags">
           {q.tags.map((tag, idx) => {
             return (
-              <button
+              <Button
+                size="small"
                 key={idx}
                 className="question_tag_button"
                 onClick={(e) => {
                   e.stopPropagation();
                   clickTag(tag.name);
                 }}
+                variant="contained"
               >
                 {tag.name}
-              </button>
+              </Button>
             );
           })}
-        </div>
-      </div>
-      <div className="lastActivity">
-        <div className="question_author">{q.asked_by}</div>
-        <div>&nbsp;</div>
-        <div className="question_meta">
+        </Box>
+      </Box>
+      <Box className="lastActivity">
+        <Typography className="question_author">{q.asked_by}</Typography>
+        <Typography>&nbsp;</Typography>
+        <Typography className="question_meta">
           asked {getMetaData(new Date(q.ask_date_time))}
-        </div>
-      </div>
-    </div>
+        </Typography>
+      </Box>
+    </Box>
   );
 };
 

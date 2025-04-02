@@ -1,5 +1,6 @@
 import "./headerView.css";
 import { AnswerHeaderProps } from "../../../../types/pageTypes";
+import Button from "@mui/material/Button";
 
 /**
  * The header of the answer page
@@ -15,14 +16,15 @@ const AnswerHeader = ({
     <div id="answersHeader" className="space_between right_padding">
       <div className="bold_title">{ansCount} answers</div>
       <div className="bold_title answer_question_title">{title}</div>
-      <button
+      <Button
+        variant="contained"
         className="bluebtn"
         onClick={() => {
           handleNewQuestion();
         }}
       >
         Ask a Question
-      </button>
+      </Button>
     </div>
   );
 };
