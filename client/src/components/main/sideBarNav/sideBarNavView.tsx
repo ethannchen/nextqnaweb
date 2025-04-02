@@ -1,5 +1,6 @@
 import "./sideBarNavView.css";
 import { VoidFunctionType } from "../../../types/functionTypes";
+import Box from "@mui/material/Box";
 
 // The type definition for the SideBarNav component props
 interface SideBarNavProps {
@@ -12,7 +13,7 @@ interface SideBarNavProps {
  * The sidebar component is composed of two buttons, one for questions and one for tags.
  * The selected prop is used to determine which button is selected.
  * The handleQuestions and handleTags functions are used to handle the click events for the buttons.
- * @param props contains the selected prop, handleQuestions function, and handleTags function 
+ * @param props contains the selected prop, handleQuestions function, and handleTags function
  * @returns the Sidebar component
  */
 const SideBarNav = ({
@@ -21,8 +22,8 @@ const SideBarNav = ({
   handleTags,
 }: SideBarNavProps) => {
   return (
-    <div id="sideBarNav" className="sideBarNav">
-      <div
+    <Box id="sideBarNav" className="sideBarNav">
+      <Box
         id="menu_question"
         className={`menu_button ${selected === "q" ? "menu_selected" : ""}`}
         onClick={() => {
@@ -30,8 +31,8 @@ const SideBarNav = ({
         }}
       >
         Questions
-      </div>
-      <div
+      </Box>
+      <Box
         id="menu_tag"
         className={`menu_button ${selected === "t" ? "menu_selected" : ""}`}
         onClick={() => {
@@ -39,8 +40,8 @@ const SideBarNav = ({
         }}
       >
         Tags
-      </div>
-    </div>
+      </Box>
+    </Box>
   );
 };
 
