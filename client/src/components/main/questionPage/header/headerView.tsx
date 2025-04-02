@@ -21,7 +21,7 @@ const QuestionHeader = ({
     <Box>
       <Box className="space_between right_padding">
         <Typography variant="h5" className="bold_title">
-          <strong>{title_text}</strong>
+          {title_text}
         </Typography>
         <Button
           variant="contained"

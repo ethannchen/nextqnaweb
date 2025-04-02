@@ -1,7 +1,7 @@
 .answer_question_meta {
-    color: #bbbbbb;
+  color: #bbbbbb;
 }
 
 .ansButton {
-    margin: 2% 0 2% 2%;
+  margin: 2% 0 2% 2% !important;
 }

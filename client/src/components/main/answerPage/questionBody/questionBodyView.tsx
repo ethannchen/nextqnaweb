@@ -1,5 +1,7 @@
 import "./questionBodyView.css";
 import { QuestionBodyProps } from "../../../../types/pageTypes";
+import Box from "@mui/material/Box";
+import { Typography } from "@mui/material";
 
 /**
  * The component renders the meta data of the question displaying all answers of a question.
@@ -8,14 +10,16 @@ import { QuestionBodyProps } from "../../../../types/pageTypes";
  */
 const QuestionBody = ({ views, text, askby, meta }: QuestionBodyProps) => {
   return (
-    <div id="questionBody" className="questionBody right_padding">
-      <div className="bold_title answer_question_view">{views} views</div>
-      <div className="answer_question_text">{text}</div>
-      <div className="answer_question_right">
-        <div className="question_author">{askby}</div>
-        <div className="answer_question_meta">asked {meta}</div>
-      </div>
-    </div>
+    <Box id="questionBody" className="questionBody right_padding">
+      <Typography variant="h6" className="bold_title answer_question_view">
+        {views} views
+      </Typography>
+      <Typography className="answer_question_text">{text}</Typography>
+      <Box className="answer_question_right">
+        <Typography className="question_author">{askby}</Typography>
+        <Typography className="answer_question_meta">asked {meta}</Typography>
+      </Box>
+    </Box>
   );
 };
 

@@ -25,7 +25,7 @@ const Header = ({ search, setQuestionPage }: HeaderProps) => {
     <Box id="header" className="header">
       <Box></Box>
       <Typography variant="h4" className="title">
-        <strong>Fake Stack Overflow</strong>
+        Fake Stack Overflow
       </Typography>
       <TextField
         variant="outlined"

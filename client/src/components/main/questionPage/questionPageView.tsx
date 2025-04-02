@@ -43,7 +43,7 @@ const QuestionPage = ({
       </Box>
       {title_text === "Search Results" && !qlist.length && (
         <Typography variant="h6" className="bold_title right_padding">
-          <strong>No Questions Found</strong>
+          No Questions Found
         </Typography>
       )}
     </>
