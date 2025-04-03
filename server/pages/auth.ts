@@ -3,28 +3,48 @@ import User from "../models/users";
 import jwt from "jsonwebtoken";
 import bcrypt from "bcryptjs";
 import dotenv from "dotenv";
+import {
+  validateSignupMiddleware,
+  RequestWithSignupInfo,
+} from "../sanitizers/validateSignupMiddleware";
 
 dotenv.config();
 const router = express.Router();
 
 // Sign-up route
-router.post("/signup", async (req: Request, res: Response) => {
-  const { username, email, password } = req.body;
-  //   res.status(201).json({ message: "User registered successfully" });
+router.post(
+  "/signup",
+  validateSignupMiddleware,
+  async (req: RequestWithSignupInfo, res: Response) => {
+    const { username, email, password } = req.body;
 
-  try {
-    const existingUser = await User.findOne({ email });
-    if (existingUser)
-      return res.status(400).json({ error: "User already exists" });
+    try {
+      // Check if the email already exists
+      const existingUserByEmail = await User.findByEmail(email);
+      if (existingUserByEmail) {
+        return res.status(400).json({ error: "Email is already registered" });
+      }
 
-    const newUser = new User({ username, email, password });
-    await newUser.save();
+      // Check if the username already exists
+      const existingUserByUsername = await User.findByUsername(username);
+      if (existingUserByUsername) {
+        return res.status(400).json({ error: "Username is already taken" });
+      }
 
-    res.status(201).json({ message: "User registered successfully" });
-  } catch (error) {
-    res.status(500).json({ error: "Internal Server Error" + error });
+      const newUser = await User.createUser({ username, email, password });
+
+      // Respond with success
+      res
+        .status(201)
+        .json({ message: `User ${newUser.username} registered successfully` });
+    } catch (error) {
+      console.error(error); // Log error for debugging
+      res
+        .status(500)
+        .json({ error: "Internal Server Error. Please try again later." });
+    }
   }
-});
+);
 
 // Login route
 router.post("/login", async (req: Request, res: Response) => {
