@@ -10,6 +10,7 @@ import path from "path";
 import tagRouter from "./pages/tag";
 import questionRouter from "./pages/question";
 import answerRouter from "./pages/answer";
+import authRouter from "./pages/auth";
 
 const MONGO_URL: string = "mongodb://127.0.0.1:27017/fake_so";
 const CLIENT_URL: string = "http://localhost:3000";
@@ -94,6 +95,9 @@ app.use("/question", questionRouter);
 
 // use answer server to handle tag related requests
 app.use("/answer", answerRouter);
+
+// use auth server to handle tag related requests
+app.use("/auth", authRouter);
 
 // The middleware function to handle errors.
 app.use(
