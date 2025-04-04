@@ -4,6 +4,9 @@ import Input from "../baseComponents/input/inputView";
 import Textarea from "../baseComponents/textarea/textAreaView";
 import { useNewQuestion } from "../../../hooks/useNewQuestion";
 import { NewQuestionProps } from "../../../types/pageTypes";
+import Box from "@mui/material/Box";
+import Button from "@mui/material/Button";
+import { Typography } from "@mui/material";
 
 /**
  * The component renders the form for posting a new question.
@@ -63,12 +66,19 @@ const NewQuestion = ({ handleQuestions }: NewQuestionProps) => {
         setState={setUsrn}
         err={usrnErr}
       />
-      <div className="btn_indicator_container">
-        <button className="form_postBtn" onClick={postQuestion}>
+      <Box className="btn_indicator_container">
+        <Button
+          variant="contained"
+          size="small"
+          className="form_postBtn"
+          onClick={postQuestion}
+        >
           Post Question
-        </button>
-        <div className="mandatory_indicator">* indicates mandatory fields</div>
-      </div>
+        </Button>
+        <Typography className="mandatory_indicator" variant="body2">
+          * indicates mandatory fields
+        </Typography>
+      </Box>
     </Form>
   );
 };

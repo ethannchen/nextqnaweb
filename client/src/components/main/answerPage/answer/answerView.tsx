@@ -1,5 +1,7 @@
 import "./answerView.css";
 import { AnswerProps } from "../../../../types/pageTypes";
+import Box from "@mui/material/Box";
+import { Typography } from "@mui/material";
 
 /**
  * The component to render an answer in the answer page
@@ -8,15 +10,15 @@ import { AnswerProps } from "../../../../types/pageTypes";
  */
 const Answer = ({ text, ansBy, meta }: AnswerProps) => {
   return (
-    <div className="answer right_padding">
-      <div id="answerText" className="answerText">
+    <Box className="answer right_padding">
+      <Typography id="answerText" className="answerText">
         {text}
-      </div>
-      <div className="answerAuthor">
-        <div className="answer_author">{ansBy}</div>
-        <div className="answer_question_meta">{meta}</div>
-      </div>
-    </div>
+      </Typography>
+      <Box className="answerAuthor">
+        <Typography className="answer_author">{ansBy}</Typography>
+        <Typography className="answer_question_meta">{meta}</Typography>
+      </Box>
+    </Box>
   );
 };
 

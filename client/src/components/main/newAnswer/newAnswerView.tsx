@@ -4,6 +4,10 @@ import Input from "../baseComponents/input/inputView";
 import Textarea from "../baseComponents/textarea/textAreaView";
 import { useNewAnswer } from "../../../hooks/useNewAnswer";
 import { NewAnswerProps } from "../../../types/pageTypes";
+import Box from "@mui/material/Box";
+import Button from "@mui/material/Button";
+import { Typography } from "@mui/material";
+import React from "react";
 
 /**
  * The component renders a form to post a new answer to a question.
@@ -33,12 +37,19 @@ const NewAnswer = ({ qid, handleAnswer }: NewAnswerProps) => {
         setState={setText}
         err={textErr}
       />
-      <div className="btn_indicator_container">
-        <button className="form_postBtn" onClick={postAnswer}>
+      <Box className="btn_indicator_container">
+        <Button
+          variant="contained"
+          size="small"
+          className="form_postBtn"
+          onClick={postAnswer}
+        >
           Post Answer
-        </button>
-        <div className="mandatory_indicator">* indicates mandatory fields</div>
-      </div>
+        </Button>
+        <Typography className="mandatory_indicator" variant="body2">
+          * indicates mandatory fields
+        </Typography>
+      </Box>
     </Form>
   );
 };

@@ -5,6 +5,7 @@ import "./answerPageView.css";
 import QuestionBody from "./questionBody/questionBodyView";
 import { AnswerPageProps } from "../../../types/pageTypes";
 import { useAnswerPage } from "../../../hooks/useAnswerPage";
+import Button from "@mui/material/Button";
 
 /**
  * The component renders all the answers for a question.
@@ -45,14 +46,16 @@ const AnswerPage = ({
           meta={getMetaData(new Date(a.ans_date_time))}
         />
       ))}
-      <button
-        className="bluebtn ansButton"
+      <Button
+        size="small"
+        variant="contained"
+        className="ansButton"
         onClick={() => {
           handleNewAnswer();
         }}
       >
         Answer Question
-      </button>
+      </Button>
     </>
   );
 };

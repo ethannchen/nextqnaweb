@@ -1,26 +1,22 @@
 .input_title {
-    margin-bottom: 8px;
-    font-weight: bold;
+  margin-bottom: 8px !important;
+  font-weight: bold !important;
 }
 
 .input_hint {
-    font-size: 14px;
-    color: black;
-    margin-bottom: 5px;
-    font-style: italic;
-    margin-left: 10px;
+  margin-bottom: 5px !important;
+  font-style: italic;
+  margin-left: 10px;
 }
 
 .input_input {
-    width: 100%;
-    box-sizing: border-box;
-    padding: 10px;
-    margin-bottom: 20px;
-    border: 1px solid #ccc;
-    border-radius: 4px;
+  width: 100%;
+  margin-bottom: 20px !important;
+  border: 1px solid #ccc;
+  border-radius: 4px;
 }
 
 .input_error {
-    color: red;
-    margin-bottom: 20px;
+  color: red;
+  margin-bottom: 20px !important;
 }

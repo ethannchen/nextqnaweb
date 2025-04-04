@@ -1,6 +1,9 @@
 import "./index.css";
 import { HeaderProps } from "../../types/pageTypes";
 import { useHeader } from "../../hooks/useHeader";
+import { Typography } from "@mui/material";
+import Box from "@mui/material/Box";
+import TextField from "@mui/material/TextField";
 
 /**
  * The header component for the Fake Stack Overflow application.
@@ -19,18 +22,22 @@ const Header = ({ search, setQuestionPage }: HeaderProps) => {
   );
 
   return (
-    <div id="header" className="header">
-      <div></div>
-      <div className="title">Fake Stack Overflow</div>
-      <input
+    <Box id="header" className="header">
+      <Box></Box>
+      <Typography variant="h4" className="title">
+        Fake Stack Overflow
+      </Typography>
+      <TextField
+        variant="outlined"
+        size="small"
         id="searchBar"
         placeholder="Search ..."
         type="text"
         value={val}
         onChange={handleInputChange}
-        onKeyDown={handleKeyDown}
+        InputProps={{ onKeyDown: handleKeyDown }}
       />
-    </div>
+    </Box>
   );
 };
 

@@ -5,6 +5,9 @@ import {
   VoidFunctionType,
   ClickTagFunctionType,
 } from "../../../types/functionTypes";
+import Button from "@mui/material/Button";
+import Box from "@mui/material/Box";
+import { Typography } from "@mui/material";
 
 // The type definition for the props of the TagPage component
 interface TagPageProps {
@@ -23,18 +26,22 @@ const TagPage = ({ clickTag, handleNewQuestion }: TagPageProps) => {
 
   return (
     <>
-      <div className="space_between right_padding">
-        <div className="bold_title">{tlist.length} Tags</div>
-        <div className="bold_title">All Tags</div>
-        <button className="bluebtn" onClick={handleNewQuestion}>
+      <Box className="space_between right_padding">
+        <Typography className="bold_title" variant="h5">
+          {tlist.length} Tags
+        </Typography>
+        <Typography className="bold_title" variant="h5">
+          All Tags
+        </Typography>
+        <Button variant="contained" onClick={handleNewQuestion}>
           Ask a Question
-        </button>
-      </div>
-      <div className="tag_list right_padding">
+        </Button>
+      </Box>
+      <Box className="tag_list right_padding">
         {tlist.map((t, idx) => (
           <Tag key={idx} t={t} clickTag={clickTag} />
         ))}
-      </div>
+      </Box>
     </>
   );
 };
