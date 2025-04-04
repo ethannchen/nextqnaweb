@@ -2,7 +2,9 @@ import React, { useState } from 'react';
 import SignupDialog from './signup/SignupDialog';  // Import the renamed SignupDialog component
 import { HeaderProps } from "../../types/pageTypes";
 import { useHeader } from "../../hooks/useHeader";
-import Button from '@mui/material/Button';
+import { Typography, Button } from "@mui/material";
+import Box from "@mui/material/Box";
+import TextField from "@mui/material/TextField";
 
 const Header = ({ search, setQuestionPage }: HeaderProps) => {
   const [openDialog, setOpenDialog] = useState(false);
@@ -17,22 +19,26 @@ const Header = ({ search, setQuestionPage }: HeaderProps) => {
   };
 
   return (
-    <div id="header" className="header">
-      <div></div>
-      <div className="title">Fake Stack Overflow</div>
-      <input
+    <Box id="header" className="header">
+      <Box></Box>
+      <Typography variant="h4" className="title">
+        Fake Stack Overflow
+      </Typography>
+      <TextField
+        variant="outlined"
+        size="small"
         id="searchBar"
         placeholder="Search ..."
         type="text"
         value={val}
         onChange={handleInputChange}
-        onKeyDown={handleKeyDown}
+        InputProps={{ onKeyDown: handleKeyDown }}
       />
       <Button variant="outlined" onClick={handleOpenDialog}>
         Sign Up
       </Button>
       <SignupDialog open={openDialog} handleClose={handleCloseDialog} />
-    </div>
+    </Box>
   );
 };
 

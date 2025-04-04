@@ -1,6 +1,9 @@
 import "./headerView.css";
 import OrderButton from "./orderButton/orderButtonView";
 import { QuestionHeaderProps } from "../../../../types/pageTypes";
+import Button from "@mui/material/Button";
+import Box from "@mui/material/Box";
+import { Typography } from "@mui/material";
 
 /**
  * A container component for th header of the page that displays a list of questions
@@ -15,21 +18,23 @@ const QuestionHeader = ({
   handleNewQuestion,
 }: QuestionHeaderProps) => {
   return (
-    <div>
-      <div className="space_between right_padding">
-        <div className="bold_title">{title_text}</div>
-        <button
-          className="bluebtn"
+    <Box>
+      <Box className="space_between right_padding">
+        <Typography variant="h5" className="bold_title">
+          {title_text}
+        </Typography>
+        <Button
+          variant="contained"
           onClick={() => {
             handleNewQuestion();
           }}
         >
           Ask a Question
-        </button>
-      </div>
-      <div className="space_between right_padding">
-        <div id="question_count">{qcnt} questions</div>
-        <div className="btns">
+        </Button>
+      </Box>
+      <Box className="space_between right_padding">
+        <Typography id="question_count">{qcnt} questions</Typography>
+        <Box className="btns">
           {["Newest", "Active", "Unanswered"].map((m, idx) => (
             <OrderButton
               key={idx}
@@ -37,9 +42,9 @@ const QuestionHeader = ({
               setQuestionOrder={setQuestionOrder}
             />
           ))}
-        </div>
-      </div>
-    </div>
+        </Box>
+      </Box>
+    </Box>
   );
 };
 
