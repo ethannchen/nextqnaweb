@@ -7,6 +7,7 @@ import { NewAnswerProps } from "../../../types/pageTypes";
 import Box from "@mui/material/Box";
 import Button from "@mui/material/Button";
 import { Typography } from "@mui/material";
+import React from "react";
 
 /**
  * The component renders a form to post a new answer to a question.

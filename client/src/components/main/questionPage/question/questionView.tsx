@@ -4,6 +4,7 @@ import { QuestionProps } from "../../../../types/pageTypes";
 import Box from "@mui/material/Box";
 import Button from "@mui/material/Button";
 import { Typography } from "@mui/material";
+import React from "react";
 
 /**
  * A component to display a question
@@ -29,6 +30,7 @@ const Question = ({ q, clickTag, handleAnswer }: QuestionProps) => {
           {q.tags.map((tag, idx) => {
             return (
               <Button
+                variant="contained"
                 size="small"
                 key={idx}
                 className="question_tag_button"
@@ -36,7 +38,6 @@ const Question = ({ q, clickTag, handleAnswer }: QuestionProps) => {
                   e.stopPropagation();
                   clickTag(tag.name);
                 }}
-                variant="contained"
               >
                 {tag.name}
               </Button>

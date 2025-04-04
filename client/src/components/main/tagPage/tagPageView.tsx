@@ -33,7 +33,7 @@ const TagPage = ({ clickTag, handleNewQuestion }: TagPageProps) => {
         <Typography className="bold_title" variant="h5">
           All Tags
         </Typography>
-        <Button variant="contained" size="small" onClick={handleNewQuestion}>
+        <Button variant="contained" onClick={handleNewQuestion}>
           Ask a Question
         </Button>
       </Box>
