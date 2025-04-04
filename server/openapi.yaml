@@ -42,26 +42,38 @@ components:
               message:
                 type: string
                 example: "Internal Server Error"
+    Unauthorized:
+      description: Unauthorized
+      content:
+        application/json:
+          schema:
+            type: object
+            properties:
+              message:
+                type: string
+                example: "Unauthorized access"
   schemas:
-    User:
+    UserDetails:
       type: object
-      required:
-        - username
-        - email
-        - password
       properties:
+        id:
+          type: string
+          example: "60d0fe4f5311236168a109ca"
         username:
           type: string
-          example: "devUser123"
+          example: "newUsername"
         email:
           type: string
-          format: email
-          example: "user@example.com"
-        password:
+          example: "new@example.com"
+        role:
           type: string
-          format: password
-          example: "securePassword123"
-    
+          example: "user"
+        bio:
+          type: string
+          example: "Software developer and tech enthusiast."
+        website:
+          type: string
+          example: "https://myportfolio.com"
     Tag:
       type: object
       properties:
@@ -150,24 +162,6 @@ components:
         __v:
           type: integer
           example: 0
-    UserSignupRequest:
-      type: object
-      required:
-        - username
-        - email
-        - password
-      properties:
-        username:
-          type: string
-          example: "devUser123"
-        email:
-          type: string
-          format: email
-          example: "user@example.com"
-        password:
-          type: string
-          format: password
-          example: "securePassword123"
 
     AddAnswerRequest:
       type: object
@@ -235,6 +229,26 @@ components:
           type: string
           format: date-time
           example: "2025-02-02T00:28:19.406Z"
+    
+    UserSignupRequest:
+      type: object
+      required:
+        - username
+        - email
+        - password
+      properties:
+        username:
+          type: string
+          example: "devUser123"
+        email:
+          type: string
+          format: email
+          example: "user@example.com"
+        password:
+          type: string
+          format: password
+          example: "securePassword123"
+
     UserSignupResponse:
       type: object
       properties:
@@ -244,7 +258,68 @@ components:
         username:
           type: string
           example: "JohnDoe"
-            
+    
+    UserLoginRequest: 
+      type: object
+      required:
+        - email
+        - password
+      properties:
+        email:
+          type: string
+          format: email
+          example: "user@example.com"
+        password:
+          type: string
+          format: password
+          example: "securePassword123"
+
+    UserLoginResponse:
+      type: object
+      properties:
+        token:
+          type: string
+          example: "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9..."
+        user:
+          type: object
+          properties:
+            id:
+              type: string
+              example: "679846196243c96505ba4007"
+            username:
+              type: string
+              example: "devUser123"
+            email:
+              type: string
+              format: email
+              example: "user@example.com"
+            role:
+              type: string
+              example: "user"
+            bio:
+              type: string
+              nullable: true
+              example: "Software developer passionate about APIs."
+            website:
+              type: string
+              nullable: true
+              example: "https://example.com"
+    UpdateProfileRequest:
+      type: object
+      properties:
+        username:
+          type: string
+          example: "newUsername"
+        email:
+          type: string
+          example: "new@example.com"
+        bio:
+          type: string
+          example: "Software developer and tech enthusiast."
+        website:
+          type: string
+          example: "https://myportfolio.com"
+
     ErrorResponse:
       type: object
       properties:
@@ -429,5 +504,55 @@ paths:
         "500":
           $ref: "#/components/responses/InternalServerError"
 
-        
-        
+  /auth/login:
+    post:
+      summary: User login
+      description: Authenticates a user and returns a JWT token.
+      tags:
+        - Authentication
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/UserLoginRequest"
+      responses:
+        "200":
+          description: Login successful
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/UserLoginResponse"
+        "400":
+          $ref: "#/components/responses/BadRequest"
+        "401":
+          $ref: "#/components/responses/Unauthorized"
+        "500":
+          $ref: "#/components/responses/InternalServerError"
+  /auth/profile:
+    put:
+      summary: Update user profile
+      description: Updates the authenticated user's profile details such as username, email, bio, and website.
+      tags:
+        - Authentication
+      security:
+        - BearerAuth: []
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/UpdateProfileRequest"
+      responses:
+        "200":
+          description: User profile updated successfully
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/UserDetails"
+        "400":
+          $ref: "#/components/responses/BadRequest"
+        "401":
+          $ref: "#/components/responses/Unauthorized"
+        "500":
+          $ref: "#/components/responses/InternalServerError"

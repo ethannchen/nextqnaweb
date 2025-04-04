@@ -164,6 +164,9 @@ export interface IAnswerDocument
  * @property {string} username - The username of the user
  * @property {string} email - The email of the user
  * @property {string} password - The hashed password of the user
+ * @property {string} role - The role of the user (user or admin)
+ * @property {string} bio - Optional user biography
+ * @property {string} website - Optional user website URL
  * @property {Date} createdAt - The date when the user account was created
  */
 export interface IUser {
@@ -171,6 +174,9 @@ export interface IUser {
   username: string;
   email: string;
   password: string;
+  role?: string;
+  bio?: string;
+  website?: string;
   createdAt?: Date;
 }
 
@@ -183,6 +189,9 @@ export interface IUserDocument extends mongoose.Document {
   username: string;
   email: string;
   password: string;
+  role: string;
+  bio?: string;
+  website?: string;
   createdAt: Date;
 
   // Instance Methods

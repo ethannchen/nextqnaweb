@@ -1,57 +1,61 @@
 import { Request, Response, NextFunction } from "express";
-import {
-  sanitizeUsername,
-  sanitizeEmail,
-  sanitizePassword,
-} from "./sanitization";
+import { body, validationResult } from "express-validator";
 
 export interface RequestWithSignupInfo extends Request {
-  username?: string;
-  email?: string;
-  password?: string;
+  body: {
+    username: string;
+    email: string;
+    password: string;
+    role?: string;
+    bio?: string;
+    website?: string;
+  };
 }
 
-export const validateSignupMiddleware = (
-  req: RequestWithSignupInfo,
-  res: Response,
-  next: NextFunction
-) => {
-  const { username, email, password } = req.body;
+export const validateSignupMiddleware = [
+  // Username validation
+  body("username")
+    .notEmpty()
+    .withMessage("Username is required")
+    .isLength({ min: 3, max: 30 })
+    .withMessage("Username must be between 3 and 30 characters")
+    .matches(/^[a-zA-Z0-9_]+$/)
+    .withMessage("Username can only contain letters, numbers, and underscores"),
 
-  // Sanitize the inputs
-  const sanitizedUsername = sanitizeUsername(username);
-  const sanitizedEmail = sanitizeEmail(email);
-  const sanitizedPassword = sanitizePassword(password);
+  // Email validation
+  body("email")
+    .notEmpty()
+    .withMessage("Email is required")
+    .isEmail()
+    .withMessage("Must provide a valid email address")
+    .normalizeEmail(),
 
-  // Validate the username
-  if (!sanitizedUsername) {
-    return res
-      .status(400)
-      .send(
-        "Invalid username: It must be alphanumeric with underscores, 3–30 characters."
-      );
-  }
+  // Password validation
+  body("password")
+    .notEmpty()
+    .withMessage("Password is required")
+    .isLength({ min: 8 })
+    .withMessage("Password must be at least 8 characters long")
+    .matches(/^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)/)
+    .withMessage(
+      "Password must contain at least one uppercase letter, one lowercase letter, and one number"
+    ),
 
-  // Validate the email
-  if (!sanitizedEmail) {
-    return res
-      .status(400)
-      .send("Invalid email: It must be a valid email address.");
-  }
+  // Role validation (optional)
+  body("role")
+    .optional()
+    .isIn(["user", "admin"])
+    .withMessage('Role must be either "user" or "admin"'),
 
-  // Validate the password
-  if (!sanitizedPassword) {
-    return res
-      .status(400)
-      .send(
-        "Invalid password: It must be at least 8 characters long, with at least 1 letter and 1 number."
-      );
-  }
+  // Website validation (optional)
+  body("website").optional().isURL().withMessage("Must provide a valid URL"),
 
-  // Attach sanitized values to the request object
-  req.username = sanitizedUsername;
-  req.email = sanitizedEmail;
-  req.password = sanitizedPassword;
-
-  next();
-};
+  // Process validation results
+  (req: Request, res: Response, next: NextFunction) => {
+    const errors = validationResult(req);
+    if (!errors.isEmpty()) {
+      return res.status(400).json({ errors: errors.array() });
+    }
+    next();
+  },
+];

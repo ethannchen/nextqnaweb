@@ -7,9 +7,17 @@ const UserSchema = new mongoose.Schema<IUserDocument, IUserModel>(
     username: { type: String, required: true, unique: true },
     email: { type: String, required: true, unique: true },
     password: { type: String, required: true },
+    role: {
+      type: String,
+      enum: ["user", "admin"],
+      default: "user",
+      required: true,
+    },
+    bio: { type: String, required: false },
+    website: { type: String, required: false },
     createdAt: { type: Date, default: Date.now },
   },
-  { collection: "users" }
+  { collection: "Users" }
 );
 
 // Instance method to compare password (used for authentication)
