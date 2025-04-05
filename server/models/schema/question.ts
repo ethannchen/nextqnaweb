@@ -197,6 +197,8 @@ QuestionSchema.methods.convertToIQuestion =
         text: a.text,
         ans_by: a.ans_by,
         ans_date_time: a.ans_date_time.toISOString(),
+        votes: a.votes,
+        voted_by: a.voted_by,
       }));
 
     const convertedQuestion = {

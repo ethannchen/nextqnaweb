@@ -4,11 +4,11 @@ import mongoose from "mongoose";
  * The types in this file are used to define the shape of the documents
  * in the database. These types are used to define the schema of a document
  * in the questions, answers, and tags collections.
- * 
+ *
  * They are similar to the types defined in types.ts, but the id field is
  * explicitly defined to have the type mongoose.Types.ObjectId, which is
  * the type of the _id field used by Mongoose in a MongoDB document.
- * 
+ *
  * These types are used only the scripts used to populate the database with
  * test data.
  */
@@ -18,6 +18,8 @@ export interface IAnswerDB {
   text: string;
   ans_by: string;
   ans_date_time: Date;
+  votes: Number;
+  voted_by: string[];
 }
 
 export interface IQuestionDB {

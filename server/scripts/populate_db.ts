@@ -51,14 +51,14 @@ db.on("error", console.error.bind(console, "MongoDB connection error:"));
  * @returns a promise that resolves to the tag object created in the database
  */
 async function tagCreate(name: string): Promise<ITagDB> {
-   const tagDoc = await new Tag({ name }).save();
-  
-   const tagDB: ITagDB = {
-     _id: new mongoose.Types.ObjectId(tagDoc._id),
-     name: tagDoc.name
-   };
-   
-   return tagDB;
+  const tagDoc = await new Tag({ name }).save();
+
+  const tagDB: ITagDB = {
+    _id: new mongoose.Types.ObjectId(tagDoc._id),
+    name: tagDoc.name,
+  };
+
+  return tagDB;
 }
 
 /**
@@ -73,7 +73,13 @@ function answerCreate(
   ans_by: string,
   ans_date_time: Date
 ): Promise<IAnswerDB> {
-  const answerDetail: IAnswerDB = { text, ans_by, ans_date_time };
+  const answerDetail: IAnswerDB = {
+    text,
+    ans_by,
+    ans_date_time,
+    votes: 0,
+    voted_by: [],
+  }; // TODO: add some real user here
 
   const answer = new Answer(answerDetail);
   return answer.save();

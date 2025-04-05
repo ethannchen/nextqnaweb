@@ -39,6 +39,8 @@ export interface IAnswer {
   text: string;
   ans_by: string;
   ans_date_time: string;
+  votes: number;
+  voted_by: string[];
 }
 
 /**
@@ -155,4 +157,7 @@ export interface IAnswerDocument
   extends Omit<mongoose.Document, "_id">,
     Omit<IAnswerDB, "_id"> {
   _id: mongoose.Types.ObjectId;
+  hasUserVoted(user: string): boolean;
+  vote(user: string): Promise<void>;
+  unvote(user: string): Promise<void>;
 }

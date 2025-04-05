@@ -16,9 +16,44 @@ const AnswerSchema = new mongoose.Schema<IAnswerDocument, IAnswerModel>(
     text: { type: String, required: true },
     ans_by: { type: String, required: true },
     ans_date_time: { type: Date, required: true },
+    votes: { type: Number, required: true, default: 0 },
+    voted_by: { type: [String], required: true, default: [] },
   },
   { collection: "Answer" }
 );
+
+/**
+ * Check if a user has voted for this answer
+ * @param user - the username or user id
+ * @returns - if the user has voted for the answer
+ */
+AnswerSchema.methods.hasUserVoted = function (user: string): boolean {
+  return this.voted_by.includes(user);
+};
+
+/**
+ * Upvote the answer by a user
+ * @param user - the username or user id
+ */
+AnswerSchema.methods.vote = async function (user: string): Promise<void> {
+  if (!this.voted_by.includes(user)) {
+    this.votes += 1;
+    this.voted_by.push(user);
+    await this.save();
+  }
+};
+
+/**
+ * Remove vote (unvote) by a user
+ * @param user - the username or user id
+ */
+AnswerSchema.methods.unvote = async function (user: string): Promise<void> {
+  if (this.voted_by.includes(user)) {
+    this.votes = Math.max(0, this.votes - 1);
+    this.voted_by = this.voted_by.filter((u: string) => u !== user);
+    await this.save();
+  }
+};
 
 /**
  * An async method that returns an array with the most recent answer document for a list of answer ids
@@ -74,6 +109,8 @@ AnswerSchema.statics.addAnswerToQuestion = async function (
     text: answerData.text,
     ans_by: answerData.ans_by,
     ans_date_time: new Date(answerData.ans_date_time),
+    votes: 0,
+    voted_by: [],
   });
 
   await answer.save();
