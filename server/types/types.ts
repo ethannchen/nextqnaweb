@@ -210,4 +210,15 @@ export interface IUserModel extends mongoose.Model<IUserDocument> {
   findByEmail(email: string): Promise<IUserDocument | null>;
   findByUsername(username: string): Promise<IUserDocument | null>;
   createUser(userData: IUser): Promise<IUserDocument>;
+  addNewUser(userData: IUser): Promise<IUserDocument>;
+  updateProfile(
+    userId: mongoose.Types.ObjectId,
+    user: Partial<IUser>
+  ): Promise<IUserDocument>;
+  changePassword(
+    userId: mongoose.Types.ObjectId,
+    newPassword: string,
+    currentPassword: string
+  ): Promise<IUserDocument>;
+  deleteUser(userId: mongoose.Types.ObjectId): Promise<IUserDocument>;
 }

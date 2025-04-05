@@ -23,6 +23,8 @@ tags:
     description: Operations related to answers
   - name: Authentication
     description: Operations related to authentication
+  - name: Users
+    description: Operations related to user
 
 components:
   responses:
@@ -58,22 +60,25 @@ components:
       properties:
         id:
           type: string
-          example: "60d0fe4f5311236168a109ca"
+          example: "679846196243c96505ba4007"
         username:
           type: string
-          example: "newUsername"
+          example: "devUser123"
         email:
           type: string
-          example: "new@example.com"
+          format: email
+          example: "user@example.com"
         role:
           type: string
           example: "user"
         bio:
           type: string
-          example: "Software developer and tech enthusiast."
+          nullable: true
+          example: "Software developer passionate about APIs."
         website:
           type: string
-          example: "https://myportfolio.com"
+          nullable: true
+          example: "https://example.com"
     Tag:
       type: object
       properties:
@@ -281,29 +286,8 @@ components:
           type: string
           example: "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9..."
         user:
-          type: object
-          properties:
-            id:
-              type: string
-              example: "679846196243c96505ba4007"
-            username:
-              type: string
-              example: "devUser123"
-            email:
-              type: string
-              format: email
-              example: "user@example.com"
-            role:
-              type: string
-              example: "user"
-            bio:
-              type: string
-              nullable: true
-              example: "Software developer passionate about APIs."
-            website:
-              type: string
-              nullable: true
-              example: "https://example.com"
+          $ref: "#/components/schemas/UserDetails"
+
     UpdateProfileRequest:
       type: object
       properties:
@@ -319,6 +303,35 @@ components:
         website:
           type: string
           example: "https://myportfolio.com"
+          
+    ChangePasswordRequest:
+      type: object
+      required:
+        - currentPassword
+        - newPassword
+      properties:
+        currentPassword:
+          type: string
+          format: password
+          example: "currentSecurePassword123"
+        newPassword:
+          type: string
+          format: password
+          example: "newSecurePassword456"
+
+    ChangePasswordResponse:
+      type: object
+      properties:
+        message:
+          type: string
+          example: "Password updated successfully"
+
+    DeleteAccountResponse:
+      type: object
+      properties:
+        message:
+          type: string
+          example: "Account deleted successfully"
 
     ErrorResponse:
       type: object
@@ -529,12 +542,12 @@ paths:
           $ref: "#/components/responses/Unauthorized"
         "500":
           $ref: "#/components/responses/InternalServerError"
-  /auth/profile:
+  /users/profile:
     put:
       summary: Update user profile
       description: Updates the authenticated user's profile details such as username, email, bio, and website.
       tags:
-        - Authentication
+        - Users
       security:
         - BearerAuth: []
       requestBody:
@@ -554,5 +567,59 @@ paths:
           $ref: "#/components/responses/BadRequest"
         "401":
           $ref: "#/components/responses/Unauthorized"
+        "500":
+          $ref: "#/components/responses/InternalServerError"
+          
+  /users/changePassword:
+    put:
+      summary: Change user password
+      description: Changes the authenticated user's password after verifying the current password.
+      tags:
+        - Users
+      security:
+        - BearerAuth: []
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/ChangePasswordRequest"
+      responses:
+        "200":
+          description: Password changed successfully
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ChangePasswordResponse"
+        "400":
+          $ref: "#/components/responses/BadRequest"
+        "401":
+          $ref: "#/components/responses/Unauthorized"
+        "404":
+          $ref: "#/components/responses/BadRequest"
+        "500":
+          $ref: "#/components/responses/InternalServerError"
+          
+  /users/account:
+    delete:
+      summary: Delete user account
+      description: Permanently deletes the authenticated user's account.
+      tags:
+        - Users
+      security:
+        - BearerAuth: []
+      responses:
+        "200":
+          description: Account deleted successfully
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/DeleteAccountResponse"
+        "400":
+          $ref: "#/components/responses/BadRequest"
+        "401":
+          $ref: "#/components/responses/Unauthorized"
+        "404":
+          $ref: "#/components/responses/BadRequest"
         "500":
           $ref: "#/components/responses/InternalServerError"
