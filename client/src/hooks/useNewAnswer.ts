@@ -3,7 +3,7 @@ import { addAnswer } from "../services/answerService";
 import { QuestionIdFunctionType } from "../types/functionTypes";
 
 /**
- * A custom hook to create a new answer. 
+ * A custom hook to create a new answer.
  * The hook also validates the input fields and displays error messages if the fields are empty.
  * If the answer is successfully created, the new answer is rendered on the question page.
  * @param qid the question id for which the answer is being created
@@ -40,6 +40,8 @@ export const useNewAnswer = (
       text: text,
       ans_by: usrn,
       ans_date_time: new Date(),
+      votes: 0,
+      voted_by: [],
     };
 
     const res = await addAnswer(qid, answer);

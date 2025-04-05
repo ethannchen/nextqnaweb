@@ -12,6 +12,9 @@ interface AnswerType {
   text: string;
   ans_by: string;
   ans_date_time: Date;
+  votes: number;
+  voted_by: string[];
+  _id?: string;
 }
 
 /**

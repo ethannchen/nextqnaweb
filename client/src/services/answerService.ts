@@ -32,4 +32,27 @@ const addAnswer = async (
   }
 };
 
-export { addAnswer };
+/**
+ * Calls the API to toggle a vote for an answer.
+ * If the user has already voted, it unvotes; otherwise, it upvotes.
+ * @param aid - The ID of the answer to vote or unvote.
+ * @param user - The username of the person voting.
+ * @returns The updated answer from the API.
+ */
+const voteAnswer = async (
+  aid: string,
+  user: string
+): Promise<AnswerResponseType> => {
+  try {
+    const res = await api.patch(`${ANSWER_API_URL}/${aid}/vote`, { user });
+    if (res.status !== 200) {
+      throw new Error("Error while voting on answer");
+    }
+    return res.data;
+  } catch (error) {
+    console.error("Error voting on answer:", error);
+    throw error;
+  }
+};
+
+export { addAnswer, voteAnswer };
