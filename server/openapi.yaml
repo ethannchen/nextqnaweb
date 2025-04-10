@@ -542,7 +542,7 @@ paths:
           $ref: "#/components/responses/Unauthorized"
         "500":
           $ref: "#/components/responses/InternalServerError"
-  /users/profile:
+  /user/profile:
     put:
       summary: Update user profile
       description: Updates the authenticated user's profile details such as username, email, bio, and website.
@@ -570,7 +570,7 @@ paths:
         "500":
           $ref: "#/components/responses/InternalServerError"
           
-  /users/changePassword:
+  /user/changePassword:
     put:
       summary: Change user password
       description: Changes the authenticated user's password after verifying the current password.
@@ -600,7 +600,7 @@ paths:
         "500":
           $ref: "#/components/responses/InternalServerError"
           
-  /users/account:
+  /user/account:
     delete:
       summary: Delete user account
       description: Permanently deletes the authenticated user's account.
