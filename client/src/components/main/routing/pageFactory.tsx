@@ -5,6 +5,12 @@ import NewQuestionPageClass from "./newQuestion";
 import PageClass from ".";
 import AnswerPageClass from "./answer";
 import NewAnswerPageClass from "./newAnswer";
+import LoginPageClass from "./login";
+import SignupPageClass from "./signup";
+import ProfilePageClass from "./profile";
+import ProfileEditPageClass from "./profileEdit";
+import ChangePasswordPageClass from "./changePassword";
+import DeleteAccountPageClass from "./deleteAccount";
 
 /**
  * build a corresponding page instance
@@ -34,6 +40,24 @@ export default function getPage({
       return page;
     case "newAnswer":
       page = new NewAnswerPageClass(params);
+      return page;
+    case "login":
+      page = new LoginPageClass(params);
+      return page;
+    case "signup":
+      page = new SignupPageClass(params);
+      return page;
+    case "profile":
+      page = new ProfilePageClass(params);
+      return page;
+    case "profileEdit":
+      page = new ProfileEditPageClass(params);
+      return page;
+    case "changePassword":
+      page = new ChangePasswordPageClass(params);
+      return page;
+    case "deleteAccount":
+      page = new DeleteAccountPageClass(params);
       return page;
     default:
       return page;
