@@ -156,3 +156,58 @@ export interface IAnswerDocument
     Omit<IAnswerDB, "_id"> {
   _id: mongoose.Types.ObjectId;
 }
+
+/**
+ * A type representing a user object
+ * Use this type to define the shape of a user returned from the Users collection
+ * @property {string} _id - The unique identifier of the user
+ * @property {string} username - The username of the user
+ * @property {string} email - The email of the user
+ * @property {string} password - The hashed password of the user
+ * @property {string} role - The role of the user (user or admin)
+ * @property {string} bio - Optional user biography
+ * @property {string} website - Optional user website URL
+ * @property {Date} createdAt - The date when the user account was created
+ */
+export interface IUser {
+  _id?: string;
+  username: string;
+  email: string;
+  password: string;
+  role?: string;
+  bio?: string;
+  website?: string;
+  createdAt?: Date;
+}
+
+/**
+ * A type representing a user document schema in the users collection
+ * except the _id field, which is explicitly defined to have the type mongoose.Types.ObjectId
+ */
+export interface IUserDocument extends mongoose.Document {
+  _id: mongoose.Types.ObjectId;
+  username: string;
+  email: string;
+  password: string;
+  role: string;
+  bio?: string;
+  website?: string;
+  createdAt: Date;
+
+  // Instance Methods
+  comparePassword(candidatePassword: string): Promise<boolean>;
+}
+
+/**
+ * A type representing the model for the users collection
+ * The interface also defines static methods for the model
+ *
+ * @property findByEmail - An async method that finds a user by email
+ * @property findByUsername - An async method that finds a user by username
+ * @property createUser - An async method that creates a new user
+ */
+export interface IUserModel extends mongoose.Model<IUserDocument> {
+  findByEmail(email: string): Promise<IUserDocument | null>;
+  findByUsername(username: string): Promise<IUserDocument | null>;
+  createUser(userData: IUser): Promise<IUserDocument>;
+}
