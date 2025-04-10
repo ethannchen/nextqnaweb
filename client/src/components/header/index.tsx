@@ -1,22 +1,25 @@
-import React, { useState } from 'react';
-import SignupDialog from './signup/SignupDialog';  // Import the renamed SignupDialog component
+import "./index.css";
 import { HeaderProps } from "../../types/pageTypes";
 import { useHeader } from "../../hooks/useHeader";
-import { Typography, Button } from "@mui/material";
+import { Typography } from "@mui/material";
 import Box from "@mui/material/Box";
 import TextField from "@mui/material/TextField";
 
+/**
+ * The header component for the Fake Stack Overflow application.
+ * It is composed of a title and a search bar.
+ * When the user types in the search bar and presses Enter, the page is set to display the search results.
+ * @param param0 with the search string and the function to set the page to display the search results
+ * @returns the header component
+ */
 const Header = ({ search, setQuestionPage }: HeaderProps) => {
-  const [openDialog, setOpenDialog] = useState(false);
-  const { val, handleInputChange, handleKeyDown } = useHeader(search, setQuestionPage);
-
-  const handleOpenDialog = () => {
-    setOpenDialog(true);
-  };
-
-  const handleCloseDialog = () => {
-    setOpenDialog(false);
-  };
+  /**
+   * use the custom hook to manage state of search string and question page
+   */
+  const { val, handleInputChange, handleKeyDown } = useHeader(
+    search,
+    setQuestionPage
+  );
 
   return (
     <Box id="header" className="header">
@@ -34,10 +37,6 @@ const Header = ({ search, setQuestionPage }: HeaderProps) => {
         onChange={handleInputChange}
         InputProps={{ onKeyDown: handleKeyDown }}
       />
-      <Button variant="outlined" onClick={handleOpenDialog}>
-        Sign Up
-      </Button>
-      <SignupDialog open={openDialog} handleClose={handleCloseDialog} />
     </Box>
   );
 };
