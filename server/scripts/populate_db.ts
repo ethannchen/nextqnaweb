@@ -79,6 +79,7 @@ function answerCreate(
     ans_date_time,
     votes: 0,
     voted_by: [],
+    comments: [],
   }; // TODO: add some real user here
 
   const answer = new Answer(answerDetail);

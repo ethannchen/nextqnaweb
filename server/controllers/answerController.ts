@@ -71,3 +71,43 @@ export const voteAnswer = async (req: Request, res: Response) => {
     });
   }
 };
+
+/**
+ * @route POST /answer/:aid/addComment
+ * @description Adds a comment to an existing answer
+ * @param {string} aid - The answer ID (in URL params)
+ * @param {Object} comment - The comment object (in body)
+ * @param {string} comment.text - The comment content
+ * @param {string} comment.commented_by - The username/email of the commenter
+ * @param {string} comment.comment_date_time - Timestamp for when the comment was made
+ * @returns {200} JSON response with the updated answer
+ * @returns {400} JSON error if required fields are missing
+ * @returns {404} If answer is not found
+ * @returns {500} JSON error if there is an internal server error
+ */
+export const addComment = async (req: Request, res: Response) => {
+  const { aid } = req.params;
+  const { text, commented_by, comment_date_time } = req.body;
+
+  if (!text || !commented_by || !comment_date_time) {
+    return res.status(400).json({ message: "Missing required comment fields" });
+  }
+
+  try {
+    const answer = await Answer.findById(aid);
+    if (!answer) {
+      return res.status(404).json({ message: "Answer not found" });
+    }
+
+    const comment = { text, commented_by, comment_date_time };
+    await answer.addComment(comment);
+
+    const updatedAnswer = { ...answer, _id: answer._id.toString() };
+    res.status(200).json(updatedAnswer);
+  } catch (err) {
+    res.status(500).json({
+      message: "Error adding comment",
+      error: (err as Error).message,
+    });
+  }
+};

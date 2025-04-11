@@ -150,6 +150,19 @@ export interface IAnswerModel extends mongoose.Model<IAnswerDocument> {
 }
 
 /**
+ * A type representing a model for a comment for the answer
+ *
+ * @property text - the comment text
+ * @property commented_by: the user email of the commenter
+ * @property comment_date_time: the date and time of the comment
+ */
+export interface IComment {
+  text: string;
+  commented_by: string;
+  comment_date_time: Date;
+}
+
+/**
  * A type representing an answer document schema in the answers collection
  * except the _id field, which is explicitly defined to have the type
  */
@@ -160,6 +173,7 @@ export interface IAnswerDocument
   hasUserVoted(email: string): boolean;
   vote(email: string): Promise<void>;
   unvote(email: string): Promise<void>;
+  addComment(comment: IComment): Promise<void>;
 }
 
 /**

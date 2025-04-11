@@ -4,6 +4,18 @@ import { IAnswer, IAnswerDocument, IAnswerModel } from "../../types/types";
 import Question from "../questions";
 
 /**
+ * @typedef {Object} Comment
+ * @property {string} text - The text content of the comment
+ * @property {string} commented_by - The username or email of the user who made the comment
+ * @property {Date} comment_date_time - The timestamp when the comment was created
+ */
+const CommentSchema = new mongoose.Schema({
+  text: { type: String, required: true },
+  commented_by: { type: String, required: true },
+  comment_date_time: { type: Date, required: true },
+});
+
+/**
  * The schema for a document in the Answer collection.
  *
  * The schema is created using the constructor in mongoose.Schema class.
@@ -18,6 +30,7 @@ const AnswerSchema = new mongoose.Schema<IAnswerDocument, IAnswerModel>(
     ans_date_time: { type: Date, required: true },
     votes: { type: Number, required: true, default: 0 },
     voted_by: { type: [String], required: true, default: [] },
+    comments: [CommentSchema],
   },
   { collection: "Answer" }
 );
@@ -53,6 +66,19 @@ AnswerSchema.methods.unvote = async function (email: string): Promise<void> {
     this.voted_by = this.voted_by.filter((u: string) => u !== email);
     await this.save();
   }
+};
+
+/**
+ * Add comment to an answer
+ * @param comment - the comment to be added
+ */
+AnswerSchema.methods.addComment = async function (comment: {
+  text: string;
+  commented_by: string;
+  comment_date_time: string;
+}): Promise<void> {
+  this.comments.push(comment);
+  await this.save();
 };
 
 /**
