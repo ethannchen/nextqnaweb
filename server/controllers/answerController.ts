@@ -93,6 +93,9 @@ export const addComment = async (req: Request, res: Response) => {
     return res.status(400).json({ message: "Missing required comment fields" });
   }
 
+  const user = await User.findByEmail(commented_by);
+  if (!user) return res.status(400).json({ error: "Invalid user email" });
+
   try {
     const answer = await Answer.findById(aid);
     if (!answer) {
