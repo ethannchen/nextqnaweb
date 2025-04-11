@@ -78,8 +78,8 @@ export function searchQuestion(
   // get search words
   const words = extractWords(search);
 
-  let filteredQuestionsByTag = filterByTags(questions, tags);
-  let filteredQuestionsByWords = filterByWords(questions, words);
+  const filteredQuestionsByTag = filterByTags(questions, tags);
+  const filteredQuestionsByWords = filterByWords(questions, words);
 
   let filteredQuestions = questions;
   if (tags.length > 0 && words.length > 0) {
