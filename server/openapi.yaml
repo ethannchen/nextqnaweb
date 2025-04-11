@@ -223,7 +223,6 @@ components:
           example: "carly"
           description: Username or user ID of the voter
 
-
     AddQuestionRequest:
       type: object
       required:
@@ -517,7 +516,7 @@ paths:
           $ref: "#/components/responses/BadRequest"
         "500":
           $ref: "#/components/responses/InternalServerError"
-  
+          
   /answer/{aid}/vote:
     patch:
       tags:
@@ -532,14 +531,6 @@ paths:
           schema:
             type: string
             example: "679d61405af1815cc9398a86"
-  
-  /auth/signup:
-    post:
-      summary: Register a new user
-      description: Creates a new user account with a username, email, and password.
-      # operationId: signupUser
-      tags:
-        - Authentication
       requestBody:
         required: true
         content:
@@ -553,6 +544,24 @@ paths:
             application/json:
               schema:
                 $ref: "#/components/schemas/Answer"
+        "400":
+          $ref: "#/components/responses/BadRequest"
+        "500":
+          $ref: "#/components/responses/InternalServerError"
+  
+  # Authentication Endpoints
+  /auth/signup:
+    post:
+      summary: Register a new user
+      description: Creates a new user account with a username, email, and password.
+      # operationId: signupUser
+      tags:
+        - Authentication
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
               $ref: "#/components/schemas/UserSignupRequest"
             example:
               username: "newUser"
@@ -595,7 +604,6 @@ paths:
           $ref: "#/components/responses/Unauthorized"
         "500":
           $ref: "#/components/responses/InternalServerError"
-  
   /user/profile:
     put:
       summary: Update user profile
