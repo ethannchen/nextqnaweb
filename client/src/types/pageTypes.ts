@@ -153,4 +153,40 @@ export interface PageClassParams {
   clickTag: StringHandler;
   handleNewQuestion: NoParamHandler;
   handleNewAnswer: NoParamHandler;
+  handleLogin: NoParamHandler;
+  handleSignup: NoParamHandler;
+  handleLogout: NoParamHandler;
+  handleProfile: NoParamHandler;
+  handleEditProfile: NoParamHandler;
+  handleChangePassword: NoParamHandler;
+  handleDeleteAccount: NoParamHandler;
+}
+
+export interface LoginViewProps {
+  handleLogin: VoidFunctionType;
+  handleSignup: VoidFunctionType;
+}
+
+export interface SignupViewProps {
+  handleLogin: VoidFunctionType;
+  handleQuestions: VoidFunctionType;
+}
+
+export interface ProfileViewProps {
+  handleEditProfile: VoidFunctionType;
+  handleChangePassword: VoidFunctionType;
+  handleDeleteAccount: VoidFunctionType;
+}
+
+export interface ProfileEditViewProps {
+  handleProfile: VoidFunctionType;
+}
+
+export interface ChangePasswordViewProps {
+  handleProfile: VoidFunctionType;
+}
+
+export interface DeleteAccountViewProps {
+  handleLogout: VoidFunctionType;
+  handleQuestions: VoidFunctionType;
 }

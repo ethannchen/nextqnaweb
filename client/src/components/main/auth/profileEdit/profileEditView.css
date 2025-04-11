@@ -1,0 +1,38 @@
+.profile-edit-container {
+    display: flex;
+    justify-content: center;
+    padding: 20px;
+    margin-top: 20px;
+  }
+  
+  .profile-edit-paper {
+    padding: 30px;
+    width: 100%;
+    max-width: 600px;
+  }
+  
+  .profile-edit-title {
+    margin-bottom: 20px;
+    text-align: center;
+    color: #0077cc;
+  }
+  
+  .profile-edit-form {
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+  }
+  
+  .profile-edit-actions {
+    display: flex;
+    justify-content: space-between;
+    margin-top: 20px;
+  }
+  
+  .profile-edit-button {
+    min-width: 120px;
+  }
+  
+  .profile-edit-alert {
+    margin-bottom: 20px;
+  }

@@ -1,0 +1,45 @@
+.delete-account-container {
+    display: flex;
+    justify-content: center;
+    padding: 20px;
+    margin-top: 20px;
+  }
+  
+  .delete-account-paper {
+    padding: 30px;
+    width: 100%;
+    max-width: 500px;
+  }
+  
+  .delete-account-title {
+    margin-bottom: 20px;
+    text-align: center;
+    color: #d32f2f;
+  }
+  
+  .delete-account-warning {
+    margin-bottom: 20px;
+  }
+  
+  .delete-account-alert {
+    margin-bottom: 20px;
+  }
+  
+  .delete-account-instruction {
+    margin-top: 20px;
+    font-weight: bold;
+  }
+  
+  .delete-account-actions {
+    display: flex;
+    justify-content: space-between;
+    margin-top: 20px;
+  }
+  
+  .delete-account-button {
+    min-width: 180px;
+  }
+  
+  .delete-account-cancel-button {
+    min-width: 100px;
+  }

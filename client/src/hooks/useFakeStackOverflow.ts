@@ -1,10 +1,10 @@
 import { useState } from "react";
 import getPage from "../components/main/routing/pageFactory";
+import { useUserUpdate } from "../contexts/UserContext";
 
 /**
- * Custom hook to manage the state of application's parent componet.
+ * Custom hook to manage the state of application's parent component.
  * It returns the search query, page instance, and functions to handle the application navigation.
- * @param app The application instance.
  * @returns The search query, page instance, and functions to set the page to be displayed.
  */
 export const useStackOverflow = () => {
@@ -12,6 +12,7 @@ export const useStackOverflow = () => {
   const [mainTitle, setMainTitle] = useState<string>("All Questions");
   const [questionOrder, setQuestionOrder] = useState("newest");
   const [qid, setQid] = useState("");
+  const updateUser = useUserUpdate();
 
   // Set the page to display the questions based on the search string
   const setQuestionPage = (search = "", title = "All Questions"): void => {
@@ -55,6 +56,38 @@ export const useStackOverflow = () => {
     setPageInstance(getPage({ pageName: "newAnswer", params }));
   };
 
+  // Auth-related handlers
+  const handleLogin = () => {
+    setPageInstance(getPage({ pageName: "login", params }));
+  };
+
+  const handleSignup = () => {
+    setPageInstance(getPage({ pageName: "signup", params }));
+  };
+
+  const handleLogout = () => {
+    // Clear the user data
+    updateUser(null);
+    // Return to home page
+    handleQuestions();
+  };
+
+  const handleProfile = () => {
+    setPageInstance(getPage({ pageName: "profile", params }));
+  };
+
+  const handleEditProfile = () => {
+    setPageInstance(getPage({ pageName: "profileEdit", params }));
+  };
+
+  const handleChangePassword = () => {
+    setPageInstance(getPage({ pageName: "changePassword", params }));
+  };
+
+  const handleDeleteAccount = () => {
+    setPageInstance(getPage({ pageName: "deleteAccount", params }));
+  };
+
   /**
    * The parameters to be passed to the factory that creates a pageInstance.
    */
@@ -71,6 +104,14 @@ export const useStackOverflow = () => {
     clickTag,
     handleNewQuestion,
     handleNewAnswer,
+    // Auth-related handlers
+    handleLogin,
+    handleSignup,
+    handleLogout,
+    handleProfile,
+    handleEditProfile,
+    handleChangePassword,
+    handleDeleteAccount,
   };
 
   /**
@@ -95,5 +136,8 @@ export const useStackOverflow = () => {
     pageInstance,
     handleQuestions,
     handleTags,
+    handleLogin,
+    handleLogout,
+    handleProfile,
   };
 };
