@@ -9,7 +9,7 @@ import LoginView from "../auth/login/loginView";
 export default class LoginPageClass extends PageClass {
     getContent(): React.ReactNode {
         return <LoginView
-            handleLogin={this.handleLogin}
+            handleQuestions={this.handleQuestions}
             handleSignup={this.handleSignup}
         />;
     }

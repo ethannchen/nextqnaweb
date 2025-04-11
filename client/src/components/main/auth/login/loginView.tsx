@@ -18,7 +18,7 @@ import "./loginView.css";
  * @param props Functions for navigation
  * @returns Login view component
  */
-const LoginView: React.FC<LoginViewProps> = ({ handleLogin, handleSignup }) => {
+const LoginView: React.FC<LoginViewProps> = ({ handleQuestions, handleSignup }) => {
   const {
     email,
     setEmail,
@@ -29,7 +29,7 @@ const LoginView: React.FC<LoginViewProps> = ({ handleLogin, handleSignup }) => {
     loading,
     error,
     handleSubmit
-  } = useLogin(handleLogin);
+  } = useLogin(handleQuestions);
 
   return (
     <Box className="login-container">
