@@ -3,7 +3,7 @@
  */
 
 import { REACT_APP_API_URL, api } from "./config";
-import { AnswerType, AnswerResponseType } from "../types/entityTypes";
+import { AnswerType } from "../types/entityTypes";
 
 // The base URL for the answers API
 const ANSWER_API_URL = `${REACT_APP_API_URL}/answer`;
@@ -15,10 +15,7 @@ const ANSWER_API_URL = `${REACT_APP_API_URL}/answer`;
  * @param ans the answer object to be added.
  * @returns the response data from the API, which contains the answer object added.
  */
-const addAnswer = async (
-  qid: string,
-  ans: AnswerType
-): Promise<AnswerResponseType> => {
+const addAnswer = async (qid: string, ans: AnswerType): Promise<AnswerType> => {
   const data = { qid: qid, ans: ans };
   try {
     const res = await api.post(`${ANSWER_API_URL}/addAnswer`, data);
@@ -32,4 +29,24 @@ const addAnswer = async (
   }
 };
 
-export { addAnswer };
+/**
+ * Calls the API to toggle a vote for an answer.
+ * If the email has already voted, it unvotes; otherwise, it upvotes.
+ * @param aid - The ID of the answer to vote or unvote.
+ * @param email - The username of the person voting.
+ * @returns The updated answer from the API.
+ */
+const voteAnswer = async (aid: string, email: string): Promise<AnswerType> => {
+  try {
+    const res = await api.patch(`${ANSWER_API_URL}/${aid}/vote`, { email });
+    if (res.status !== 200) {
+      throw new Error("Error while voting on answer");
+    }
+    return res.data._doc;
+  } catch (error) {
+    console.error("Error voting on answer:", error);
+    throw error;
+  }
+};
+
+export { addAnswer, voteAnswer };

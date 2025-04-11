@@ -45,6 +45,10 @@ export interface AnswerProps {
   text: string;
   ansBy: string;
   meta: string;
+  votes: number;
+  voted_by: string[];
+  handleVote: (aid: string) => Promise<AnswerType | undefined>;
+  aid?: string;
 }
 
 // The type definition for the props of the Form component

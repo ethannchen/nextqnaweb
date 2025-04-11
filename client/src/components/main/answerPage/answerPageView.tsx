@@ -6,6 +6,7 @@ import QuestionBody from "./questionBody/questionBodyView";
 import { AnswerPageProps } from "../../../types/pageTypes";
 import { useAnswerPage } from "../../../hooks/useAnswerPage";
 import Button from "@mui/material/Button";
+import { useAnswerVote } from "../../../hooks/useAnswerVote";
 
 /**
  * The component renders all the answers for a question.
@@ -20,6 +21,7 @@ const AnswerPage = ({
   handleNewAnswer,
 }: AnswerPageProps) => {
   const { question } = useAnswerPage(qid);
+  const handleVote = useAnswerVote();
 
   if (!question) {
     return null;
@@ -40,10 +42,14 @@ const AnswerPage = ({
       />
       {question.answers.map((a, idx) => (
         <Answer
+          aid={a._id}
           key={idx}
           text={a.text}
           ansBy={a.ans_by}
           meta={getMetaData(new Date(a.ans_date_time))}
+          votes={a.votes}
+          voted_by={a.voted_by}
+          handleVote={handleVote}
         />
       ))}
       <Button

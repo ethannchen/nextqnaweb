@@ -120,6 +120,14 @@ components:
           type: string
           format: date-time
           example: "2025-02-02T00:28:19.406Z"
+        votes:
+          type: integer
+          example: 0
+        voted_by:
+          type: array
+          items:
+            type: string
+          example: ["alice", "bob"]
         __v:
           type: integer
           example: 0
@@ -153,6 +161,8 @@ components:
                   text: "You can solve your problem this way."
                   ans_by: "user-name"
                   ans_date_time: "2025-02-02T00:28:19.406Z"
+                  votes: 0
+                  voted_by: []
         asked_by:
           type: string
           example: user-name
@@ -194,6 +204,24 @@ components:
               type: string
               format: date-time
               example: "2025-02-02T00:28:19.406Z"
+            votes:
+              type: integer
+              example: 0
+            voted_by:
+              type: array
+              items:
+                type: string
+              example: ["alice", "bob"]
+    
+    VoteRequest:
+      type: object
+      required:
+        - email
+      properties:
+        user:
+          type: string
+          example: "test@gmail.com"
+          description: user email for the voter
 
     AddQuestionRequest:
       type: object
@@ -493,6 +521,40 @@ paths:
           $ref: "#/components/responses/BadRequest"
         "500":
           $ref: "#/components/responses/InternalServerError"
+          
+  /answer/{aid}/vote:
+    patch:
+      tags:
+        - Answers
+      summary: Vote or unvote an answer
+      description: Upvotes or removes a vote for a specific answer by the authenticated user.
+      parameters:
+        - name: aid
+          in: path
+          required: true
+          description: ID of the answer to vote or unvote
+          schema:
+            type: string
+            example: "679d61405af1815cc9398a86"
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/VoteRequest"
+      responses:
+        "200":
+          description: Answer vote updated successfully
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Answer"
+        "400":
+          $ref: "#/components/responses/BadRequest"
+        "500":
+          $ref: "#/components/responses/InternalServerError"
+  
+  # Authentication Endpoints
   /auth/signup:
     post:
       summary: Register a new user

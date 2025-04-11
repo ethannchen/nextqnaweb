@@ -91,6 +91,7 @@ export const useSignup = (handleQuestions: VoidFunctionType) => {
       setTimeout(() => {
         handleQuestions();
       }, 2000);
+      // eslint-disable-next-line @typescript-eslint/no-explicit-any
     } catch (err: any) {
       setError(
         err.response?.data?.error ||

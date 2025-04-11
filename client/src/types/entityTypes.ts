@@ -7,25 +7,16 @@
  * @property {string} text - The answer text.
  * @property {string} ans_by - The user who answered the question.
  * @property {Date} ans_date_time - The date and time when the answer was posted.
+ * @property {number} votes - The count of upvotes
+ * @property {string[]} voted_by - The emails of the answer's upvoters
  */
 interface AnswerType {
   text: string;
   ans_by: string;
   ans_date_time: Date;
-}
-
-/**
- * The type of an answer object received from the server.
- * @property {string} ans_by - The user who answered the question.
- * @property {string} ans_date_time - The date and time when the answer was posted.
- * @property {string} text - The answer text.
- * @property {string} _id - The unique identifier of the answer.
- */
-interface AnswerResponseType {
-  ans_by: string;
-  ans_date_time: string;
-  text: string;
-  _id: string;
+  votes: number;
+  voted_by: string[];
+  _id?: string;
 }
 
 /**
@@ -113,7 +104,6 @@ export type {
   QuestionType,
   Question,
   Tag,
-  AnswerResponseType,
   QuestionResponseType,
   TagResponseType,
 };

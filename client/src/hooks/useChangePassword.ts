@@ -80,6 +80,7 @@ export const useChangePassword = (handleProfile: VoidFunctionType) => {
       setTimeout(() => {
         handleProfile();
       }, 1500);
+      // eslint-disable-next-line @typescript-eslint/no-explicit-any
     } catch (err: any) {
       setError(
         err.response?.data?.error ||

@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/no-explicit-any */
 import { useState } from "react";
 import { login } from "../services/authService";
 import { useUserUpdate } from "../contexts/UserContext";

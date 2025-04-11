@@ -14,10 +14,10 @@ export const useAnswerPage = (qid: string) => {
    * A useEffect hook in React is used to manage side effects of a component.
    * A side effect is an operation that interacts with the outside world, e.g., an API call.
    * The hook ensures that the side effect is executed when the component is rendered and only when its dependencies change.
-   * 
+   *
    * In this case, the hook will execute only when the question is rendered and if the question id changes.
    * The question id is passed as a dependency to the hook.
-   * 
+   *
    */
   useEffect(() => {
     const fetchData = async () => {
