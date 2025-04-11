@@ -191,6 +191,6 @@ export interface ChangePasswordViewProps {
 }
 
 export interface DeleteAccountViewProps {
-  handleLogout: VoidFunctionType;
+  handleProfile: VoidFunctionType;
   handleQuestions: VoidFunctionType;
 }

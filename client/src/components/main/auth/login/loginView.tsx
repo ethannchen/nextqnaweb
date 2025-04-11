@@ -80,18 +80,20 @@ const LoginView: React.FC<LoginViewProps> = ({ handleLogin, handleSignup }) => {
           >
             {loading ? <CircularProgress size={24} /> : "Login"}
           </Button>
+
+          <Typography className="signup-prompt">
+            Don&apos;t have an account?{" "}
+            <Link
+              component="button"
+              variant="body2"
+              onClick={handleSignup}
+            >
+              Create a new account
+            </Link>
+          </Typography>
         </form>
 
-        <Typography className="signup-prompt">
-          Don&apos;t have an account?{" "}
-          <Link
-            component="button"
-            variant="body2"
-            onClick={handleSignup}
-          >
-            Create a new account
-          </Link>
-        </Typography>
+
       </Paper>
     </Box>
   );

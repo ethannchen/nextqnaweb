@@ -62,9 +62,13 @@ export const useLogin = (handleQuestions: VoidFunctionType) => {
         website: response.user.website,
         createdAt: new Date(),
       });
+      console.log("User logged in successfully:", response.user);
 
-      // Navigate to homepage
-      handleQuestions();
+      // Redirect to home page after a brief delay
+      setTimeout(() => {
+        console.log("Redirecting to home page...");
+        handleQuestions();
+      }, 500);
     } catch (err: any) {
       setError(
         err.response?.data?.error || "Failed to login. Please try again."
