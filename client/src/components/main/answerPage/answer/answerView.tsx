@@ -4,6 +4,8 @@ import Box from "@mui/material/Box";
 import { Typography } from "@mui/material";
 import ThumbUpOutlinedIcon from "@mui/icons-material/ThumbUpOutlined";
 import ThumbUpIcon from "@mui/icons-material/ThumbUp";
+import LoginDialog from "../../loginDialog/loginDialog";
+import { useAnswerView } from "../../../../hooks/useAnswerView";
 
 /**
  * The component to render an answer in the answer page
@@ -19,22 +21,23 @@ const Answer = ({
   handleVote,
   aid,
 }: AnswerProps) => {
-  const currentUser = "carly"; //TODO: read the current user from global state
-  const hasVoted = voted_by?.includes(currentUser);
+  const { voteCount, hasVoted, openDialog, setOpenDialog, onVoteClick } =
+    useAnswerView({ votes, voted_by, handleVote, aid });
 
   return (
     <Box className="answer right_padding">
       <Typography id="answerText" className="answerText">
         {text}
       </Typography>
-      <Box onClick={() => aid && handleVote(aid)}>
+      <Box className="vote-container" onClick={onVoteClick}>
         {hasVoted ? <ThumbUpIcon /> : <ThumbUpOutlinedIcon />}
-        <Typography>{votes}</Typography>
+        <Typography>{voteCount}</Typography>
       </Box>
       <Box className="answerAuthor">
         <Typography className="answer_author">{ansBy}</Typography>
         <Typography className="answer_question_meta">{meta}</Typography>
       </Box>
+      <LoginDialog open={openDialog} onClose={() => setOpenDialog(false)} />
     </Box>
   );
 };

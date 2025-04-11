@@ -47,7 +47,7 @@ export interface AnswerProps {
   meta: string;
   votes: number;
   voted_by: string[];
-  handleVote: (aid: string) => void;
+  handleVote: (aid: string) => Promise<AnswerType | undefined>;
   aid?: string;
 }
 
