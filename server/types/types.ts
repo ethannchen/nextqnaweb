@@ -157,9 +157,9 @@ export interface IAnswerDocument
   extends Omit<mongoose.Document, "_id">,
     Omit<IAnswerDB, "_id"> {
   _id: mongoose.Types.ObjectId;
-  hasUserVoted(user: string): boolean;
-  vote(user: string): Promise<void>;
-  unvote(user: string): Promise<void>;
+  hasUserVoted(email: string): boolean;
+  vote(email: string): Promise<void>;
+  unvote(email: string): Promise<void>;
 }
 
 /**

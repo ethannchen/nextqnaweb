@@ -216,12 +216,12 @@ components:
     VoteRequest:
       type: object
       required:
-        - user
+        - email
       properties:
         user:
           type: string
-          example: "carly"
-          description: Username or user ID of the voter
+          example: "test@gmail.com"
+          description: user email for the voter
 
     AddQuestionRequest:
       type: object
