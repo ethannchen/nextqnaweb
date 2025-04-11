@@ -8,16 +8,30 @@ import { useStackOverflow } from "../hooks/useFakeStackOverflow";
  * @returns the root component of the application
  */
 const FakeStackOverflow = () => {
-  const { search, setQuestionPage, pageInstance, handleQuestions, handleTags } =
-    useStackOverflow();
+  const {
+    search,
+    setQuestionPage,
+    pageInstance,
+    handleQuestions,
+    handleTags,
+    handleLogin,
+    handleLogout,
+    handleProfile
+  } = useStackOverflow();
 
   return (
     <>
-      <Header search={search} setQuestionPage={setQuestionPage} />
+      <Header
+        search={search}
+        setQuestionPage={setQuestionPage}
+        handleLogin={handleLogin}
+        handleLogout={handleLogout}
+      />
       <Main
         page={pageInstance}
         handleQuestions={handleQuestions}
         handleTags={handleTags}
+        handleProfile={handleProfile}
       />
     </>
   );

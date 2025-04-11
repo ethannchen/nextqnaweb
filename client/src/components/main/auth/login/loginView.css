@@ -1,0 +1,39 @@
+.login-container {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    padding: 20px;
+    margin-top: 20px;
+  }
+  
+  .login-paper {
+    padding: 30px;
+    width: 100%;
+    max-width: 450px;
+  }
+  
+  .login-title {
+    margin-bottom: 20px;
+    text-align: center;
+    color: #0077cc;
+  }
+  
+  .login-form {
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+  }
+  
+  .login-button {
+    margin-top: 20px;
+    height: 48px;
+  }
+  
+  .login-alert {
+    margin-bottom: 20px;
+  }
+  
+  .signup-prompt {
+    margin-top: 20px;
+    text-align: center;
+  }

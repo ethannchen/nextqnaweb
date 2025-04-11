@@ -318,6 +318,9 @@ components:
 
     UpdateProfileRequest:
       type: object
+      required:
+        - username
+        - email
       properties:
         username:
           type: string
@@ -327,9 +330,11 @@ components:
           example: "new@example.com"
         bio:
           type: string
+          nullable: true
           example: "Software developer and tech enthusiast."
         website:
           type: string
+          nullable: true
           example: "https://myportfolio.com"
           
     ChangePasswordRequest:

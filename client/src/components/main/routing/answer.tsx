@@ -38,6 +38,27 @@ export default class AnswerPageClass extends PageClass {
       clickTag: props.clickTag,
       handleNewQuestion: props.handleNewQuestion,
       handleNewAnswer: props.handleNewAnswer,
+      handleLogin: function (): void {
+        throw new Error("Function not implemented.");
+      },
+      handleSignup: function (): void {
+        throw new Error("Function not implemented.");
+      },
+      handleLogout: function (): void {
+        throw new Error("Function not implemented.");
+      },
+      handleProfile: function (): void {
+        throw new Error("Function not implemented.");
+      },
+      handleEditProfile: function (): void {
+        throw new Error("Function not implemented.");
+      },
+      handleChangePassword: function (): void {
+        throw new Error("Function not implemented.");
+      },
+      handleDeleteAccount: function (): void {
+        throw new Error("Function not implemented.");
+      }
     });
 
     this.qid = props.qid;

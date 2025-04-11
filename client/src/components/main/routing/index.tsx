@@ -20,6 +20,14 @@ export interface PageClassProps {
   clickTag: ClickTagFunctionType;
   handleNewQuestion: VoidFunctionType;
   handleNewAnswer: VoidFunctionType;
+  // Auth-related handlers
+  handleLogin: VoidFunctionType;
+  handleSignup: VoidFunctionType;
+  handleLogout: VoidFunctionType;
+  handleProfile: VoidFunctionType;
+  handleEditProfile: VoidFunctionType;
+  handleChangePassword: VoidFunctionType;
+  handleDeleteAccount: VoidFunctionType;
 }
 
 /**
@@ -43,6 +51,14 @@ class PageClass {
   clickTag: ClickTagFunctionType; // the function to handle the click event on a tag
   handleNewQuestion: VoidFunctionType;  // the function to handle the creation of a new question
   handleNewAnswer: VoidFunctionType;  // the function to handle the creation of a new answer
+  // Auth-related handlers
+  handleLogin: VoidFunctionType; // the function to navigate to the login page
+  handleSignup: VoidFunctionType; // the function to navigate to the signup page
+  handleLogout: VoidFunctionType; // the function to logout the user
+  handleProfile: VoidFunctionType; // the function to navigate to the profile page
+  handleEditProfile: VoidFunctionType; // the function to navigate to the profile edit page
+  handleChangePassword: VoidFunctionType; // the function to navigate to the change password page
+  handleDeleteAccount: VoidFunctionType; // the function to navigate to the delete account page
 
   constructor(props: PageClassProps) {
     this.search = props.search;
@@ -57,6 +73,14 @@ class PageClass {
     this.clickTag = props.clickTag;
     this.handleNewQuestion = props.handleNewQuestion;
     this.handleNewAnswer = props.handleNewAnswer;
+    // Auth-related handlers
+    this.handleLogin = props.handleLogin;
+    this.handleSignup = props.handleSignup;
+    this.handleLogout = props.handleLogout;
+    this.handleProfile = props.handleProfile;
+    this.handleEditProfile = props.handleEditProfile;
+    this.handleChangePassword = props.handleChangePassword;
+    this.handleDeleteAccount = props.handleDeleteAccount;
   }
 
   getContent(): React.ReactNode {

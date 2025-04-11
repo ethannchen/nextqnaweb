@@ -1,4 +1,5 @@
 import "./sideBarNavView.css";
+import { useUser } from "../../../contexts/UserContext";
 import { VoidFunctionType } from "../../../types/functionTypes";
 import Box from "@mui/material/Box";
 
@@ -7,20 +8,23 @@ interface SideBarNavProps {
   selected?: string;
   handleQuestions: VoidFunctionType;
   handleTags: VoidFunctionType;
+  handleProfile: VoidFunctionType;
 }
 
 /**
- * The sidebar component is composed of two buttons, one for questions and one for tags.
+ * The sidebar component is composed of navigation buttons.
  * The selected prop is used to determine which button is selected.
- * The handleQuestions and handleTags functions are used to handle the click events for the buttons.
- * @param props contains the selected prop, handleQuestions function, and handleTags function
+ * @param props contains the selected prop and handler functions
  * @returns the Sidebar component
  */
 const SideBarNav = ({
   selected = "",
   handleQuestions,
   handleTags,
+  handleProfile,
 }: SideBarNavProps) => {
+  const currentUser = useUser();
+
   return (
     <Box id="sideBarNav" className="sideBarNav">
       <Box
@@ -41,6 +45,17 @@ const SideBarNav = ({
       >
         Tags
       </Box>
+      {currentUser && (
+        <Box
+          id="menu_profile"
+          className={`menu_button ${selected === "p" ? "menu_selected" : ""}`}
+          onClick={() => {
+            handleProfile();
+          }}
+        >
+          Profile
+        </Box>
+      )}
     </Box>
   );
 };
