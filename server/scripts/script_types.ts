@@ -13,10 +13,21 @@ import mongoose from "mongoose";
  * test data.
  */
 
-interface IComment {
+export interface IUser {
+  _id?: mongoose.Types.ObjectId;
+  username: string;
+  email: string;
+  password: string;
+  role?: string;
+  bio?: string;
+  website?: string;
+  createdAt?: Date;
+}
+
+export interface IComment {
   _id?: mongoose.Types.ObjectId;
   text: string;
-  commented_by: string;
+  commented_by: mongoose.Types.ObjectId;
   comment_date_time: Date;
 }
 

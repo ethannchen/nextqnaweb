@@ -11,7 +11,11 @@ import Question from "../questions";
  */
 const CommentSchema = new mongoose.Schema({
   text: { type: String, required: true },
-  commented_by: { type: String, required: true },
+  commented_by: {
+    type: mongoose.Schema.Types.ObjectId,
+    ref: "User",
+    required: true,
+  },
   comment_date_time: { type: Date, required: true },
 });
 
@@ -74,8 +78,8 @@ AnswerSchema.methods.unvote = async function (email: string): Promise<void> {
  */
 AnswerSchema.methods.addComment = async function (comment: {
   text: string;
-  commented_by: string;
-  comment_date_time: string;
+  commented_by: mongoose.Types.ObjectId;
+  comment_date_time: Date;
 }): Promise<void> {
   this.comments.push(comment);
   await this.save();
@@ -137,6 +141,7 @@ AnswerSchema.statics.addAnswerToQuestion = async function (
     ans_date_time: new Date(answerData.ans_date_time),
     votes: 0,
     voted_by: [],
+    comments: [],
   });
 
   await answer.save();

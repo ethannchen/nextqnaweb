@@ -78,7 +78,7 @@ export const voteAnswer = async (req: Request, res: Response) => {
  * @param {string} aid - The answer ID (in URL params)
  * @param {Object} comment - The comment object (in body)
  * @param {string} comment.text - The comment content
- * @param {string} comment.commented_by - The username/email of the commenter
+ * @param {string} comment.commented_by - The user id
  * @param {string} comment.comment_date_time - Timestamp for when the comment was made
  * @returns {200} JSON response with the updated answer
  * @returns {400} JSON error if required fields are missing
@@ -93,8 +93,8 @@ export const addComment = async (req: Request, res: Response) => {
     return res.status(400).json({ message: "Missing required comment fields" });
   }
 
-  const user = await User.findByEmail(commented_by);
-  if (!user) return res.status(400).json({ error: "Invalid user email" });
+  const user = await User.findById(commented_by);
+  if (!user) return res.status(400).json({ error: "Invalid user" });
 
   try {
     const answer = await Answer.findById(aid);
@@ -102,10 +102,19 @@ export const addComment = async (req: Request, res: Response) => {
       return res.status(404).json({ message: "Answer not found" });
     }
 
-    const comment = { text, commented_by, comment_date_time };
+    const comment = {
+      text,
+      commented_by: user._id,
+      comment_date_time,
+    };
     await answer.addComment(comment);
 
-    const updatedAnswer = { ...answer, _id: answer._id.toString() };
+    const updatedAnswer = await Answer.findById(aid).populate(
+      "comments.commented_by",
+      "username"
+    );
+
+    console.log("updatedAnswer: ", updatedAnswer);
     res.status(200).json(updatedAnswer);
   } catch (err) {
     res.status(500).json({

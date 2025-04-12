@@ -1,5 +1,5 @@
 import { ReactNode } from "react";
-import { AnswerType, Tag } from "./entityTypes";
+import { AnswerType, Tag, CommentType } from "./entityTypes";
 import {
   ClickTagFunctionType,
   IdFunctionType,
@@ -49,6 +49,7 @@ export interface AnswerProps {
   voted_by: string[];
   handleVote: (aid: string) => Promise<AnswerType | undefined>;
   aid?: string;
+  comments: CommentType[];
 }
 
 // The type definition for the props of the Form component

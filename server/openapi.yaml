@@ -146,8 +146,7 @@ components:
           type: string
           example: "This explanation really helped me!"
         commented_by:
-          type: string
-          example: "devUser123"
+          $ref: "#/components/schemas/UserDetails"
         comment_date_time:
           type: string
           format: date-time
@@ -172,19 +171,11 @@ components:
         answers:
           type: array
           items:
-          # oneOf is used to allow both answer IDs and answer objects answers in a question
-            oneOf:
-              - type: string # For answer IDs
-                example: "679846196243c96505ba4007"
-              - $ref: "#/components/schemas/Answer"
-                example: 
-                  _id: "679d61405af1815cc9398a86"
-                  text: "You can solve your problem this way."
-                  ans_by: "user-name"
-                  ans_date_time: "2025-02-02T00:28:19.406Z"
-                  votes: 0
-                  voted_by: []
-                  comments: []
+          # # oneOf is used to allow both answer IDs and answer objects answers in a question
+          #   oneOf:
+          #     - type: string # For answer IDs
+          #       example: "679846196243c96505ba4007"
+            $ref: "#/components/schemas/Answer"
         asked_by:
           type: string
           example: user-name
@@ -262,7 +253,8 @@ components:
           example: "Thanks for the clarification!"
         commented_by:
           type: string
-          example: "bob@example.com"
+          example: "679846196243c96505ba4007"
+          description: MongoDB ObjectId of the user making the comment
         comment_date_time:
           type: string
           format: date-time

@@ -42,6 +42,7 @@ export const useNewAnswer = (
       ans_date_time: new Date(),
       votes: 0,
       voted_by: [],
+      comments: [],
     };
 
     const res = await addAnswer(qid, answer);

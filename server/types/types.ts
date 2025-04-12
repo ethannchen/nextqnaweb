@@ -33,6 +33,9 @@ export interface IQuestion {
  * @property {String} text - The body of the answer
  * @property {String} ans_by - The user who answered the question
  * @property {String} ans_date_time - The date and time the answer was posted
+ * @property {number} votes - The vote count
+ * @property {string[]} voted_by - The user emails who upvoted the answer
+ * @property {IComment[]} comments - The comments to the answer
  */
 export interface IAnswer {
   _id?: string;
@@ -41,6 +44,7 @@ export interface IAnswer {
   ans_date_time: string;
   votes: number;
   voted_by: string[];
+  comments: IComment[];
 }
 
 /**
@@ -152,13 +156,15 @@ export interface IAnswerModel extends mongoose.Model<IAnswerDocument> {
 /**
  * A type representing a model for a comment for the answer
  *
+ * @property _id - the comment id
  * @property text - the comment text
- * @property commented_by: the user email of the commenter
+ * @property commented_by: the user who post the comment
  * @property comment_date_time: the date and time of the comment
  */
 export interface IComment {
+  _id?: mongoose.Types.ObjectId;
   text: string;
-  commented_by: string;
+  commented_by: mongoose.Types.ObjectId;
   comment_date_time: Date;
 }
 
@@ -189,7 +195,7 @@ export interface IAnswerDocument
  * @property {Date} createdAt - The date when the user account was created
  */
 export interface IUser {
-  _id?: string;
+  _id?: mongoose.Types.ObjectId;
   username: string;
   email: string;
   password: string;

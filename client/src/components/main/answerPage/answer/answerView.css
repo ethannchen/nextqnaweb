@@ -1,8 +1,13 @@
 /* All the CSS related to answers Page*/
+.answer_container {
+  display: flex;
+  flex-direction: column;
+  border-bottom: #000000 1px dashed;
+}
+
 .answer {
   display: flex;
   flex-direction: row;
-  border-bottom: #000000 1px dashed;
 }
 
 .answerText {
@@ -15,4 +20,12 @@
 
 .answer_author {
   color: green;
+}
+
+.comment_container {
+  margin-left: 10px;
+}
+
+.comment_title {
+  font-weight: bold !important;
 }
