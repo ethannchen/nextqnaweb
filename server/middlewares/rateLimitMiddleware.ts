@@ -51,17 +51,17 @@ export const generalLimiter = createRateLimiter({});
  * Limits to 5 requests per minute per IP
  */
 export const authLimiter = createRateLimiter({
-  windowMs: 60 * 1000, // 1 minute
-  max: 5, // 5 requests per minute
+  windowMs: 60 * 1000,
+  max: 5,
   message: "Too many authentication attempts, please try again later",
 });
 
 /**
  * Moderate rate limiter for user profile operations
- * Limits to 20 requests per 5 minutes per IP
+ * Limits to 10 requests per minute per IP
  */
 export const userLimiter = createRateLimiter({
-  windowMs: 5 * 60 * 1000, // 5 minutes
-  max: 20, // 20 requests per 5 minutes
+  windowMs: 60 * 1000,
+  max: 10,
   message: "Too many profile update attempts, please try again later",
 });
