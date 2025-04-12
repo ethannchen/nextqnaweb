@@ -93,7 +93,7 @@ export const addComment = async (req: Request, res: Response) => {
     return res.status(400).json({ message: "Missing required comment fields" });
   }
 
-  const user = await User.findById(commented_by);
+  const user = await User.findByEmail(commented_by);
   if (!user) return res.status(400).json({ error: "Invalid user" });
 
   try {
@@ -102,20 +102,33 @@ export const addComment = async (req: Request, res: Response) => {
       return res.status(404).json({ message: "Answer not found" });
     }
 
-    const comment = {
+    // const comment = {
+    //   text,
+    //   commented_by: user._id,
+    //   comment_date_time,
+    // };
+    // await answer.addComment(comment);
+    await answer.addComment({
       text,
       commented_by: user._id,
-      comment_date_time,
-    };
-    await answer.addComment(comment);
+      comment_date_time: new Date(comment_date_time),
+    });
 
     const updatedAnswer = await Answer.findById(aid).populate(
       "comments.commented_by",
       "username"
     );
 
+    if (!updatedAnswer) {
+      return res
+        .status(404)
+        .json({ message: "Answer not found after comment" });
+    }
+
     console.log("updatedAnswer: ", updatedAnswer);
-    res.status(200).json(updatedAnswer);
+    res
+      .status(200)
+      .json({ ...updatedAnswer, _id: updatedAnswer._id.toString() });
   } catch (err) {
     res.status(500).json({
       message: "Error adding comment",

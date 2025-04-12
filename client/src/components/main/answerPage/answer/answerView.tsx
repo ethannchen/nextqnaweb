@@ -8,7 +8,6 @@ import LoginDialog from "../../loginDialog/loginDialog";
 import { useAnswerView } from "../../../../hooks/useAnswerView";
 import Comment from "../comment/commentView";
 import Input from "../../baseComponents/input/inputView";
-import { useState } from "react";
 
 /**
  * The component to render an answer in the answer page
@@ -25,14 +24,18 @@ const Answer = ({
   aid,
   comments,
 }: AnswerProps) => {
-  const { voteCount, hasVoted, openDialog, setOpenDialog, onVoteClick } =
-    useAnswerView({ votes, voted_by, handleVote, aid });
-  const [comment, setComment] = useState<string>("");
-  const [commentErr, setCommentErr] = useState<string>("");
-
-  const handleComment = () => {
-    console.log(comment);
-  };
+  const {
+    voteCount,
+    hasVoted,
+    openDialog,
+    setOpenDialog,
+    onVoteClick,
+    comment,
+    setComment,
+    commentErr,
+    commentList,
+    handleComment,
+  } = useAnswerView({ votes, voted_by, handleVote, aid, comments });
 
   return (
     <Box className="answer_container right_padding">
@@ -50,10 +53,10 @@ const Answer = ({
         </Box>
       </Box>
       <Box className="comment_container">
-        {comments.length > 0 && (
+        {commentList.length > 0 && (
           <Typography className="comment_title">Comments</Typography>
         )}
-        {comments?.map((c, idx) => (
+        {commentList?.map((c, idx) => (
           <Comment
             key={idx}
             text={c.text}
