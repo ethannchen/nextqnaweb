@@ -12,8 +12,10 @@ import questionRouter from "./routes/question";
 import answerRouter from "./routes/answer";
 import authRouter from "./routes/auth";
 import userRouter from "./routes/user";
+import logRouter from "./routes/log";
 import { errorHandler } from "./middlewares/errorMiddleware";
-import { generalLimiter } from "./middlewares/rateLimitMiddleware"; // Import our rate limiter
+import { generalLimiter } from "./middlewares/rateLimitMiddleware";
+import { loggerMiddleware } from "./middlewares/loggerMiddleware";
 
 const MONGO_URL: string = "mongodb://127.0.0.1:27017/fake_so";
 const CLIENT_URL: string = "http://localhost:3000";
@@ -36,6 +38,9 @@ app.use(generalLimiter);
 
 // The middleware function to parse the request body.
 app.use(express.json());
+
+// Apply logging middleware to all requests
+app.use(loggerMiddleware);
 
 // Defining the path to the Open API specification file and parsing it.
 const openApiPath = path.join(__dirname, "openapi.yaml");
@@ -78,6 +83,7 @@ app.use("/question", questionRouter);
 app.use("/answer", answerRouter);
 app.use("/auth", authRouter);
 app.use("/user", userRouter);
+app.use("/logs", logRouter); // Add the logs router for admin users
 
 // Centralized error handling middleware
 app.use(errorHandler);
