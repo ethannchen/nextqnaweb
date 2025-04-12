@@ -6,21 +6,24 @@ import {
   deleteAccount,
   updateProfile,
 } from "../controllers/userController";
+import { userLimiter } from "../middlewares/rateLimitMiddleware"; // Import user limiter
 
 const router = express.Router();
 
-// Update user profile route
-router.put("/profile", authenticate, sanitizeInputMiddleware, updateProfile);
-
-// Change password route
+router.put(
+  "/profile",
+  userLimiter,
+  authenticate,
+  sanitizeInputMiddleware,
+  updateProfile
+);
 router.put(
   "/changePassword",
+  userLimiter,
   authenticate,
   sanitizeInputMiddleware,
   changePassword
 );
-
-// Delete account route
-router.delete("/account", authenticate, deleteAccount);
+router.delete("/account", userLimiter, authenticate, deleteAccount);
 
 export default router;

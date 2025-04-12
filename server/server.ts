@@ -13,6 +13,7 @@ import answerRouter from "./routes/answer";
 import authRouter from "./routes/auth";
 import userRouter from "./routes/user";
 import { errorHandler } from "./middlewares/errorMiddleware";
+import { generalLimiter } from "./middlewares/rateLimitMiddleware"; // Import our rate limiter
 
 const MONGO_URL: string = "mongodb://127.0.0.1:27017/fake_so";
 const CLIENT_URL: string = "http://localhost:3000";
@@ -29,6 +30,9 @@ app.use(
     origin: [CLIENT_URL],
   })
 );
+
+// Apply general rate limiting to all requests
+app.use(generalLimiter);
 
 // The middleware function to parse the request body.
 app.use(express.json());
