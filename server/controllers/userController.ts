@@ -1,11 +1,11 @@
 import { Request, Response } from "express";
 import User from "../models/users";
-import dotenv from "dotenv";
-import { RequestWithProfileInfo } from "../middlewares/validateUserProfileMiddleware";
 
-dotenv.config();
-
-const updateProfile = async (req: RequestWithProfileInfo, res: Response) => {
+/**
+ * Controller for updating user profile
+ * Expects sanitized inputs from the sanitizeInputMiddleware
+ */
+export const updateProfile = async (req: Request, res: Response) => {
   try {
     const { username, email, bio, website } = req.body;
     const userId = req.user?.id;
@@ -14,7 +14,7 @@ const updateProfile = async (req: RequestWithProfileInfo, res: Response) => {
       return res.status(401).json({ error: "Authentication required" });
     }
 
-    if (!username || !email || !bio || !website) {
+    if (!username && !email && bio === undefined && website === undefined) {
       return res.status(400).json({ error: "No fields to update" });
     }
 
@@ -47,7 +47,11 @@ const updateProfile = async (req: RequestWithProfileInfo, res: Response) => {
   }
 };
 
-const changePassword = async (req: Request, res: Response) => {
+/**
+ * Controller for changing user password
+ * Expects sanitized inputs from the sanitizeInputMiddleware
+ */
+export const changePassword = async (req: Request, res: Response) => {
   try {
     const { currentPassword, newPassword } = req.body;
     const userId = req.user?.id;
@@ -80,7 +84,10 @@ const changePassword = async (req: Request, res: Response) => {
   }
 };
 
-const deleteAccount = async (req: Request, res: Response) => {
+/**
+ * Controller for deleting user account
+ */
+export const deleteAccount = async (req: Request, res: Response) => {
   try {
     const userId = req.user?.id;
 
@@ -104,4 +111,3 @@ const deleteAccount = async (req: Request, res: Response) => {
     res.status(500).json({ error: "Server error" });
   }
 };
-export { updateProfile, changePassword, deleteAccount };

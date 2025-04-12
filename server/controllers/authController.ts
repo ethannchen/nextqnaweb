@@ -1,17 +1,22 @@
-import { Response } from "express";
+import { Request, Response } from "express";
 import User from "../models/users";
 import jwt from "jsonwebtoken";
 import dotenv from "dotenv";
-import { RequestWithSignupInfo } from "../middlewares/validateSignupMiddleware";
-import { RequestWithLoginInfo } from "../middlewares/validateLoginMiddleware";
 
 dotenv.config();
 
-const signup = async (req: RequestWithSignupInfo, res: Response) => {
+/**
+ * Controller for user signup
+ * Expects sanitized inputs from the sanitizeInputMiddleware
+ */
+export const signup = async (req: Request, res: Response) => {
   const { username, email, password, role } = req.body;
 
+  // Input validation is now handled by the sanitizeInputMiddleware
+  // and OpenAPI validators, so we can assume inputs are valid
+
   try {
-    // Use the new addNewUser method that encapsulates all the validation logic
+    // Use the addNewUser method that encapsulates all the business logic
     const newUser = await User.addNewUser({
       username,
       email,
@@ -42,7 +47,11 @@ const signup = async (req: RequestWithSignupInfo, res: Response) => {
   }
 };
 
-const login = async (req: RequestWithLoginInfo, res: Response) => {
+/**
+ * Controller for user login
+ * Expects sanitized inputs from the sanitizeInputMiddleware
+ */
+export const login = async (req: Request, res: Response) => {
   try {
     const { email, password } = req.body;
 
@@ -76,5 +85,3 @@ const login = async (req: RequestWithLoginInfo, res: Response) => {
     res.status(500).json({ error: "Server error" });
   }
 };
-
-export { signup, login };
