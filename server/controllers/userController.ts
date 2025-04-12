@@ -1,21 +1,27 @@
 import { Request, Response } from "express";
 import User from "../models/users";
+import {
+  asyncHandler,
+  BadRequestError,
+  NotFoundError,
+  UnauthorizedError,
+} from "../utils/errorUtils";
 
 /**
  * Controller for updating user profile
  * Expects sanitized inputs from the sanitizeInputMiddleware
  */
-export const updateProfile = async (req: Request, res: Response) => {
-  try {
+export const updateProfile = asyncHandler(
+  async (req: Request, res: Response) => {
     const { username, email, bio, website } = req.body;
     const userId = req.user?.id;
 
     if (!userId) {
-      return res.status(401).json({ error: "Authentication required" });
+      throw new UnauthorizedError("Authentication required");
     }
 
     if (!username && !email && bio === undefined && website === undefined) {
-      return res.status(400).json({ error: "No fields to update" });
+      throw new BadRequestError("No fields to update");
     }
 
     const updatedUser = await User.updateProfile(userId, {
@@ -23,91 +29,77 @@ export const updateProfile = async (req: Request, res: Response) => {
       email,
       bio,
       website,
-    });
-
-    // Return updated user data
-    res.json({ user: updatedUser });
-  } catch (error) {
-    // Handle specific error types
-    if (error instanceof Error) {
+    }).catch((error) => {
       if (error.message === "User not found") {
-        return res.status(404).json({ error: error.message });
+        throw new NotFoundError(error.message);
       }
       if (
         error.message === "Username is already taken" ||
         error.message === "Email is already registered"
       ) {
-        return res.status(400).json({ error: error.message });
+        throw new BadRequestError(error.message);
       }
-    }
+      throw error;
+    });
 
-    // Log generic errors
-    console.error(error);
-    res.status(500).json({ error: "Server error" });
+    // Return updated user data
+    res.json({ user: updatedUser });
   }
-};
+);
 
 /**
  * Controller for changing user password
  * Expects sanitized inputs from the sanitizeInputMiddleware
  */
-export const changePassword = async (req: Request, res: Response) => {
-  try {
+export const changePassword = asyncHandler(
+  async (req: Request, res: Response) => {
     const { currentPassword, newPassword } = req.body;
     const userId = req.user?.id;
 
     if (!userId) {
-      return res.status(401).json({ error: "Authentication required" });
+      throw new UnauthorizedError("Authentication required");
     }
 
     // Use the changePassword method from the User model
-    await User.changePassword(userId, currentPassword, newPassword);
+    await User.changePassword(userId, currentPassword, newPassword).catch(
+      (error) => {
+        if (error.message === "User not found") {
+          throw new NotFoundError(error.message);
+        }
+        if (error.message === "Current password is incorrect") {
+          throw new BadRequestError(error.message);
+        }
+        if (
+          error.message === "Current password and new password are required"
+        ) {
+          throw new BadRequestError(error.message);
+        }
+        throw error;
+      }
+    );
 
     res.json({ message: "Password updated successfully" });
-  } catch (error) {
-    // Handle specific error types
-    if (error instanceof Error) {
-      if (error.message === "User not found") {
-        return res.status(404).json({ error: error.message });
-      }
-      if (error.message === "Current password is incorrect") {
-        return res.status(400).json({ error: error.message });
-      }
-      if (error.message === "Current password and new password are required") {
-        return res.status(400).json({ error: error.message });
-      }
-    }
-
-    // Log generic errors
-    console.error(error);
-    res.status(500).json({ error: "Server error" });
   }
-};
+);
 
 /**
  * Controller for deleting user account
  */
-export const deleteAccount = async (req: Request, res: Response) => {
-  try {
+export const deleteAccount = asyncHandler(
+  async (req: Request, res: Response) => {
     const userId = req.user?.id;
 
     if (!userId) {
-      return res.status(401).json({ error: "Authentication required" });
+      throw new UnauthorizedError("Authentication required");
     }
 
-    await User.deleteUser(userId);
+    await User.deleteUser(userId).catch((error) => {
+      if (error.message === "User not found") {
+        throw new NotFoundError(error.message);
+      }
+      throw error;
+    });
 
     res.json({ message: "Account deleted successfully" });
-  } catch (error) {
-    // Handle specific error types
-    if (error instanceof Error) {
-      if (error.message === "User not found") {
-        return res.status(404).json({ error: error.message });
-      }
-    }
-
-    // Log generic errors
-    console.error(error);
-    res.status(500).json({ error: "Server error" });
   }
-};
+);

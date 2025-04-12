@@ -1,6 +1,11 @@
 import { Request, Response } from "express";
 import Answer from "../models/answers";
 import User from "../models/users";
+import {
+  asyncHandler,
+  BadRequestError,
+  NotFoundError,
+} from "../utils/errorUtils";
 
 /**
  * @route POST /addAnswer
@@ -14,20 +19,16 @@ import User from "../models/users";
  * @returns {400} JSON error if required fields are missing
  * @returns {500} JSON error if there is an internal server error
  */
-export const addAnswer = async (req: Request, res: Response) => {
+export const addAnswer = asyncHandler(async (req: Request, res: Response) => {
   const { qid, ans } = req.body;
+
   if (!qid || !ans || !ans.text || !ans.ans_by || !ans.ans_date_time) {
-    return res.status(400).json({ message: "Missing required fields" });
+    throw new BadRequestError("Missing required fields");
   }
-  try {
-    const response = await Answer.addAnswerToQuestion(qid, ans);
-    res.status(200).json(response);
-  } catch (err) {
-    res
-      .status(500)
-      .json({ message: "Error adding answer", error: (err as Error).message });
-  }
-};
+
+  const response = await Answer.addAnswerToQuestion(qid, ans);
+  res.status(200).json(response);
+});
 
 /**
  * Toggles vote for an answer by the given user.
@@ -38,36 +39,30 @@ export const addAnswer = async (req: Request, res: Response) => {
  * @returns {404} If answer is not found
  * @returns {500} JSON error if there is an internal server error
  */
-export const voteAnswer = async (req: Request, res: Response) => {
+export const voteAnswer = asyncHandler(async (req: Request, res: Response) => {
   const { aid } = req.params;
   const { email } = req.body;
 
   if (!email) {
-    return res
-      .status(400)
-      .json({ message: "Missing user email in request body" });
+    throw new BadRequestError("Missing user email in request body");
   }
 
   const user = await User.findByEmail(email);
-  if (!user) return res.status(400).json({ error: "Invalid user email" });
-
-  try {
-    const answer = await Answer.findById(aid);
-    if (!answer) {
-      return res.status(404).json({ message: "Answer not found" });
-    }
-
-    if (answer.hasUserVoted(email)) {
-      await answer.unvote(email);
-    } else {
-      await answer.vote(email);
-    }
-    const convertedAnswer = { ...answer, _id: answer._id.toString() };
-    res.status(200).json(convertedAnswer);
-  } catch (err) {
-    res.status(500).json({
-      message: "Error processing vote",
-      error: (err as Error).message,
-    });
+  if (!user) {
+    throw new BadRequestError("Invalid user email");
   }
-};
+
+  const answer = await Answer.findById(aid);
+  if (!answer) {
+    throw new NotFoundError("Answer not found");
+  }
+
+  if (answer.hasUserVoted(email)) {
+    await answer.unvote(email);
+  } else {
+    await answer.vote(email);
+  }
+
+  const convertedAnswer = { ...answer, _id: answer._id.toString() };
+  res.status(200).json(convertedAnswer);
+});
