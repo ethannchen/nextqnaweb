@@ -62,8 +62,8 @@ export const useLogin = (handleQuestions: VoidFunctionType) => {
         website: response.user.website,
         createdAt: new Date(),
       });
+      console.log("User logged in successfully:", response.user);
 
-      // Navigate to homepage
       handleQuestions();
     } catch (err: any) {
       setError(

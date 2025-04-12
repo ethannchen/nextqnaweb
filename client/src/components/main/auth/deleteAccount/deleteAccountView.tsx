@@ -18,7 +18,7 @@ import "./deleteAccountView.css";
  * @returns Delete account view component
  */
 const DeleteAccountView: React.FC<DeleteAccountViewProps> = ({
-    handleLogout,
+    handleProfile,
     handleQuestions
 }) => {
     const {
@@ -65,7 +65,7 @@ const DeleteAccountView: React.FC<DeleteAccountViewProps> = ({
                     <Button
                         variant="outlined"
                         color="primary"
-                        onClick={handleLogout}
+                        onClick={handleProfile}
                         disabled={loading}
                         className="delete-account-cancel-button"
                     >
