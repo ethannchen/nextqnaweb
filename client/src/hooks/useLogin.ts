@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/no-explicit-any */
 import { useState } from "react";
 import { login } from "../services/authService";
 import { useUserUpdate } from "../contexts/UserContext";
@@ -61,8 +62,8 @@ export const useLogin = (handleQuestions: VoidFunctionType) => {
         website: response.user.website,
         createdAt: new Date(),
       });
+      console.log("User logged in successfully:", response.user);
 
-      // Navigate to homepage
       handleQuestions();
     } catch (err: any) {
       setError(

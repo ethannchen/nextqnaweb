@@ -1,14 +1,11 @@
 import express from "express";
-import { validateSignupMiddleware } from "../middlewares/validateSignupMiddleware";
-import { validateLoginMiddleware } from "../middlewares/validateLoginMiddleware";
 import { login, signup } from "../controllers/authController";
+import { sanitizeInputMiddleware } from "../middlewares/sanitizeInputMiddleware";
+import { authLimiter } from "../middlewares/rateLimitMiddleware";
 
 const router = express.Router();
 
-// Sign-up route
-router.post("/signup", validateSignupMiddleware, signup);
-
-// Login route
-router.post("/login", validateLoginMiddleware, login);
+router.post("/signup", authLimiter, sanitizeInputMiddleware, signup);
+router.post("/login", authLimiter, sanitizeInputMiddleware, login);
 
 export default router;

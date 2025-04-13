@@ -121,19 +121,21 @@ const SignupView: React.FC<SignupViewProps> = ({ handleLogin, handleQuestions })
                     >
                         {loading ? <CircularProgress size={24} /> : "Create Account"}
                     </Button>
+
+                    <Typography className="login-prompt">
+                        Already have an account?{" "}
+                        <Link
+                            component="button"
+                            variant="body2"
+                            onClick={handleLogin}
+                            disabled={loading || !!success}
+                        >
+                            Login
+                        </Link>
+                    </Typography>
                 </form>
 
-                <Typography className="login-prompt">
-                    Already have an account?{" "}
-                    <Link
-                        component="button"
-                        variant="body2"
-                        onClick={handleLogin}
-                        disabled={loading || !!success}
-                    >
-                        Login
-                    </Link>
-                </Typography>
+
             </Paper>
         </Box>
     );

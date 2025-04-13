@@ -1,7 +1,7 @@
 import cors from "cors";
 import mongoose from "mongoose";
 import { Server } from "http"; // Import the Server type from Node.js
-import express, { type Express, Request, Response } from "express";
+import express, { type Express } from "express";
 import swaggerUi from "swagger-ui-express";
 import yaml from "yaml";
 import fs from "fs";
@@ -12,6 +12,10 @@ import questionRouter from "./routes/question";
 import answerRouter from "./routes/answer";
 import authRouter from "./routes/auth";
 import userRouter from "./routes/user";
+import logRouter from "./routes/log";
+import { errorHandler } from "./middlewares/errorMiddleware";
+import { generalLimiter } from "./middlewares/rateLimitMiddleware";
+import { loggerMiddleware } from "./middlewares/loggerMiddleware";
 
 const MONGO_URL: string = "mongodb://127.0.0.1:27017/fake_so";
 const CLIENT_URL: string = "http://localhost:3000";
@@ -29,8 +33,14 @@ app.use(
   })
 );
 
+// Apply general rate limiting to all requests
+app.use(generalLimiter);
+
 // The middleware function to parse the request body.
 app.use(express.json());
+
+// Apply logging middleware to all requests
+app.use(loggerMiddleware);
 
 // Defining the path to the Open API specification file and parsing it.
 const openApiPath = path.join(__dirname, "openapi.yaml");
@@ -67,6 +77,17 @@ app.use(
   })
 );
 
+// Route handlers
+app.use("/tag", tagRouter);
+app.use("/question", questionRouter);
+app.use("/answer", answerRouter);
+app.use("/auth", authRouter);
+app.use("/user", userRouter);
+app.use("/logs", logRouter); // Add the logs router for admin users
+
+// Centralized error handling middleware
+app.use(errorHandler);
+
 const server: Server = app.listen(port, () => {
   console.log(`Server starts at http://localhost:${port}`);
 });
@@ -87,41 +108,5 @@ process.on("SIGINT", () => {
       process.exit(1);
     });
 });
-
-// use tag server to handle tag related requests
-app.use("/tag", tagRouter);
-
-// use question server to handle tag related requests
-app.use("/question", questionRouter);
-
-// use answer server to handle tag related requests
-app.use("/answer", answerRouter);
-
-// use auth server to handle auth related requests
-app.use("/auth", authRouter);
-
-// use auth server to handle user related requests
-app.use("/user", userRouter);
-
-// The middleware function to handle errors.
-app.use(
-  (
-    err: Error & { status?: number; errors?: Error[] },
-    req: Request,
-    res: Response
-  ) => {
-    if (err.status && err.errors) {
-      console.log("err", err);
-      res.status(err.status).json({
-        message: err.message,
-        errors: err.errors,
-      });
-    } else {
-      res.status(500).json({
-        message: err.message || "Internal Server Error",
-      });
-    }
-  }
-);
 
 module.exports = server;

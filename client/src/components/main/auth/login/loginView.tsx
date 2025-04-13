@@ -18,7 +18,7 @@ import "./loginView.css";
  * @param props Functions for navigation
  * @returns Login view component
  */
-const LoginView: React.FC<LoginViewProps> = ({ handleLogin, handleSignup }) => {
+const LoginView: React.FC<LoginViewProps> = ({ handleQuestions, handleSignup }) => {
   const {
     email,
     setEmail,
@@ -29,7 +29,7 @@ const LoginView: React.FC<LoginViewProps> = ({ handleLogin, handleSignup }) => {
     loading,
     error,
     handleSubmit
-  } = useLogin(handleLogin);
+  } = useLogin(handleQuestions);
 
   return (
     <Box className="login-container">
@@ -80,18 +80,20 @@ const LoginView: React.FC<LoginViewProps> = ({ handleLogin, handleSignup }) => {
           >
             {loading ? <CircularProgress size={24} /> : "Login"}
           </Button>
+
+          <Typography className="signup-prompt">
+            Don&apos;t have an account?{" "}
+            <Link
+              component="button"
+              variant="body2"
+              onClick={handleSignup}
+            >
+              Create a new account
+            </Link>
+          </Typography>
         </form>
 
-        <Typography className="signup-prompt">
-          Don&apos;t have an account?{" "}
-          <Link
-            component="button"
-            variant="body2"
-            onClick={handleSignup}
-          >
-            Create a new account
-          </Link>
-        </Typography>
+
       </Paper>
     </Box>
   );

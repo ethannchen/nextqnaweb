@@ -168,8 +168,8 @@ export interface PageClassParams {
 }
 
 export interface LoginViewProps {
-  handleLogin: VoidFunctionType;
   handleSignup: VoidFunctionType;
+  handleQuestions: VoidFunctionType;
 }
 
 export interface SignupViewProps {
@@ -192,6 +192,6 @@ export interface ChangePasswordViewProps {
 }
 
 export interface DeleteAccountViewProps {
-  handleLogout: VoidFunctionType;
+  handleProfile: VoidFunctionType;
   handleQuestions: VoidFunctionType;
 }

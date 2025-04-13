@@ -6,7 +6,6 @@ import { Typography, Button, Link } from "@mui/material";
 import Box from "@mui/material/Box";
 import TextField from "@mui/material/TextField";
 
-// Updated props for Header component
 interface UpdatedHeaderProps extends HeaderProps {
   handleLogin: () => void;
   handleLogout: () => void;

@@ -9,7 +9,7 @@ import DeleteAccountView from "../auth/deleteAccount/deleteAccountView";
 export default class DeleteAccountPageClass extends PageClass {
     getContent(): React.ReactNode {
         return <DeleteAccountView
-            handleLogout={this.handleLogout}
+            handleProfile={this.handleProfile}
             handleQuestions={this.handleQuestions}
         />;
     }

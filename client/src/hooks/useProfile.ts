@@ -7,7 +7,7 @@ import { useUser } from "../contexts/UserContext";
  */
 export const useProfile = () => {
   const currentUser = useUser();
-  const [loading, setLoading] = useState(false);
+  const [loading] = useState(false);
   const [error, setError] = useState("");
 
   // Ensure current user is available

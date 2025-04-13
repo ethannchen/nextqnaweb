@@ -423,8 +423,106 @@ components:
               errorCode:
                 type: string
                 example: "type.openapi.validation"
+    
+    LogEntry:
+      type: object
+      properties:
+        timestamp:
+          type: string
+          format: date-time
+          description: When the request occurred
+        method:
+          type: string
+          description: HTTP method used
+          example: GET
+        path:
+          type: string
+          description: Request path
+          example: /question/getQuestion
+        ip:
+          type: string
+          description: IP address of the requester
+          example: 127.0.0.1
+        userId:
+          type: string
+          description: ID of the authenticated user or 'unauthenticated'
+          example: 60d5ec9f0e1b2a0015a5f3a8
+        statusCode:
+          type: integer
+          description: HTTP status code of the response
+          example: 200
+        responseTime:
+          type: integer
+          description: Response time in milliseconds
+          example: 45
+        userAgent:
+          type: string
+          description: User agent string of the requester
+          example: Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36
+      required:
+        - timestamp
+        - method
+        - path
+        - ip
 
 paths:
+  # Logs Controller Endpoints
+  /logs:
+    get:
+      summary: Get all API request logs
+      description: Retrieves all API request logs. Only accessible by admin users.
+      tags:
+        - Logs
+      security:
+        - BearerAuth: []
+      parameters:
+        - in: query
+          name: limit
+          schema:
+            type: integer
+            minimum: 1
+          description: Maximum number of logs to return
+      responses:
+        '200':
+          description: Successfully retrieved logs
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  count:
+                    type: integer
+                    description: Number of logs returned
+                  logs:
+                    type: array
+                    items:
+                      $ref: '#/components/schemas/LogEntry'
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+        '500':
+          $ref: '#/components/responses/InternalServerError'
+    delete:
+      summary: Clear all logs
+      description: Deletes all stored logs. Only accessible by admin users.
+      tags:
+        - Logs
+      security:
+        - BearerAuth: []
+      responses:
+        '200':
+          description: Successfully cleared logs
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+                    example: All logs have been cleared
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+        '500':
+          $ref: '#/components/responses/InternalServerError'
   # Tags Controller Endpoints
   /tag/getTagsWithQuestionNumber:
     get:
