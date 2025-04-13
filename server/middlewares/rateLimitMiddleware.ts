@@ -2,6 +2,8 @@ import { rateLimit } from "express-rate-limit";
 import { Request } from "express";
 import { AppError } from "../utils/errorUtils";
 
+const isTestEnvironment = process.env.NODE_ENV === "test";
+
 /**
  * Create a rate limit middleware with custom settings
  *
@@ -16,6 +18,9 @@ export const createRateLimiter = (options: {
   legacyHeaders?: boolean;
   keyGenerator?: (req: Request) => string;
 }) => {
+  if (isTestEnvironment) {
+    return (req: Request, res: Response, next: () => void) => next();
+  }
   const defaultOptions = {
     windowMs: 15 * 60 * 1000, // 15 minutes
     max: 100, // Limit each IP to 100 requests per window
