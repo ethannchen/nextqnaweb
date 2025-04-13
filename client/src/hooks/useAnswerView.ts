@@ -50,6 +50,9 @@ export const useAnswerView = ({
   /** Whether to show the login-required dialog */
   const [openDialog, setOpenDialog] = useState(false);
 
+  /** Whether to show the add comment dialog */
+  const [openCommentDialog, setOpenCommentDialog] = useState(false);
+
   /**
    * State to manage comment input and comment error
    */
@@ -88,6 +91,18 @@ export const useAnswerView = ({
       }
     } catch (error) {
       console.error("Failed to handle vote:", error);
+    }
+  };
+
+  /**
+   * Handles click adding a comment
+   */
+  const onAddComment = () => {
+    if (!currentUser) {
+      setOpenDialog(true);
+      return;
+    } else {
+      setOpenCommentDialog(true);
     }
   };
 
@@ -146,6 +161,9 @@ export const useAnswerView = ({
     hasVoted,
     openDialog,
     setOpenDialog,
+    openCommentDialog,
+    setOpenCommentDialog,
+    onAddComment,
     onVoteClick,
     comment,
     setComment,

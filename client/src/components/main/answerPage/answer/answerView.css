@@ -24,8 +24,9 @@
 
 .comment_container {
   margin-left: 10px;
+  border-top: 1px solid #ccc;
 }
 
-.comment_title {
-  font-weight: bold !important;
+.add_comment_button {
+  margin-left: 5px;
 }

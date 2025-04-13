@@ -1,7 +1,14 @@
 import "./answerView.css";
 import { AnswerProps } from "../../../../types/pageTypes";
 import Box from "@mui/material/Box";
-import { Button, Typography } from "@mui/material";
+import {
+  Button,
+  Dialog,
+  DialogActions,
+  DialogContent,
+  DialogTitle,
+  Typography,
+} from "@mui/material";
 import ThumbUpOutlinedIcon from "@mui/icons-material/ThumbUpOutlined";
 import ThumbUpIcon from "@mui/icons-material/ThumbUp";
 import LoginDialog from "../../loginDialog/loginDialog";
@@ -29,6 +36,9 @@ const Answer = ({
     hasVoted,
     openDialog,
     setOpenDialog,
+    openCommentDialog,
+    setOpenCommentDialog,
+    onAddComment,
     onVoteClick,
     comment,
     setComment,
@@ -52,34 +62,60 @@ const Answer = ({
           <Typography className="answer_question_meta">{meta}</Typography>
         </Box>
       </Box>
-      <Box className="comment_container">
-        {commentList.length > 0 && (
-          <Typography className="comment_title">Comments</Typography>
-        )}
-        {commentList?.map((c, idx) => (
-          <Comment
-            key={idx}
-            text={c.text}
-            commented_by={c.commented_by}
-            comment_date_time={c.comment_date_time}
-          />
-        ))}
-        <Input
-          title={"Add a comment"}
-          mandatory={false}
-          id={"answerCommentInput"}
-          val={comment}
-          setState={setComment}
-          err={commentErr}
-        />
-        <Button
-          variant="outlined"
-          color="primary"
-          size="small"
-          onClick={handleComment}
+      {commentList.length > 0 && (
+        <Box className="comment_container">
+          {commentList?.map((c, idx) => (
+            <Comment
+              key={idx}
+              text={c.text}
+              commented_by={c.commented_by}
+              comment_date_time={c.comment_date_time}
+            />
+          ))}
+        </Box>
+      )}
+      <Box>
+        <Box className="add_comment_button">
+          <Button color="primary" size="small" onClick={onAddComment}>
+            Add a comment
+          </Button>
+        </Box>
+        <Dialog
+          open={openCommentDialog}
+          onClose={() => setOpenCommentDialog(false)}
+          fullWidth
+          maxWidth="sm"
         >
-          {"Post Comment"}
-        </Button>
+          <DialogTitle>Add a comment</DialogTitle>
+          <DialogContent>
+            <Input
+              title={""}
+              mandatory={false}
+              id={"answerCommentInput"}
+              val={comment}
+              setState={setComment}
+              err={commentErr}
+            />
+          </DialogContent>
+          <DialogActions>
+            <Button
+              onClick={() => setOpenCommentDialog(false)}
+              color="secondary"
+            >
+              Cancel
+            </Button>
+            <Button
+              onClick={async () => {
+                await handleComment();
+                setOpenCommentDialog(false);
+              }}
+              variant="contained"
+              color="primary"
+            >
+              Submit
+            </Button>
+          </DialogActions>
+        </Dialog>
       </Box>
       <LoginDialog open={openDialog} onClose={() => setOpenDialog(false)} />
     </Box>

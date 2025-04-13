@@ -5,21 +5,22 @@ import { CommentType } from "../../../../types/entityTypes";
 
 const Comment = (comment: CommentType) => {
   return (
-    <Box>
-      <Box className="comment">
+    <Box className="comment">
+      <Typography
+        variant="subtitle2"
+        id="commentText"
+        className="commentText"
+        display="inline"
+      >
+        {comment.text}
         <Typography
+          className="comment_author"
           variant="subtitle2"
-          id="commentText"
-          className="commentText"
+          display="inline"
         >
-          {comment.text}
+          &nbsp; - {comment.commented_by.username}
         </Typography>
-        <Box className="commentAuthor">
-          <Typography className="comment_author" variant="subtitle2">
-            {comment.commented_by.username}
-          </Typography>
-        </Box>
-      </Box>
+      </Typography>
     </Box>
   );
 };
