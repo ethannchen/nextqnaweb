@@ -1,25 +1,29 @@
 import express from "express";
-import { validateUserProfileMiddleware } from "../middlewares/validateUserProfileMiddleware";
 import { authenticate } from "../middlewares/authMiddleware";
+import { sanitizeInputMiddleware } from "../middlewares/sanitizeInputMiddleware";
 import {
   changePassword,
   deleteAccount,
   updateProfile,
 } from "../controllers/userController";
+import { userLimiter } from "../middlewares/rateLimitMiddleware"; // Import user limiter
 
 const router = express.Router();
 
-// Update user profile route
 router.put(
   "/profile",
+  userLimiter,
   authenticate,
-  validateUserProfileMiddleware,
+  sanitizeInputMiddleware,
   updateProfile
 );
+router.put(
+  "/changePassword",
+  userLimiter,
+  authenticate,
+  sanitizeInputMiddleware,
+  changePassword
+);
+router.delete("/account", userLimiter, authenticate, deleteAccount);
 
-// Change password route
-router.put("/changePassword", authenticate, changePassword);
-
-// Delete account route
-router.delete("/account", authenticate, deleteAccount);
 export default router;

@@ -227,3 +227,17 @@ export interface IUserModel extends mongoose.Model<IUserDocument> {
   ): Promise<IUserDocument>;
   deleteUser(userId: mongoose.Types.ObjectId): Promise<IUserDocument>;
 }
+
+/**
+ * Log entry structure containing request and response information
+ */
+export interface LogEntry {
+  timestamp: Date;
+  method: string;
+  path: string;
+  ip: string;
+  userId?: string;
+  statusCode?: number;
+  responseTime?: number;
+  userAgent?: string;
+}

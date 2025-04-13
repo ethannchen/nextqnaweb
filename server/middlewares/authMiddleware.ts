@@ -2,6 +2,11 @@ import { Request, Response, NextFunction } from "express";
 import jwt from "jsonwebtoken";
 import User from "../models/users";
 import mongoose from "mongoose";
+import {
+  UnauthorizedError,
+  ForbiddenError,
+  asyncHandler,
+} from "../utils/errorUtils";
 
 interface UserPayload {
   id: string;
@@ -17,17 +22,13 @@ declare module "express" {
   }
 }
 
-export const authenticate = async (
-  req: Request,
-  res: Response,
-  next: NextFunction
-) => {
-  try {
+export const authenticate = asyncHandler(
+  async (req: Request, res: Response, next: NextFunction) => {
     // Get token from header
     const token = req.header("Authorization")?.replace("Bearer ", "");
 
     if (!token) {
-      return res.status(400).json({ error: "No token, authorization denied" });
+      throw new UnauthorizedError("No token, authorization denied");
     }
 
     // Verify token
@@ -40,7 +41,7 @@ export const authenticate = async (
     const user = await User.findById(decoded.id).select("-password");
 
     if (!user) {
-      return res.status(400).json({ error: "User not found" });
+      throw new UnauthorizedError("User not found");
     }
 
     // Add user to request object
@@ -50,18 +51,14 @@ export const authenticate = async (
     };
 
     next();
-  } catch (err) {
-    res.status(400).json({ error: "Token is not valid: " + err });
   }
-};
+);
 
 // Middleware to check if user is admin
 export const isAdmin = (req: Request, res: Response, next: NextFunction) => {
   if (req.user && req.user.role === "admin") {
     next();
   } else {
-    res
-      .status(403)
-      .json({ error: "Access denied. Admin privileges required." });
+    next(new ForbiddenError("Access denied. Admin privileges required."));
   }
 };
