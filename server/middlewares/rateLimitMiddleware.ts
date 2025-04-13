@@ -2,8 +2,6 @@ import { rateLimit } from "express-rate-limit";
 import { Request } from "express";
 import { AppError } from "../utils/errorUtils";
 
-const isTestEnvironment = process.env.NODE_ENV === "test";
-
 /**
  * Create a rate limit middleware with custom settings
  *
@@ -18,8 +16,16 @@ export const createRateLimiter = (options: {
   legacyHeaders?: boolean;
   keyGenerator?: (req: Request) => string;
 }) => {
+  // Check if we're in a testing environment
+  const isTestEnvironment = process.env.NODE_ENV === "test";
+
   if (isTestEnvironment) {
-    return (req: Request, res: Response, next: () => void) => next();
+    return rateLimit({
+      windowMs: 15 * 60 * 1000,
+      max: 1000000, // Very high limit that won't be reached in tests
+      standardHeaders: true,
+      legacyHeaders: false,
+    });
   }
   const defaultOptions = {
     windowMs: 15 * 60 * 1000, // 15 minutes
