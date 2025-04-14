@@ -3,6 +3,28 @@
  */
 
 /**
+ * The type of a user object
+ * @property {string} username - The username
+ * @property {string} email - The user email
+ */
+interface UserType {
+  username: string;
+  email: string;
+}
+
+/**
+ * The type of a comment object
+ * @property {string} text - The comment text
+ * @property {UserType} user - The user who posts the comment
+ * @property {Date} comment_date_time - The comment post date and time
+ */
+export interface CommentType {
+  text: string;
+  commented_by: UserType;
+  comment_date_time: Date;
+}
+
+/**
  * The type of an answer object.
  * @property {string} text - The answer text.
  * @property {string} ans_by - The user who answered the question.
@@ -16,6 +38,7 @@ interface AnswerType {
   ans_date_time: Date;
   votes: number;
   voted_by: string[];
+  comments: CommentType[];
   _id?: string;
 }
 

@@ -1,0 +1,18 @@
+/* All the CSS related to comments Page*/
+.comment {
+  margin: 10px 0 5px 20px;
+  display: flex;
+  flex-direction: row;
+}
+
+.commentText {
+  width: 75%;
+}
+
+.commentAuthor {
+  margin-left: 5%;
+}
+
+.comment_author {
+  color: #bbbbbb;
+}

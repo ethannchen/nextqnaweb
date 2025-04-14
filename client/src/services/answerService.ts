@@ -49,4 +49,30 @@ const voteAnswer = async (aid: string, email: string): Promise<AnswerType> => {
   }
 };
 
-export { addAnswer, voteAnswer };
+/**
+ * Calls the API to add a comment to a specific answer.
+ * @param aid - The ID of the answer to comment on.
+ * @param comment - The comment object including text, commented_by (user ID), and comment_date_time.
+ * @returns The updated answer from the API.
+ */
+const commentAnswer = async (
+  aid: string,
+  comment: {
+    text: string;
+    commented_by: string;
+    comment_date_time: string;
+  }
+): Promise<AnswerType> => {
+  try {
+    const res = await api.post(`${ANSWER_API_URL}/${aid}/addComment`, comment);
+    if (res.status !== 200) {
+      throw new Error("Error while adding comment to answer");
+    }
+    return res.data;
+  } catch (error) {
+    console.error("Error adding comment:", error);
+    throw error;
+  }
+};
+
+export { addAnswer, voteAnswer, commentAnswer };

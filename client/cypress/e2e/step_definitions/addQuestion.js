@@ -1,5 +1,10 @@
 import { Given, When, Then, And } from "cypress-cucumber-preprocessor/steps";
-import { fillQuestionForm, createQuestion, createAnswer } from "./sharedSteps";
+import {
+  fillQuestionForm,
+  createQuestion,
+  createAnswer,
+  login,
+} from "./sharedSteps";
 
 const Q4_DESC = "Quick question about storage on android";
 const Q3_DESC = "Object storage for a web application";
@@ -47,7 +52,7 @@ const answer = { username: "abc3", answer: "Answer Question A" };
 
 function verifyMetaData(q) {
   cy.get(".postTitle").first().should("contain", q.title);
-  cy.get(".question_author").first().should("contain", q.user);
+  cy.get(".question_author").first().should("contain", "carly");
   cy.get(".question_meta").first().should("contain", "0 seconds");
 }
 
@@ -79,8 +84,26 @@ function verifyUnansweredQuestions() {
   });
 }
 
+// Scenario: Unable to add a new question if not logged in
+// Given The user has read access to the application "http://localhost:3000"
+// When The user clicks the "Ask a Question" button
+// Then The user should see an error message "You need to log in first."
+
+Given("The user has read access to the application {string}", (url) => {
+  cy.visit(url);
+});
+
+When("The user clicks the {string} button", (buttonName) => {
+  cy.contains(buttonName).click();
+});
+
+Then("The user should see an error message {string}", (errorMessage) => {
+  cy.contains(errorMessage, { matchCase: false });
+});
+
 // Scenario: Add a new question successfully
 //     Given The user has write access to the application "http://localhost:3000"
+//     And The user has logged in
 //     When The user clicks the "Ask a Question" button
 //     And fills out the necessary fields
 //     And clicks the "Post Question" button
@@ -88,6 +111,10 @@ function verifyUnansweredQuestions() {
 
 Given("The user has write access to the application {string}", (url) => {
   cy.visit(url);
+});
+
+And("The user has logged in", () => {
+  login();
 });
 
 When("The user clicks the {string} button", (buttonName) => {
@@ -112,6 +139,7 @@ Then(
 
 // Scenario Outline: Add a new question fail with missing fields
 //     Given The user has write access to the application "http://localhost:3000"
+//     And The user has logged in
 //     When The user clicks the "Ask a Question" button
 //     And fill out form with all necessary fields except the "<missingField>" field
 //     And clicks the "Post Question" button
@@ -120,6 +148,10 @@ Then(
 
 Given("The user has write access to the application {string}", (url) => {
   cy.visit(url);
+});
+
+And("The user has logged in", () => {
+  login();
 });
 
 When("The user clicks the {string} button", (buttonName) => {
@@ -148,6 +180,7 @@ And("The user should see the {string} button", (buttonName) => {
 
 // Scenario: Add questions and verify their sequences in Unanswered page
 // Given The user has write access to the application "http://localhost:3000"
+// And The user has logged in
 // And The user asks three questions
 // And The user answers the first question
 // When The user goes to "Questions" page
@@ -156,6 +189,10 @@ And("The user should see the {string} button", (buttonName) => {
 
 Given("The user has write access to the application {string}", (url) => {
   cy.visit(url);
+});
+
+And("The user has logged in", () => {
+  login();
 });
 
 And("The user asks three questions", () => {
@@ -183,6 +220,7 @@ Then("The user should see two questions in newest order", () => {
 
 // Scenario: Adds multiple questions one by one and verify them in All Questions
 // Given The user has write access to the application "http://localhost:3000"
+// And The user has logged in
 // And The user asks three questions
 // When The user goes back to the home page "Fake Stack Overflow"
 // Then The user should see all questions including new questions in newest order
@@ -191,6 +229,10 @@ Then("The user should see two questions in newest order", () => {
 
 Given("The user has write access to the application {string}", (url) => {
   cy.visit(url);
+});
+
+And("The user has logged in", () => {
+  login();
 });
 
 And("The user asks three questions", () => {

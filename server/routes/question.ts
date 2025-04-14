@@ -4,10 +4,11 @@ import {
   getQuestionById,
   getQuestion,
 } from "../controllers/questionController";
+import { authenticate } from "../middlewares/authMiddleware";
 
 const router = express.Router();
 
-router.post("/addQuestion", addQuestion);
+router.post("/addQuestion", authenticate, addQuestion);
 
 router.get("/getQuestionById/:qid", getQuestionById);
 

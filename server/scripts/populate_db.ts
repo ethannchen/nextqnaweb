@@ -7,7 +7,7 @@ import mongoose from "mongoose";
 import Answer from "../models/answers";
 import Question from "../models/questions";
 import Tag from "../models/tags";
-import { ITagDB, IAnswerDB, IQuestionDB } from "./script_types";
+import { ITagDB, IAnswerDB, IQuestionDB, IUser } from "./script_types";
 import {
   Q1_DESC,
   Q1_TXT,
@@ -26,6 +26,9 @@ import {
   A7_TXT,
   A8_TXT,
 } from "../data/posts_strings";
+import User from "../models/users";
+import { users } from "../data/users";
+import { IComment } from "../types/types";
 
 // Get arguments passed on command line
 const userArgs = process.argv.slice(2);
@@ -71,17 +74,20 @@ async function tagCreate(name: string): Promise<ITagDB> {
 function answerCreate(
   text: string,
   ans_by: string,
-  ans_date_time: Date
+  ans_date_time: Date,
+  votes?: number,
+  voted_by?: string[],
+  comments?: IComment[]
 ): Promise<IAnswerDB> {
-  const answerDetail: IAnswerDB = {
+  const answer = new Answer({
     text,
     ans_by,
     ans_date_time,
-    votes: 0,
-    voted_by: [],
-  }; // TODO: add some real user here
+    votes,
+    voted_by,
+    comments,
+  });
 
-  const answer = new Answer(answerDetail);
   return answer.save();
 }
 
@@ -126,6 +132,13 @@ function questionCreate(
  */
 const populate = async () => {
   try {
+    const comment_by: mongoose.Types.ObjectId[] = [];
+
+    for (const u of users) {
+      const user = await User.createUser(u);
+      if (user._id) comment_by.push(user._id);
+    }
+
     const t1 = await tagCreate("react");
     const t2 = await tagCreate("javascript");
     const t3 = await tagCreate("android-studio");
@@ -136,42 +149,121 @@ const populate = async () => {
     const a1 = await answerCreate(
       A1_TXT,
       "hamkalo",
-      new Date("2023-11-20T03:24:42")
+      new Date("2023-11-20T03:24:42"),
+      1,
+      [users[0].email],
+      [
+        {
+          text: "This is super helpful",
+          commented_by: comment_by[0],
+          comment_date_time: new Date("2024-11-20T03:24:42"),
+        },
+        {
+          text: "I don't understand. Could you elaborate more?",
+          commented_by: comment_by[1],
+          comment_date_time: new Date("2024-12-20T03:24:42"),
+        },
+      ]
     );
+
     const a2 = await answerCreate(
       A2_TXT,
       "azad",
-      new Date("2023-11-23T08:24:00")
+      new Date("2023-11-23T08:24:00"),
+      2,
+      [users[0].email, users[1].email],
+      [
+        {
+          text: "Thank you! This works for me.",
+          commented_by: comment_by[2],
+          comment_date_time: new Date("2024-11-20T03:24:42"),
+        },
+        {
+          text: "It might be good if you could refactor the code so that you only have to make one call.",
+          commented_by: comment_by[3],
+          comment_date_time: new Date("2024-04-20T03:24:42"),
+        },
+      ]
     );
     const a3 = await answerCreate(
       A3_TXT,
       "abaya",
-      new Date("2023-11-18T09:24:00")
+      new Date("2023-11-18T09:24:00"),
+      4,
+      [users[0].email, users[1].email, users[2].email, users[3].email],
+      [
+        {
+          text: "Could you give an example?",
+          commented_by: comment_by[4],
+          comment_date_time: new Date("2024-04-21T09:15:30"),
+        },
+      ]
     );
     const a4 = await answerCreate(
       A4_TXT,
       "alia",
-      new Date("2023-11-12T03:30:00")
+      new Date("2023-11-12T03:30:00"),
+      4,
+      [users[0].email, users[1].email, users[2].email, users[3].email],
+      [
+        {
+          text: "I faced a similar issue before. Restarting the build process worked for me.",
+          commented_by: comment_by[4],
+          comment_date_time: new Date("2024-11-20T03:24:42"),
+        },
+        {
+          text: "Thanks for the detailed explanation! Helped me understand the difference between useEffect and useLayoutEffect.",
+          commented_by: comment_by[0],
+          comment_date_time: new Date("2024-04-23T13:47:00"),
+        },
+      ]
     );
     const a5 = await answerCreate(
       A5_TXT,
       "sana",
-      new Date("2023-11-01T15:24:19")
+      new Date("2023-11-01T15:24:19"),
+      4,
+      [users[0].email, users[1].email, users[2].email, users[3].email]
     );
     const a6 = await answerCreate(
       A6_TXT,
       "abhi3241",
-      new Date("2023-02-19T18:20:59")
+      new Date("2023-02-19T18:20:59"),
+      3,
+      [users[1].email, users[2].email, users[3].email]
     );
     const a7 = await answerCreate(
       A7_TXT,
       "mackson3332",
-      new Date("2023-02-22T17:19:00")
+      new Date("2023-02-22T17:19:00"),
+      3,
+      [users[1].email, users[2].email, users[3].email],
+      [
+        {
+          text: "Could you give an example?",
+          commented_by: comment_by[4],
+          comment_date_time: new Date("2024-04-21T09:15:30"),
+        },
+      ]
     );
     const a8 = await answerCreate(
       A8_TXT,
       "ihba001",
-      new Date("2023-03-22T21:17:53")
+      new Date("2023-03-22T21:17:53"),
+      4,
+      [users[0].email, users[1].email, users[2].email, users[3].email],
+      [
+        {
+          text: "I faced a similar issue before. Restarting the build process worked for me.",
+          commented_by: comment_by[4],
+          comment_date_time: new Date("2024-11-20T03:24:42"),
+        },
+        {
+          text: "Thanks for the detailed explanation! Helped me understand the difference between useEffect and useLayoutEffect.",
+          commented_by: comment_by[0],
+          comment_date_time: new Date("2024-04-23T13:47:00"),
+        },
+      ]
     );
 
     await questionCreate(

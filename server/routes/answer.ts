@@ -1,9 +1,15 @@
 import express from "express";
-import { addAnswer, voteAnswer } from "../controllers/answerController";
+import {
+  addAnswer,
+  voteAnswer,
+  addComment,
+} from "../controllers/answerController";
+import { authenticate } from "../middlewares/authMiddleware";
 
 const router = express.Router();
 
-router.post("/addAnswer", addAnswer);
-router.patch("/:aid/vote", voteAnswer);
+router.post("/addAnswer", authenticate, addAnswer);
+router.patch("/:aid/vote", authenticate, voteAnswer);
+router.post("/:aid/addComment", authenticate, addComment);
 
 export default router;

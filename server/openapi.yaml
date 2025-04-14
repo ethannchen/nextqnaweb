@@ -128,9 +128,29 @@ components:
           items:
             type: string
           example: ["alice", "bob"]
+        comments:
+          type: array
+          items:
+            $ref: "#/components/schemas/Comment"
         __v:
           type: integer
           example: 0
+    
+    Comment:
+      type: object
+      properties:
+        _id:
+          type: string
+          example: "60f6c2ab3a334f001fa0c001"
+        text:
+          type: string
+          example: "This explanation really helped me!"
+        commented_by:
+          $ref: "#/components/schemas/UserDetails"
+        comment_date_time:
+          type: string
+          format: date-time
+          example: "2025-04-11T09:12:00.000Z"
 
     Question:
       type: object
@@ -151,18 +171,11 @@ components:
         answers:
           type: array
           items:
-          # oneOf is used to allow both answer IDs and answer objects answers in a question
-            oneOf:
-              - type: string # For answer IDs
-                example: "679846196243c96505ba4007"
-              - $ref: "#/components/schemas/Answer"
-                example: 
-                  _id: "679d61405af1815cc9398a86"
-                  text: "You can solve your problem this way."
-                  ans_by: "user-name"
-                  ans_date_time: "2025-02-02T00:28:19.406Z"
-                  votes: 0
-                  voted_by: []
+          # # oneOf is used to allow both answer IDs and answer objects answers in a question
+          #   oneOf:
+          #     - type: string # For answer IDs
+          #       example: "679846196243c96505ba4007"
+            $ref: "#/components/schemas/Answer"
         asked_by:
           type: string
           example: user-name
@@ -212,7 +225,12 @@ components:
               items:
                 type: string
               example: ["alice", "bob"]
-    
+            comments:
+              type: array
+              items:
+                $ref: "#/components/schemas/Comment"
+              example: []
+
     VoteRequest:
       type: object
       required:
@@ -222,6 +240,25 @@ components:
           type: string
           example: "test@gmail.com"
           description: user email for the voter
+    
+    AddCommentRequest:
+      type: object
+      required:
+        - text
+        - commented_by
+        - comment_date_time
+      properties:
+        text:
+          type: string
+          example: "Thanks for the clarification!"
+        commented_by:
+          type: string
+          example: "679846196243c96505ba4007"
+          description: MongoDB ObjectId of the user making the comment
+        comment_date_time:
+          type: string
+          format: date-time
+          example: "2025-04-11T10:30:00.000Z"
 
     AddQuestionRequest:
       type: object
@@ -648,6 +685,38 @@ paths:
               schema:
                 $ref: "#/components/schemas/Answer"
         "400":
+          $ref: "#/components/responses/BadRequest"
+        "500":
+          $ref: "#/components/responses/InternalServerError"
+  
+  /answer/{aid}/addComment:
+    post:
+      tags:
+        - Answers
+      summary: Add a comment to an answer
+      parameters:
+        - name: aid
+          in: path
+          required: true
+          schema:
+            type: string
+          description: ID of the answer to comment on
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/AddCommentRequest"
+      responses:
+        "200":
+          description: Comment added successfully
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Answer"
+        "400":
+          $ref: "#/components/responses/BadRequest"
+        "404":
           $ref: "#/components/responses/BadRequest"
         "500":
           $ref: "#/components/responses/InternalServerError"

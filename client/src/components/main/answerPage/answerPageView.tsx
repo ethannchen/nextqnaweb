@@ -7,6 +7,7 @@ import { AnswerPageProps } from "../../../types/pageTypes";
 import { useAnswerPage } from "../../../hooks/useAnswerPage";
 import Button from "@mui/material/Button";
 import { useAnswerVote } from "../../../hooks/useAnswerVote";
+import LoginDialog from "../loginDialog/loginDialog";
 
 /**
  * The component renders all the answers for a question.
@@ -20,7 +21,8 @@ const AnswerPage = ({
   handleNewQuestion,
   handleNewAnswer,
 }: AnswerPageProps) => {
-  const { question } = useAnswerPage(qid);
+  const { question, openDialog, setOpenDialog, onAnswerQuestionClick } =
+    useAnswerPage(qid, handleNewAnswer);
   const handleVote = useAnswerVote();
 
   if (!question) {
@@ -40,28 +42,31 @@ const AnswerPage = ({
         askby={question.asked_by}
         meta={getMetaData(new Date(question.ask_date_time))}
       />
-      {question.answers.map((a, idx) => (
-        <Answer
-          aid={a._id}
-          key={idx}
-          text={a.text}
-          ansBy={a.ans_by}
-          meta={getMetaData(new Date(a.ans_date_time))}
-          votes={a.votes}
-          voted_by={a.voted_by}
-          handleVote={handleVote}
-        />
-      ))}
+      {question.answers.map((a, idx) => {
+        console.log(a);
+        return (
+          <Answer
+            aid={a._id}
+            key={idx}
+            text={a.text}
+            ansBy={a.ans_by}
+            meta={getMetaData(new Date(a.ans_date_time))}
+            votes={a.votes}
+            voted_by={a.voted_by}
+            handleVote={handleVote}
+            comments={a.comments}
+          />
+        );
+      })}
       <Button
         size="small"
         variant="contained"
         className="ansButton"
-        onClick={() => {
-          handleNewAnswer();
-        }}
+        onClick={onAnswerQuestionClick}
       >
         Answer Question
       </Button>
+      <LoginDialog open={openDialog} onClose={() => setOpenDialog(false)} />
     </>
   );
 };

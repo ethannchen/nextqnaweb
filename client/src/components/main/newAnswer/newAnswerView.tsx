@@ -1,6 +1,5 @@
 import "./newAnswerView.css";
 import Form from "../baseComponents/form/formView";
-import Input from "../baseComponents/input/inputView";
 import Textarea from "../baseComponents/textarea/textAreaView";
 import { useNewAnswer } from "../../../hooks/useNewAnswer";
 import { NewAnswerProps } from "../../../types/pageTypes";
@@ -17,18 +16,13 @@ import { Typography } from "@mui/material";
  * @returns the NewAnswer component
  */
 const NewAnswer = ({ qid, handleAnswer }: NewAnswerProps) => {
-  const { usrn, setUsrn, text, setText, usrnErr, textErr, postAnswer } =
-    useNewAnswer(qid, handleAnswer);
+  const { text, setText, textErr, postAnswer } = useNewAnswer(
+    qid,
+    handleAnswer
+  );
 
   return (
     <Form>
-      <Input
-        title={"Username"}
-        id={"answerUsernameInput"}
-        val={usrn}
-        setState={setUsrn}
-        err={usrnErr}
-      />
       <Textarea
         title={"Answer Text"}
         id={"answerTextInput"}

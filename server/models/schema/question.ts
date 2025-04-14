@@ -1,5 +1,6 @@
 import mongoose, { Schema } from "mongoose";
 import {
+  IComment,
   IQuestion,
   IQuestionDocument,
   IQuestionModel,
@@ -7,6 +8,7 @@ import {
 } from "../../types/types";
 import Answer from "../answers";
 import Tag from "../tags";
+import User from "../users";
 
 /**
  * The schema for a document in the Question collection.
@@ -153,7 +155,16 @@ QuestionSchema.statics.getActiveQuestions = async function (): Promise<
 QuestionSchema.statics.findByIdAndIncrementViews = async function (
   qid: string
 ): Promise<IQuestion | null> {
-  const question = await this.findById(qid).exec();
+  const question = await this.findById(qid)
+    .populate({
+      path: "answers",
+      populate: {
+        path: "comments.commented_by",
+        select: "username",
+      },
+    })
+    .exec();
+
   if (!question) {
     return null;
   } else {
@@ -188,6 +199,27 @@ QuestionSchema.methods.convertToIQuestion =
       )
     );
 
+    const validAnswers = answerObjects.filter(
+      (a): a is NonNullable<typeof a> => a !== null
+    );
+
+    // collect all unique commenter ObjectIds
+    const commenterIds = new Set<string>();
+    for (const answer of validAnswers) {
+      for (const comment of answer.comments || []) {
+        commenterIds.add(comment.commented_by.toString());
+      }
+    }
+
+    // fetch all users
+    const userDocs = await User.find({ _id: { $in: Array.from(commenterIds) } })
+      .select("_id username")
+      .exec();
+    const userMap = new Map<string, string>();
+    for (const user of userDocs) {
+      userMap.set(user._id.toString(), user.username);
+    }
+
     // retrieve the answers and sort by answer time
     const answers = answerObjects
       .filter((a): a is NonNullable<typeof a> => a !== null)
@@ -199,6 +231,15 @@ QuestionSchema.methods.convertToIQuestion =
         ans_date_time: a.ans_date_time.toISOString(),
         votes: a.votes,
         voted_by: a.voted_by,
+        comments: a.comments?.map((c: IComment) => ({
+          _id: c._id?.toString(),
+          text: c.text,
+          commented_by: {
+            _id: c.commented_by.toString(),
+            username: userMap.get(c.commented_by.toString()) ?? "(unknown)",
+          },
+          comment_date_time: c.comment_date_time.toISOString(),
+        })),
       }));
 
     const convertedQuestion = {

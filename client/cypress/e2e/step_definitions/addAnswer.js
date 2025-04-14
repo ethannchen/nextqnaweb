@@ -1,5 +1,10 @@
 import { Given, When, Then, And } from "cypress-cucumber-preprocessor/steps";
-import { fillQuestionForm, fillAnswerForm, createAnswer } from "./sharedSteps";
+import {
+  fillQuestionForm,
+  fillAnswerForm,
+  createAnswer,
+  login,
+} from "./sharedSteps";
 
 const Q1_DESC = "Programmatically navigate using React router";
 const Q2_DESC =
@@ -15,13 +20,11 @@ const newQuestion = {
   title: "Test Question A",
   text: "Test Question A Text",
   tags: "javascript",
-  user: "mks0",
 };
 
 const answers = ["Test Answer 1", A1_TXT, A2_TXT];
 
 const newAnswer = {
-  username: "joym",
   answer: answers[0],
 };
 
@@ -29,7 +32,7 @@ function verifyAnswers() {
   cy.get(".answerText").each(($el, index) => {
     cy.contains(answers[index]);
   });
-  cy.contains("joym");
+  cy.contains("carly");
   cy.contains("0 seconds ago");
 }
 
@@ -53,8 +56,31 @@ function verifyActiveOrder() {
   });
 }
 
+// Scenario: Unable to add a new answer if not logged in
+//     Given The user has read access to the application "http://localhost:3000"
+//     When The user clicks on a question
+//     And clicks "Answer Question" button
+//     Then The user should see an error message "You need to log in first."
+
+Given("The user has write access to the application {string}", (url) => {
+  cy.visit(url);
+});
+
+When("The user clicks on a question", () => {
+  cy.contains(Q1_DESC).click();
+});
+
+And("clicks {string} button", (buttonName) => {
+  cy.contains(buttonName).click();
+});
+
+Then("The user should see an error message {string}", (errorMessage) => {
+  cy.contains(errorMessage, { matchCase: false });
+});
+
 // Scenario: Created new answer should be displayed at the top of the answers page
 //     Given The user has write access to the application "http://localhost:3000"
+//     And The user has logged in
 //     When The user clicks on a question
 //     And clicks "Answer Question" button
 //     And fills the answer
@@ -63,6 +89,10 @@ function verifyActiveOrder() {
 
 Given("The user has write access to the application {string}", (url) => {
   cy.visit(url);
+});
+
+And("The user has logged in", () => {
+  login();
 });
 
 When("The user clicks on a question", () => {
@@ -87,6 +117,7 @@ Then("the answers should be in newest order in the answers page", () => {
 
 // Scenario Outline: Add a new answer fail with missing fields
 //     Given The user has write access to the application "http://localhost:3000"
+//     And The user has logged in
 //     When The user clicks on a question
 //     And clicks "Answer Question" button
 //     And fill out the answer form with all necessary fields except the "<missingField>" field
@@ -95,6 +126,10 @@ Then("the answers should be in newest order in the answers page", () => {
 
 Given("The user has write access to the application {string}", (url) => {
   cy.visit(url);
+});
+
+And("The user has logged in", () => {
+  login();
 });
 
 When("The user clicks on a question", () => {
@@ -123,6 +158,7 @@ Then("The user should see an error message {string}", (errorMessage) => {
 
 // Scenario: Adding new answers to questions should make them active
 //     Given The user has write access to the application "http://localhost:3000"
+//     And The user has logged in
 //     And The user clicks "Ask a Question" button
 //     And fills out the necessary fields
 //     And clicks the "Post Question" button
@@ -133,6 +169,10 @@ Then("The user should see an error message {string}", (errorMessage) => {
 
 Given("The user has write access to the application {string}", (url) => {
   cy.visit(url);
+});
+
+And("The user has logged in", () => {
+  login();
 });
 
 And("The user clicks {string} button", (buttonName) => {

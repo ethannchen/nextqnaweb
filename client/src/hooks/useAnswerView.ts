@@ -6,6 +6,7 @@
 import { useEffect, useState } from "react";
 import { AnswerProps } from "../types/pageTypes";
 import { useUser } from "../contexts/UserContext";
+import { commentAnswer } from "../services/answerService";
 
 /**
  * Hook to manage vote state and behavior for an answer component.
@@ -28,7 +29,11 @@ export const useAnswerView = ({
   voted_by,
   handleVote,
   aid,
-}: Pick<AnswerProps, "votes" | "voted_by" | "handleVote" | "aid">) => {
+  comments,
+}: Pick<
+  AnswerProps,
+  "votes" | "voted_by" | "handleVote" | "aid" | "comments"
+>) => {
   const currentUser = useUser();
 
   /** State to store the current vote count */
@@ -44,6 +49,16 @@ export const useAnswerView = ({
 
   /** Whether to show the login-required dialog */
   const [openDialog, setOpenDialog] = useState(false);
+
+  /** Whether to show the add comment dialog */
+  const [openCommentDialog, setOpenCommentDialog] = useState(false);
+
+  /**
+   * State to manage comment input and comment error
+   */
+  const [commentList, setCommentList] = useState(comments);
+  const [comment, setComment] = useState<string>("");
+  const [commentErr, setCommentErr] = useState<string>("");
 
   // Update hasVoted state when user or voters list changes
   useEffect(() => {
@@ -79,11 +94,81 @@ export const useAnswerView = ({
     }
   };
 
+  /**
+   * Handles click adding a comment
+   */
+  const onAddComment = () => {
+    if (!currentUser) {
+      setOpenDialog(true);
+      return;
+    } else {
+      setOpenCommentDialog(true);
+    }
+  };
+
+  /**
+   * Handles adding a comment to the answer.
+   */
+  const handleComment = async () => {
+    if (!comment.trim()) {
+      setCommentErr("Comment cannot be empty.");
+      return;
+    }
+
+    if (comment.trim().length > 500) {
+      setCommentErr("Comment cannot exceed 500 characters.");
+      return;
+    }
+
+    if (!currentUser) {
+      setOpenDialog(true);
+      return;
+    }
+
+    try {
+      await commentAnswer(aid!, {
+        text: comment,
+        commented_by: currentUser.email,
+        comment_date_time: new Date().toISOString(),
+      });
+
+      const newComment = {
+        text: comment,
+        commented_by: {
+          username: currentUser.username,
+          email: currentUser.email,
+        },
+        comment_date_time: new Date(),
+      };
+
+      setCommentList((prev) => [
+        ...prev,
+        {
+          ...newComment,
+        },
+      ]);
+
+      setComment("");
+      setCommentErr("");
+    } catch (error) {
+      console.error("Failed to post comment:", error);
+      setCommentErr("Failed to post comment. Please try again.");
+    }
+  };
+
   return {
     voteCount,
     hasVoted,
     openDialog,
     setOpenDialog,
+    openCommentDialog,
+    setOpenCommentDialog,
+    onAddComment,
     onVoteClick,
+    comment,
+    setComment,
+    commentErr,
+    commentList,
+    handleComment,
   };
 };

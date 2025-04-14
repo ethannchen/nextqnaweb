@@ -1,4 +1,14 @@
 /**
+ * The method to login as a test user
+ */
+export const login = () => {
+  cy.get(".login-button").click();
+  cy.get("#email").type("carly@test.com");
+  cy.get("#password").type("111111Aa");
+  cy.get("#submit-login").click();
+};
+
+/**
  * The method to fill question form
  * @param {*} q - the question
  */
@@ -6,7 +16,6 @@ export const fillQuestionForm = (q) => {
   if (q.title) cy.get("#formTitleInput").type(q.title);
   if (q.text) cy.get("#formTextInput").type(q.text);
   if (q.tags) cy.get("#formTagInput").type(q.tags);
-  if (q.user) cy.get("#formUsernameInput").type(q.user);
 };
 
 /**
@@ -14,7 +23,6 @@ export const fillQuestionForm = (q) => {
  * @param {*} a - the answer
  */
 export const fillAnswerForm = (a) => {
-  if (a.username) cy.get("#answerUsernameInput").type(a.username);
   if (a.answer) cy.get("#answerTextInput").type(a.answer);
 };
 

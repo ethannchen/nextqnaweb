@@ -13,6 +13,24 @@ import mongoose from "mongoose";
  * test data.
  */
 
+export interface IUser {
+  _id?: mongoose.Types.ObjectId;
+  username: string;
+  email: string;
+  password: string;
+  role?: string;
+  bio?: string;
+  website?: string;
+  createdAt?: Date;
+}
+
+export interface IComment {
+  _id?: mongoose.Types.ObjectId;
+  text: string;
+  commented_by: mongoose.Types.ObjectId;
+  comment_date_time: Date;
+}
+
 export interface IAnswerDB {
   _id?: mongoose.Types.ObjectId;
   text: string;
@@ -20,6 +38,7 @@ export interface IAnswerDB {
   ans_date_time: Date;
   votes: Number;
   voted_by: string[];
+  comments: IComment[];
 }
 
 export interface IQuestionDB {

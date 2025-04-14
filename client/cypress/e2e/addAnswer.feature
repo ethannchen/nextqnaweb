@@ -3,8 +3,15 @@ Feature: Adding new answers
     I want to add a new answer to specific questions
     So that I can share my solution with the question poster and the community
 
+Scenario: Unable to add a new answer if not logged in
+    Given The user has read access to the application "http://localhost:3000"
+    When The user clicks on a question
+    And clicks "Answer Question" button
+    Then The user should see an error message "You need to log in first."
+
 Scenario: Created new answer should be displayed at the top of the answers page
     Given The user has write access to the application "http://localhost:3000"
+    And The user has logged in
     When The user clicks on a question
     And clicks "Answer Question" button
     And fills the answer
@@ -13,6 +20,7 @@ Scenario: Created new answer should be displayed at the top of the answers page
 
 Scenario Outline: Add a new answer fail with missing fields
     Given The user has write access to the application "http://localhost:3000"
+    And The user has logged in
     When The user clicks on a question
     And clicks "Answer Question" button
     And fill out the answer form with all necessary fields except the "<missingField>" field 
@@ -21,11 +29,11 @@ Scenario Outline: Add a new answer fail with missing fields
   
     Examples:
       | missingField | errorMessage |
-      | username  | Username cannot be empty | 
       | answer   | Answer text cannot be empty |
 
 Scenario: Adding new answers to questions should make them active
     Given The user has write access to the application "http://localhost:3000"
+    And The user has logged in
     And The user clicks "Ask a Question" button
     And fills out the necessary fields
     And clicks the "Post Question" button

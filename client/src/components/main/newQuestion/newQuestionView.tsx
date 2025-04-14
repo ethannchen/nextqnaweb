@@ -24,12 +24,9 @@ const NewQuestion = ({ handleQuestions }: NewQuestionProps) => {
     setText,
     tag,
     setTag,
-    usrn,
-    setUsrn,
     titleErr,
     textErr,
     tagErr,
-    usrnErr,
     postQuestion,
   } = useNewQuestion(handleQuestions);
 
@@ -58,13 +55,6 @@ const NewQuestion = ({ handleQuestions }: NewQuestionProps) => {
         val={tag}
         setState={setTag}
         err={tagErr}
-      />
-      <Input
-        title={"Username"}
-        id={"formUsernameInput"}
-        val={usrn}
-        setState={setUsrn}
-        err={usrnErr}
       />
       <Box className="btn_indicator_container">
         <Button

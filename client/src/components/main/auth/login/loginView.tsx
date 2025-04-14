@@ -9,7 +9,7 @@ import {
   Paper,
   Link,
   CircularProgress,
-  Alert
+  Alert,
 } from "@mui/material";
 import "./loginView.css";
 
@@ -18,7 +18,10 @@ import "./loginView.css";
  * @param props Functions for navigation
  * @returns Login view component
  */
-const LoginView: React.FC<LoginViewProps> = ({ handleQuestions, handleSignup }) => {
+const LoginView: React.FC<LoginViewProps> = ({
+  handleQuestions,
+  handleSignup,
+}) => {
   const {
     email,
     setEmail,
@@ -28,7 +31,7 @@ const LoginView: React.FC<LoginViewProps> = ({ handleQuestions, handleSignup }) 
     passwordError,
     loading,
     error,
-    handleSubmit
+    handleSubmit,
   } = useLogin(handleQuestions);
 
   return (
@@ -46,6 +49,7 @@ const LoginView: React.FC<LoginViewProps> = ({ handleQuestions, handleSignup }) 
 
         <form className="login-form">
           <TextField
+            id="email"
             label="Email"
             type="email"
             value={email}
@@ -58,6 +62,7 @@ const LoginView: React.FC<LoginViewProps> = ({ handleQuestions, handleSignup }) 
           />
 
           <TextField
+            id="password"
             label="Password"
             type="password"
             value={password}
@@ -77,23 +82,18 @@ const LoginView: React.FC<LoginViewProps> = ({ handleQuestions, handleSignup }) 
             onClick={handleSubmit}
             disabled={loading}
             className="login-button"
+            id="submit-login"
           >
             {loading ? <CircularProgress size={24} /> : "Login"}
           </Button>
 
           <Typography className="signup-prompt">
             Don&apos;t have an account?{" "}
-            <Link
-              component="button"
-              variant="body2"
-              onClick={handleSignup}
-            >
+            <Link component="button" variant="body2" onClick={handleSignup}>
               Create a new account
             </Link>
           </Typography>
         </form>
-
-
       </Paper>
     </Box>
   );
