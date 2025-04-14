@@ -5,6 +5,7 @@ Feature: Adding new answers
 
 Scenario: Created new answer should be displayed at the top of the answers page
     Given The user has write access to the application "http://localhost:3000"
+    And The user has logged in
     When The user clicks on a question
     And clicks "Answer Question" button
     And fills the answer
@@ -13,6 +14,7 @@ Scenario: Created new answer should be displayed at the top of the answers page
 
 Scenario Outline: Add a new answer fail with missing fields
     Given The user has write access to the application "http://localhost:3000"
+    And The user has logged in
     When The user clicks on a question
     And clicks "Answer Question" button
     And fill out the answer form with all necessary fields except the "<missingField>" field 
@@ -21,11 +23,11 @@ Scenario Outline: Add a new answer fail with missing fields
   
     Examples:
       | missingField | errorMessage |
-      | username  | Username cannot be empty | 
       | answer   | Answer text cannot be empty |
 
 Scenario: Adding new answers to questions should make them active
     Given The user has write access to the application "http://localhost:3000"
+    And The user has logged in
     And The user clicks "Ask a Question" button
     And fills out the necessary fields
     And clicks the "Post Question" button
