@@ -110,3 +110,5 @@ process.on("SIGINT", () => {
 });
 
 module.exports = server;
+
+export { app };
