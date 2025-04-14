@@ -1,4 +1,4 @@
-import { useEffect, useState } from "react";
+import { useState } from "react";
 import { useUser } from "../contexts/UserContext";
 import { addAnswer } from "../services/answerService";
 import { QuestionIdFunctionType } from "../types/functionTypes";
@@ -15,18 +15,12 @@ export const useNewAnswer = (
   qid: string,
   handleAnswer: QuestionIdFunctionType
 ) => {
-  const [usrn, setUsrn] = useState<string>("");
+  const currentUser = useUser();
   const [text, setText] = useState<string>("");
-  const [usrnErr, setUsrnErr] = useState<string>("");
   const [textErr, setTextErr] = useState<string>("");
 
   const postAnswer = async () => {
     let isValid = true;
-
-    if (!usrn) {
-      setUsrnErr("Username cannot be empty");
-      isValid = false;
-    }
 
     if (!text) {
       setTextErr("Answer text cannot be empty");
@@ -39,7 +33,7 @@ export const useNewAnswer = (
 
     const answer = {
       text: text,
-      ans_by: usrn,
+      ans_by: currentUser!.username,
       ans_date_time: new Date(),
       votes: 0,
       voted_by: [],
@@ -53,11 +47,8 @@ export const useNewAnswer = (
   };
 
   return {
-    usrn,
-    setUsrn,
     text,
     setText,
-    usrnErr,
     textErr,
     postAnswer,
   };

@@ -1,6 +1,7 @@
 import { useState } from "react";
 import { addQuestion } from "../services/questionService";
 import { VoidFunctionType } from "../types/functionTypes";
+import { useUser } from "../contexts/UserContext";
 
 /**
  * A custom hook to handle the state and logic for adding a new question.
@@ -9,15 +10,14 @@ import { VoidFunctionType } from "../types/functionTypes";
  * @returns the state and logic required to add a new question
  */
 export const useNewQuestion = (handleQuestions: VoidFunctionType) => {
+  const currentUser = useUser();
   const [title, setTitle] = useState<string>("");
   const [text, setText] = useState<string>("");
   const [tag, setTag] = useState<string>("");
-  const [usrn, setUsrn] = useState<string>("");
 
   const [titleErr, setTitleErr] = useState<string>("");
   const [textErr, setTextErr] = useState<string>("");
   const [tagErr, setTagErr] = useState<string>("");
-  const [usrnErr, setUsrnErr] = useState<string>("");
 
   const postQuestion = async () => {
     let isValid = true;
@@ -54,11 +54,6 @@ export const useNewQuestion = (handleQuestions: VoidFunctionType) => {
 
     const tagObjects = tags.map((tag) => ({ name: tag }));
 
-    if (!usrn) {
-      setUsrnErr("Username cannot be empty");
-      isValid = false;
-    }
-
     if (!isValid) {
       return;
     }
@@ -67,7 +62,7 @@ export const useNewQuestion = (handleQuestions: VoidFunctionType) => {
       title: title,
       text: text,
       tags: tagObjects,
-      asked_by: usrn,
+      asked_by: currentUser!.username,
       ask_date_time: new Date(),
     };
 
@@ -84,12 +79,9 @@ export const useNewQuestion = (handleQuestions: VoidFunctionType) => {
     setText,
     tag,
     setTag,
-    usrn,
-    setUsrn,
     titleErr,
     textErr,
     tagErr,
-    usrnErr,
     postQuestion,
   };
 };
