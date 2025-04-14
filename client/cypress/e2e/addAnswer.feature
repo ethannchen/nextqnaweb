@@ -3,6 +3,12 @@ Feature: Adding new answers
     I want to add a new answer to specific questions
     So that I can share my solution with the question poster and the community
 
+Scenario: Unable to add a new answer if not logged in
+    Given The user has read access to the application "http://localhost:3000"
+    When The user clicks on a question
+    And clicks "Answer Question" button
+    Then The user should see an error message "You need to log in first."
+
 Scenario: Created new answer should be displayed at the top of the answers page
     Given The user has write access to the application "http://localhost:3000"
     And The user has logged in

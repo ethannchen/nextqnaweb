@@ -56,6 +56,28 @@ function verifyActiveOrder() {
   });
 }
 
+// Scenario: Unable to add a new answer if not logged in
+//     Given The user has read access to the application "http://localhost:3000"
+//     When The user clicks on a question
+//     And clicks "Answer Question" button
+//     Then The user should see an error message "You need to log in first."
+
+Given("The user has write access to the application {string}", (url) => {
+  cy.visit(url);
+});
+
+When("The user clicks on a question", () => {
+  cy.contains(Q1_DESC).click();
+});
+
+And("clicks {string} button", (buttonName) => {
+  cy.contains(buttonName).click();
+});
+
+Then("The user should see an error message {string}", (errorMessage) => {
+  cy.contains(errorMessage, { matchCase: false });
+});
+
 // Scenario: Created new answer should be displayed at the top of the answers page
 //     Given The user has write access to the application "http://localhost:3000"
 //     And The user has logged in
