@@ -62,7 +62,7 @@ const Answer = ({
           <Typography className="answer_question_meta">{meta}</Typography>
         </Box>
       </Box>
-      {commentList.length > 0 && (
+      {commentList?.length > 0 && (
         <Box className="comment_container">
           {commentList?.map((c, idx) => (
             <Comment

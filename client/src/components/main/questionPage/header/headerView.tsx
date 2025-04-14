@@ -4,6 +4,8 @@ import { QuestionHeaderProps } from "../../../../types/pageTypes";
 import Button from "@mui/material/Button";
 import Box from "@mui/material/Box";
 import { Typography } from "@mui/material";
+import LoginDialog from "../../loginDialog/loginDialog";
+import { useQuestionHeader } from "../../../../hooks/useQuestionHeader";
 
 /**
  * A container component for th header of the page that displays a list of questions
@@ -17,18 +19,16 @@ const QuestionHeader = ({
   setQuestionOrder,
   handleNewQuestion,
 }: QuestionHeaderProps) => {
+  const { onAddQuestionClick, openDialog, setOpenDialog } =
+    useQuestionHeader(handleNewQuestion);
+
   return (
     <Box>
       <Box className="space_between right_padding">
         <Typography variant="h5" className="bold_title">
           {title_text}
         </Typography>
-        <Button
-          variant="contained"
-          onClick={() => {
-            handleNewQuestion();
-          }}
-        >
+        <Button variant="contained" onClick={onAddQuestionClick}>
           Ask a Question
         </Button>
       </Box>
@@ -44,6 +44,7 @@ const QuestionHeader = ({
           ))}
         </Box>
       </Box>
+      <LoginDialog open={openDialog} onClose={() => setOpenDialog(false)} />
     </Box>
   );
 };

@@ -7,6 +7,7 @@ import { AnswerPageProps } from "../../../types/pageTypes";
 import { useAnswerPage } from "../../../hooks/useAnswerPage";
 import Button from "@mui/material/Button";
 import { useAnswerVote } from "../../../hooks/useAnswerVote";
+import LoginDialog from "../loginDialog/loginDialog";
 
 /**
  * The component renders all the answers for a question.
@@ -20,7 +21,8 @@ const AnswerPage = ({
   handleNewQuestion,
   handleNewAnswer,
 }: AnswerPageProps) => {
-  const { question } = useAnswerPage(qid);
+  const { question, openDialog, setOpenDialog, onAnswerQuestionClick } =
+    useAnswerPage(qid, handleNewAnswer);
   const handleVote = useAnswerVote();
 
   if (!question) {
@@ -60,12 +62,11 @@ const AnswerPage = ({
         size="small"
         variant="contained"
         className="ansButton"
-        onClick={() => {
-          handleNewAnswer();
-        }}
+        onClick={onAnswerQuestionClick}
       >
         Answer Question
       </Button>
+      <LoginDialog open={openDialog} onClose={() => setOpenDialog(false)} />
     </>
   );
 };

@@ -64,16 +64,6 @@ async function tagCreate(name: string): Promise<ITagDB> {
   return tagDB;
 }
 
-function userCreate(
-  username: string,
-  email: string,
-  password: string
-): Promise<IUser> {
-  const userDetails: IUser = { username, email, password };
-  const user = new User(userDetails);
-  return user.save();
-}
-
 /**
  * an asynchronous function to create an answer in the Answers collection of the database
  * @param text answer text
@@ -145,7 +135,7 @@ const populate = async () => {
     const comment_by: mongoose.Types.ObjectId[] = [];
 
     for (const u of users) {
-      const user = await userCreate(u.username, u.email, u.password);
+      const user = await User.createUser(u);
       if (user._id) comment_by.push(user._id);
     }
 

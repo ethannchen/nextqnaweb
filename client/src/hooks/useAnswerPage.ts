@@ -1,14 +1,22 @@
 import { useEffect, useState } from "react";
+import { useUser } from "../contexts/UserContext";
 import { getQuestionById } from "../services/questionService";
 import { QuestionResponseType } from "../types/entityTypes";
+import { VoidFunctionType } from "../types/functionTypes";
 
 /**
  * The custom hook is used to fetch a question by its id.
  * @param qid the id of the question to fetch
  * @returns the state of the question viewer component.
  */
-export const useAnswerPage = (qid: string) => {
+export const useAnswerPage = (
+  qid: string,
+  handleNewAnswer: VoidFunctionType
+) => {
+  const currentUser = useUser();
   const [question, setQuestion] = useState<QuestionResponseType | null>(null);
+  /** Whether to show the login-required dialog */
+  const [openDialog, setOpenDialog] = useState(false);
 
   /**
    * A useEffect hook in React is used to manage side effects of a component.
@@ -31,5 +39,13 @@ export const useAnswerPage = (qid: string) => {
     fetchData();
   }, [qid]);
 
-  return { question };
+  const onAnswerQuestionClick = () => {
+    if (!currentUser) {
+      setOpenDialog(true);
+      return;
+    }
+    handleNewAnswer();
+  };
+
+  return { question, openDialog, setOpenDialog, onAnswerQuestionClick };
 };

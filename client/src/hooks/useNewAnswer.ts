@@ -1,4 +1,5 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
+import { useUser } from "../contexts/UserContext";
 import { addAnswer } from "../services/answerService";
 import { QuestionIdFunctionType } from "../types/functionTypes";
 
