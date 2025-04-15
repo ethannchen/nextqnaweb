@@ -13,7 +13,6 @@ type RequestHandler = (
 // Mock the Tag model
 jest.mock("../models/tags");
 jest.mock("../utils/errorUtils", () => ({
-  // Use the RequestHandler type instead of any
   asyncHandler: (fn: RequestHandler) => fn,
 }));
 
