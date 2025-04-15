@@ -233,7 +233,6 @@ describe("Answer Controller Tests", () => {
     });
 
     test("should throw NotFoundError when answer is not found", async () => {
-      // Arrange
       const mockEmail = "user@example.com";
       const mockUser = { _id: new mongoose.Types.ObjectId(), email: mockEmail };
 
@@ -242,10 +241,8 @@ describe("Answer Controller Tests", () => {
       (User.findByEmail as jest.Mock).mockResolvedValue(mockUser);
       (Answer.findById as jest.Mock).mockResolvedValue(null);
 
-      // Act & Assert
       try {
         await voteAnswer(mockRequest as Request, mockResponse as Response);
-        // If we reach here, the test should fail because we expected an error
         fail("Expected NotFoundError was not thrown");
       } catch (error: unknown) {
         expect(error).toBeInstanceOf(AppError);

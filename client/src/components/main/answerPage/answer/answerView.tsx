@@ -54,8 +54,12 @@ const Answer = ({
           {text}
         </Typography>
         <Box className="vote-container" onClick={onVoteClick}>
-          {hasVoted ? <ThumbUpIcon /> : <ThumbUpOutlinedIcon />}
-          <Typography>{voteCount}</Typography>
+          {hasVoted ? (
+            <ThumbUpIcon className="vote_icon_filled" />
+          ) : (
+            <ThumbUpOutlinedIcon className="vote_icon_outlined" />
+          )}
+          <Typography className="vote_count">{voteCount}</Typography>
         </Box>
         <Box className="answerAuthor">
           <Typography className="answer_author">{ansBy}</Typography>

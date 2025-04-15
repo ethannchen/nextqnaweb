@@ -39,7 +39,7 @@ export const addAnswer = asyncHandler(async (req: Request, res: Response) => {
  * @returns {404} If answer is not found
  * @returns {500} JSON error if there is an internal server error
  */
-export const voteAnswer = async (req: Request, res: Response) => {
+export const voteAnswer = asyncHandler(async (req: Request, res: Response) => {
   const { aid } = req.params;
   const { email } = req.body;
 
@@ -65,7 +65,7 @@ export const voteAnswer = async (req: Request, res: Response) => {
 
   const convertedAnswer = { ...answer, _id: answer._id.toString() };
   res.status(200).json(convertedAnswer);
-};
+});
 
 /**
  * @route POST /answer/:aid/addComment
@@ -80,7 +80,7 @@ export const voteAnswer = async (req: Request, res: Response) => {
  * @returns {404} If answer is not found
  * @returns {500} JSON error if there is an internal server error
  */
-export const addComment = async (req: Request, res: Response) => {
+export const addComment = asyncHandler(async (req: Request, res: Response) => {
   const { aid } = req.params;
   const { text, commented_by, comment_date_time } = req.body;
 
@@ -123,4 +123,4 @@ export const addComment = async (req: Request, res: Response) => {
       error: (err as Error).message,
     });
   }
-};
+});
