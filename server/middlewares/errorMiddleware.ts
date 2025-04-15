@@ -12,20 +12,21 @@ export const errorHandler = (
   res: Response
 ): void => {
   console.error("Error:", err);
+  res.setHeader("Content-Type", "application/json");
 
   // Handle OpenAPI validation errors
-  const isOpenApiError =
-    err?.constructor?.name === "OpenAPIError" ||
-    ((err as any)?.status === 400 && (err as any)?.errors);
+  // const isOpenApiError =
+  //   err?.constructor?.name === "OpenAPIError" ||
+  //   ((err as any)?.status === 400 && (err as any)?.errors);
 
-  if (isOpenApiError) {
-    const openApiErr = err as any;
-    res.status(openApiErr.status || 400).json({
-      error: openApiErr.message || "Validation Error",
-      details: openApiErr.errors || [],
-    });
-    return;
-  }
+  // if (isOpenApiError) {
+  //   const openApiErr = err as any;
+  //   res.status(openApiErr.status || 400).json({
+  //     error: openApiErr.message || "Validation Error",
+  //     details: openApiErr.errors || [],
+  //   });
+  //   return;
+  // }
 
   // Handle our custom AppError instances
   if (err instanceof AppError) {

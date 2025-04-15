@@ -110,3 +110,4 @@ process.on("SIGINT", () => {
 });
 
 module.exports = server;
+export default app;
