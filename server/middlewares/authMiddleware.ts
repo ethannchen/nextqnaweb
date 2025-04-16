@@ -25,7 +25,6 @@ export const authenticate = asyncHandler(
     const token = req.header("Authorization")?.replace("Bearer ", "");
 
     if (!token) {
-      console.log("no token");
       throw new UnauthorizedError("No token, authorization denied");
     }
 
