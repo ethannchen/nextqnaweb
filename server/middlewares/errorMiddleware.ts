@@ -1,5 +1,5 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
-import { Request, Response } from "express";
+import { NextFunction, Request, Response } from "express";
 import { AppError } from "../utils/errorUtils";
 
 /**
@@ -9,10 +9,10 @@ import { AppError } from "../utils/errorUtils";
 export const errorHandler = (
   err: Error | AppError,
   req: Request,
-  res: Response
+  res: Response,
+  // eslint-disable-next-line @typescript-eslint/no-unused-vars
+  next: NextFunction
 ): void => {
-  console.error("Error:", err);
-
   // Handle OpenAPI validation errors
   const isOpenApiError =
     err?.constructor?.name === "OpenAPIError" ||

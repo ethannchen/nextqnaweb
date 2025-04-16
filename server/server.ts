@@ -19,7 +19,7 @@ import { loggerMiddleware } from "./middlewares/loggerMiddleware";
 
 const MONGO_URL: string = "mongodb://127.0.0.1:27017/fake_so";
 const CLIENT_URL: string = "http://localhost:3000";
-const port: number = 8000;
+const port = process.env.PORT || 8000;
 
 mongoose.connect(MONGO_URL);
 
@@ -110,3 +110,4 @@ process.on("SIGINT", () => {
 });
 
 module.exports = server;
+export default app;

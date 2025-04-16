@@ -2,11 +2,8 @@ import { Request, Response } from "express";
 import User from "../models/users";
 import jwt from "jsonwebtoken";
 import dotenv from "dotenv";
-import {
-  asyncHandler,
-  BadRequestError,
-  UnauthorizedError,
-} from "../utils/errorUtils";
+import { BadRequestError, UnauthorizedError } from "../utils/errorUtils";
+import asyncHandler from "express-async-handler";
 
 dotenv.config();
 
@@ -30,13 +27,12 @@ export const signup = asyncHandler(async (req: Request, res: Response) => {
     if (error.message === "Username is already taken") {
       throw new BadRequestError(error.message);
     }
-    throw error;
   });
 
   // Respond with success
   res
     .status(201)
-    .json({ message: `User ${newUser.username} registered successfully` });
+    .json({ message: `User ${newUser?.username} registered successfully` });
 });
 
 /**
