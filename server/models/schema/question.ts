@@ -220,10 +220,15 @@ QuestionSchema.methods.convertToIQuestion =
       userMap.set(user._id.toString(), user.username);
     }
 
-    // retrieve the answers and sort by answer time
+    // retrieve the answers and sort by votes then by answer time
     const answers = answerObjects
       .filter((a): a is NonNullable<typeof a> => a !== null)
-      .sort((a, b) => b.ans_date_time.getTime() - a.ans_date_time.getTime())
+      .sort((a, b) => {
+        if (b.votes !== a.votes) {
+          return b.votes - a.votes;
+        }
+        return b.ans_date_time.getTime() - a.ans_date_time.getTime();
+      })
       .map((a) => ({
         _id: a._id.toString(),
         text: a.text,

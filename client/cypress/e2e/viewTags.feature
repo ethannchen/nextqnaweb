@@ -19,7 +19,8 @@ Scenario Outline: Each tag should have correct number of questions
     |website   |  1    |
 
 Scenario: Successfully add the tags when create a new question 
-    Given The user can access the homepage "http://localhost:3000"
+    Given The user has write access to the application "http://localhost:3000"
+    And The user has logged in
     And The user clicks on "Ask a Question"
     And fills out the necessary fields with tags
     And clicks the "Post Question" button
@@ -48,7 +49,8 @@ Scenario Outline: Correct question should exist in tags
     |storage|Quick question about storage on android; Object storage for a web application|
 
 Scenario: Successfully create a new question with a new tag and finds the question through tag
-    Given The user can access the homepage "http://localhost:3000"
+    Given The user has write access to the application "http://localhost:3000"
+    And The user has logged in
     And The user clicks on "Ask a Question"
     And fills out the necessary fields with new tags
     And clicks the "Post Question" button

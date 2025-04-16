@@ -62,6 +62,10 @@ Given("The user has write access to the application {string}", (url) => {
   cy.visit(url);
 });
 
+And("The user has logged in", () => {
+  login();
+});
+
 And("The user clicks on {string}", (buttonName) => {
   cy.contains(buttonName).click();
 });
@@ -155,6 +159,10 @@ Then("they should be able to see question {string} in it", (question) => {
 
 Given("The user has write access to the application {string}", (url) => {
   cy.visit(url);
+});
+
+And("The user has logged in", () => {
+  login();
 });
 
 And("The user clicks on {string}", (buttonName) => {

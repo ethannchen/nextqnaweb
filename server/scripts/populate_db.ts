@@ -189,8 +189,8 @@ const populate = async () => {
       A3_TXT,
       "abaya",
       new Date("2023-11-18T09:24:00"),
-      4,
-      [users[0].email, users[1].email, users[2].email, users[3].email],
+      3,
+      [users[1].email, users[2].email, users[3].email],
       [
         {
           text: "Could you give an example?",
@@ -250,8 +250,8 @@ const populate = async () => {
       A8_TXT,
       "ihba001",
       new Date("2023-03-22T21:17:53"),
-      4,
-      [users[0].email, users[1].email, users[2].email, users[3].email],
+      3,
+      [users[1].email, users[2].email, users[3].email],
       [
         {
           text: "I faced a similar issue before. Restarting the build process worked for me.",

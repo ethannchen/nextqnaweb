@@ -37,7 +37,6 @@ Scenario: Search for a question using a tag that does not exist
 
 Scenario: Search by tag from new question page
     Given The user can access the homepage "http://localhost:3000"
-    And The user clicks "Ask a Question" button
     When The user search for a tag in the search bar
     Then The user should see correct questions in the result in newest order
 
