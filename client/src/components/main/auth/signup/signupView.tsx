@@ -60,7 +60,7 @@ const SignupView: React.FC<SignupViewProps> = ({ handleLogin, handleQuestions })
                 <form className="signup-form">
                     <TextField
                         label="Username"
-                        type="text"
+                        type="username"
                         value={username}
                         onChange={(e) => setUsername(e.target.value)}
                         fullWidth

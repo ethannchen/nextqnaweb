@@ -84,7 +84,7 @@ const LoginView: React.FC<LoginViewProps> = ({
             className="login-button"
             id="submit-login"
           >
-            {loading ? <CircularProgress size={24} /> : "Login"}
+            {loading ? <CircularProgress size={24} /> : "Login Now"}
           </Button>
 
           <Typography className="signup-prompt">

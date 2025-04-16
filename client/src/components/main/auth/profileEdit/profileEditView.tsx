@@ -68,6 +68,7 @@ const ProfileEditView: React.FC<ProfileEditViewProps> = ({ handleProfile }) => {
                         helperText={usernameError}
                         required
                         disabled={loading || !!success}
+
                     />
 
                     <TextField
@@ -95,6 +96,7 @@ const ProfileEditView: React.FC<ProfileEditViewProps> = ({ handleProfile }) => {
                         multiline
                         rows={4}
                         disabled={loading || !!success}
+                        id="bio"
                     />
 
                     <TextField
