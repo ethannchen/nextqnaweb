@@ -44,7 +44,7 @@ const AnswerSchema = new mongoose.Schema<IAnswerDocument, IAnswerModel>(
  * @param email - the username or user id
  * @returns - if the user has voted for the answer
  */
-AnswerSchema.methods.hasUserVoted = function (email: string): boolean {
+AnswerSchema.methods.hasUserVoted = function (email: string): Promise<boolean> {
   return this.voted_by.includes(email);
 };
 

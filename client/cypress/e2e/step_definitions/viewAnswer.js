@@ -32,15 +32,20 @@ Then(
 );
 
 // Scenario: Show 0 answers when a question does not have any answer yet
-//     Given The user can access the homepage "http://localhost:3000"
+//     Given The user has write access to the application "http://localhost:3000"
+//     And The user has logged in
 //     And The user clicks the "Ask a Question" button
 //     And fills out the necessary fields
 //     And clicks the "Post Question" button
 //     When The user clicks into the newly added question
 //     Then The user should see "0 answers" for that question
 
-Given("The user can access the homepage {string}", (url) => {
+Given("The user has write access to the application {string}", (url) => {
   cy.visit(url);
+});
+
+And("The user has logged in", () => {
+  login();
 });
 
 And("The user clicks the {string} button", (buttonName) => {

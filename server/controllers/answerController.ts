@@ -77,47 +77,38 @@ export const voteAnswer = asyncHandler(async (req: Request, res: Response) => {
  * @returns {404} If answer is not found
  * @returns {500} JSON error if there is an internal server error
  */
-export const addComment = async (req: Request, res: Response) => {
+export const addComment = asyncHandler(async (req: Request, res: Response) => {
   const { aid } = req.params;
   const { text, commented_by, comment_date_time } = req.body;
 
   if (!text || !commented_by || !comment_date_time) {
-    return res.status(400).json({ message: "Missing required comment fields" });
+    throw new BadRequestError("Missing required comment fields");
   }
 
   const user = await User.findByEmail(commented_by);
-  if (!user) return res.status(400).json({ error: "Invalid user" });
-
-  try {
-    const answer = await Answer.findById(aid);
-    if (!answer) {
-      return res.status(404).json({ message: "Answer not found" });
-    }
-
-    await answer.addComment({
-      text,
-      commented_by: user._id,
-      comment_date_time: new Date(comment_date_time),
-    });
-
-    const updatedAnswer = await Answer.findById(aid).populate(
-      "comments.commented_by",
-      "username"
-    );
-
-    if (!updatedAnswer) {
-      return res
-        .status(404)
-        .json({ message: "Answer not found after comment" });
-    }
-
-    res
-      .status(200)
-      .json({ ...updatedAnswer, _id: updatedAnswer._id.toString() });
-  } catch (err) {
-    res.status(500).json({
-      message: "Error adding comment",
-      error: (err as Error).message,
-    });
+  if (!user) {
+    throw new BadRequestError("Invalid user email");
   }
-};
+
+  const answer = await Answer.findById(aid);
+  if (!answer) {
+    throw new NotFoundError("Answer not found");
+  }
+
+  await answer.addComment({
+    text,
+    commented_by: user._id,
+    comment_date_time: new Date(comment_date_time),
+  });
+
+  const updatedAnswer = await Answer.findById(aid).populate(
+    "comments.commented_by",
+    "username"
+  );
+
+  if (!updatedAnswer) {
+    throw new NotFoundError("Answer not found after comment");
+  }
+
+  res.status(200).json({ ...updatedAnswer, _id: updatedAnswer._id.toString() });
+});
