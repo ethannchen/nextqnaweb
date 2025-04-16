@@ -1,6 +1,6 @@
 import { Request, Response } from "express";
 import { loggerService } from "../utils/loggerService";
-import { asyncHandler } from "../utils/errorUtils";
+import asyncHandler from "express-async-handler";
 
 /**
  * Get all logs

@@ -3,11 +3,8 @@ import Question from "../models/questions";
 import Tag from "../models/tags";
 import { searchQuestion } from "../utils/searchQuestion";
 import { strategies } from "../utils/sortQuestion";
-import {
-  asyncHandler,
-  BadRequestError,
-  NotFoundError,
-} from "../utils/errorUtils";
+import { BadRequestError, NotFoundError } from "../utils/errorUtils";
+import asyncHandler from "express-async-handler";
 
 const addQuestion = asyncHandler(async (req: Request, res: Response) => {
   const { title, text, tags, asked_by, ask_date_time } = req.body;

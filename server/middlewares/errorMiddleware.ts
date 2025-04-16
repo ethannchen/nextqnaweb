@@ -1,5 +1,5 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
-import { Request, Response } from "express";
+import { NextFunction, Request, Response } from "express";
 import { AppError } from "../utils/errorUtils";
 
 /**
@@ -9,24 +9,23 @@ import { AppError } from "../utils/errorUtils";
 export const errorHandler = (
   err: Error | AppError,
   req: Request,
-  res: Response
+  res: Response,
+  // eslint-disable-next-line @typescript-eslint/no-unused-vars
+  next: NextFunction
 ): void => {
-  console.error("Error:", err);
-  res.setHeader("Content-Type", "application/json");
-
   // Handle OpenAPI validation errors
-  // const isOpenApiError =
-  //   err?.constructor?.name === "OpenAPIError" ||
-  //   ((err as any)?.status === 400 && (err as any)?.errors);
+  const isOpenApiError =
+    err?.constructor?.name === "OpenAPIError" ||
+    ((err as any)?.status === 400 && (err as any)?.errors);
 
-  // if (isOpenApiError) {
-  //   const openApiErr = err as any;
-  //   res.status(openApiErr.status || 400).json({
-  //     error: openApiErr.message || "Validation Error",
-  //     details: openApiErr.errors || [],
-  //   });
-  //   return;
-  // }
+  if (isOpenApiError) {
+    const openApiErr = err as any;
+    res.status(openApiErr.status || 400).json({
+      error: openApiErr.message || "Validation Error",
+      details: openApiErr.errors || [],
+    });
+    return;
+  }
 
   // Handle our custom AppError instances
   if (err instanceof AppError) {

@@ -5,12 +5,7 @@ import {
   UnauthorizedError,
   ForbiddenError,
   NotFoundError,
-  asyncHandler,
 } from "../../utils/errorUtils";
-import { Request, Response } from "express";
-
-// Create a proper mockable type for NextFunction
-type NextFunction = (err?: any) => void;
 
 describe("AppError", () => {
   it("should create an error with the provided message and default status code", () => {
@@ -81,67 +76,5 @@ describe("HTTP Error subclasses", () => {
     expect(error.status).toBe(404);
     expect(error instanceof AppError).toBe(true);
     expect(error instanceof NotFoundError).toBe(true);
-  });
-});
-
-describe("asyncHandler", () => {
-  it("should wrap an async function and pass through request, response, and next", async () => {
-    const mockReq = {} as Request;
-    const mockRes = {} as Response;
-    const mockNext = jest.fn() as NextFunction;
-
-    const asyncFn = jest.fn().mockResolvedValue("result");
-    const wrappedFn = asyncHandler(asyncFn);
-
-    await wrappedFn(mockReq, mockRes, mockNext);
-
-    expect(asyncFn).toHaveBeenCalledWith(mockReq, mockRes, mockNext);
-    expect(mockNext).not.toHaveBeenCalled();
-  });
-
-  it("should catch errors and pass them to next", async () => {
-    const mockReq = {} as Request;
-    const mockRes = {} as Response;
-    const mockNext = jest.fn();
-    const testError = new Error("Test error");
-
-    const asyncFn = jest.fn().mockRejectedValue(testError);
-    const wrappedFn = asyncHandler(asyncFn);
-
-    await wrappedFn(mockReq, mockRes, mockNext);
-
-    expect(asyncFn).toHaveBeenCalledWith(mockReq, mockRes, mockNext);
-    expect(mockNext).toHaveBeenCalledWith(testError);
-  });
-
-  it("should propagate custom error types to next", async () => {
-    const mockReq = {} as Request;
-    const mockRes = {} as Response;
-    const mockNext = jest.fn();
-    const customError = new NotFoundError("Entity not found");
-
-    const asyncFn = jest.fn().mockRejectedValue(customError);
-    const wrappedFn = asyncHandler(asyncFn);
-
-    await wrappedFn(mockReq, mockRes, mockNext);
-
-    expect(mockNext).toHaveBeenCalledWith(customError);
-    expect(mockNext.mock.calls[0][0].status).toBe(404);
-    expect(mockNext.mock.calls[0][0].message).toBe("Entity not found");
-  });
-
-  it("should handle non-async functions correctly", async () => {
-    const mockReq = {} as Request;
-    const mockRes = {} as Response;
-    const mockNext = jest.fn();
-
-    // A synchronous function that returns a value
-    const syncFn = jest.fn().mockReturnValue("sync result");
-    const wrappedSyncFn = asyncHandler(syncFn);
-
-    await wrappedSyncFn(mockReq, mockRes, mockNext);
-
-    expect(syncFn).toHaveBeenCalledWith(mockReq, mockRes, mockNext);
-    expect(mockNext).not.toHaveBeenCalled();
   });
 });

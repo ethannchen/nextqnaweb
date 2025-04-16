@@ -2,11 +2,8 @@ import { Request, Response } from "express";
 import User from "../models/users";
 import jwt from "jsonwebtoken";
 import dotenv from "dotenv";
-import {
-  asyncHandler,
-  BadRequestError,
-  UnauthorizedError,
-} from "../utils/errorUtils";
+import { BadRequestError, UnauthorizedError } from "../utils/errorUtils";
+import asyncHandler from "express-async-handler";
 
 dotenv.config();
 

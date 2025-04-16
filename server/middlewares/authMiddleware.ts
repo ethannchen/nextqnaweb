@@ -2,11 +2,8 @@ import { Request, Response, NextFunction } from "express";
 import jwt from "jsonwebtoken";
 import User from "../models/users";
 import mongoose from "mongoose";
-import {
-  UnauthorizedError,
-  ForbiddenError,
-  asyncHandler,
-} from "../utils/errorUtils";
+import { UnauthorizedError, ForbiddenError } from "../utils/errorUtils";
+import asyncHandler from "express-async-handler";
 
 interface UserPayload {
   id: string;
@@ -28,7 +25,6 @@ export const authenticate = asyncHandler(
     const token = req.header("Authorization")?.replace("Bearer ", "");
 
     if (!token) {
-      console.log("no token");
       throw new UnauthorizedError("No token, authorization denied");
     }
 

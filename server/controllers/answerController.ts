@@ -1,11 +1,8 @@
 import { Request, Response } from "express";
 import Answer from "../models/answers";
 import User from "../models/users";
-import {
-  asyncHandler,
-  BadRequestError,
-  NotFoundError,
-} from "../utils/errorUtils";
+import { BadRequestError, NotFoundError } from "../utils/errorUtils";
+import asyncHandler from "express-async-handler";
 
 /**
  * @route POST /addAnswer
