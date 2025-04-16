@@ -28,6 +28,16 @@ tags:
 
 components:
   responses:
+    Forbidden:
+      description: Forbidden
+      content:
+        application/json:
+          schema:
+            type: object
+            properties:
+              message:
+                type: string
+                example: "Access denied"
     NotFound:
       description: Not Found
       content:
@@ -506,6 +516,8 @@ paths:
                       $ref: '#/components/schemas/LogEntry'
         '401':
           $ref: '#/components/responses/Unauthorized'
+        '403':
+          $ref: '#/components/responses/Forbidden'
         '500':
           $ref: '#/components/responses/InternalServerError'
     delete:
@@ -528,6 +540,8 @@ paths:
                     example: All logs have been cleared
         '401':
           $ref: '#/components/responses/Unauthorized'
+        '403':
+          $ref: '#/components/responses/Forbidden'
         '500':
           $ref: '#/components/responses/InternalServerError'
   # Tags Controller Endpoints
@@ -665,6 +679,8 @@ paths:
                 $ref: "#/components/schemas/Answer"
         "400":
           $ref: "#/components/responses/BadRequest"
+        "401":  
+          $ref: "#/components/responses/Unauthorized"
         "500":
           $ref: "#/components/responses/InternalServerError"
           
@@ -697,6 +713,10 @@ paths:
                 $ref: "#/components/schemas/Answer"
         "400":
           $ref: "#/components/responses/BadRequest"
+        "401":
+          $ref: "#/components/responses/Unauthorized"
+        "404":
+          $ref: "#/components/responses/NotFound"
         "500":
           $ref: "#/components/responses/InternalServerError"
   
@@ -727,6 +747,8 @@ paths:
                 $ref: "#/components/schemas/Answer"
         "400":
           $ref: "#/components/responses/BadRequest"
+        "401":
+          $ref: "#/components/responses/Unauthorized"
         "404":
           $ref: "#/components/responses/BadRequest"
         "500":
