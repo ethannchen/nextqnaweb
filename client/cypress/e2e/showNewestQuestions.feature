@@ -25,7 +25,8 @@ So that I can view the questions that were asked most recently
     Then The user should see all questions in the database with the most recently created first
 
   Scenario: View questions in newest order after asking questions
-    Given The user is viewing the homepage "http://localhost:3000"
+    Given The user has write access to the application "http://localhost:3000"
+    And The user has logged in
     And The user has created a new question
     When The user goes back to the "Questions" page
     Then The user should see all questions in the database in new newest order

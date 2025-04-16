@@ -14,7 +14,8 @@ Scenario Outline: Show all answers in the question page
     |Quick question about storage on android|Store data in a SQLLite database.|
 
 Scenario: Show 0 answers when a question does not have any answer yet
-    Given The user can access the homepage "http://localhost:3000"
+    Given The user has write access to the application "http://localhost:3000"
+    And The user has logged in
     And The user clicks the "Ask a Question" button
     And fills out the necessary fields
     And clicks the "Post Question" button

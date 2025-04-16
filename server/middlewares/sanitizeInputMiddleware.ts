@@ -6,7 +6,8 @@ import {
   sanitizeText,
   validateUrl,
 } from "../utils/sanitizers";
-import { BadRequestError, asyncHandler } from "../utils/errorUtils";
+import { BadRequestError } from "../utils/errorUtils";
+import asyncHandler from "express-async-handler";
 
 /**
  * A general middleware for sanitizing common inputs in requests

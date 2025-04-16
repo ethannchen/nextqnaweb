@@ -145,15 +145,20 @@ Then(
 );
 
 // Scenario: View questions in active order after answering questions
-//     Given The user is viewing the homepage "http://localhost:3000"
+//     Given The user has write access to the application "http://localhost:3000"
+//     And The user has logged in
 //     And The user has created a new question
 //     And answers the new question
 //     And The user answers an existing question from the "Questions" page
 //     When The user clicks on the "Active" tab in the "Questions" page
 //     Then The user should see all questions in the database in new active order
 
-Given("The user is viewing the homepage {string}", (url) => {
+Given("The user has write access to the application {string}", (url) => {
   cy.visit(url);
+});
+
+And("The user has logged in", () => {
+  login();
 });
 
 And("The user has created a new question", () => {

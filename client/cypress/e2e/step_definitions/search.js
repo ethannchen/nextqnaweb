@@ -89,16 +89,11 @@ Then("The user should see no questions displayed for that tag", () => {
 
 // Scenario: Search by tag from new question page
 //     Given The user can access the homepage "http://localhost:3000"
-//     And The user clicks "Ask a Question" button
 //     When The user search for a tag in the search bar
 //     Then The user should see correct questions in the result in newest order
 
 Given("The user can access the homepage {string}", (url) => {
   cy.visit(url);
-});
-
-And("The user clicks {string} button", (buttonName) => {
-  cy.contains(buttonName).click();
 });
 
 When("The user search for a tag in the search bar", () => {

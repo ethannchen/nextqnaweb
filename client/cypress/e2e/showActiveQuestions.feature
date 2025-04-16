@@ -27,7 +27,8 @@ So that I can view the questions that were answered most recently
     Then The user should see all questions in the database with the most recently posted answers first
 
   Scenario: View questions in active order after answering questions
-    Given The user is viewing the homepage "http://localhost:3000"
+    Given The user has write access to the application "http://localhost:3000"
+    And The user has logged in
     And The user has created a new question
     And answers the new question
     And The user answers an existing question from the "Questions" page

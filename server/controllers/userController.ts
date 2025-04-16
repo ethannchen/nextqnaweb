@@ -1,11 +1,11 @@
 import { Request, Response } from "express";
 import User from "../models/users";
 import {
-  asyncHandler,
   BadRequestError,
   NotFoundError,
   UnauthorizedError,
 } from "../utils/errorUtils";
+import asyncHandler from "express-async-handler";
 
 /**
  * Controller for updating user profile
