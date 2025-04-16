@@ -1,6 +1,6 @@
 import { Request, Response } from "express";
 import Tag from "../models/tags";
-import { asyncHandler } from "../utils/errorUtils";
+import asyncHandler from "express-async-handler";
 
 const getTagsWithQuestionNumber = asyncHandler(
   async (req: Request, res: Response) => {

@@ -8,7 +8,7 @@ import {
 import Answer from "../../models/answers";
 import User from "../../models/users";
 import { IUserDocument } from "../../types/types";
-import { AppError } from "../../utils/errorUtils";
+import { BadRequestError, NotFoundError } from "../../utils/errorUtils";
 
 // Mock dependencies
 jest.mock("../../models/answers");
@@ -102,6 +102,7 @@ describe("Answer Controller Tests", () => {
 
       // Check that next was called with an error
       expect(mockNext).toHaveBeenCalled();
+      expect(mockNext.mock.calls[0][0]).toBeInstanceOf(BadRequestError);
       expect(mockNext.mock.calls[0][0].message).toBe("Missing required fields");
 
       // Ensure the model function wasn't called
@@ -147,11 +148,11 @@ describe("Answer Controller Tests", () => {
       // Assert against the separated mock functions
       expect(User.findByEmail).toHaveBeenCalledWith(mockEmail);
       expect(Answer.findById).toHaveBeenCalledWith(mockAid);
-      // expect(hasUserVotedMock).toHaveBeenCalledWith(mockEmail);
-      // expect(voteMock).toHaveBeenCalledWith(mockEmail);
-      // expect(unvoteMock).not.toHaveBeenCalled();
-      // expect(mockResponse.status).toHaveBeenCalledWith(200);
-      // expect(mockResponse.json).toHaveBeenCalled();
+      expect(hasUserVotedMock).toHaveBeenCalledWith(mockEmail);
+      expect(voteMock).toHaveBeenCalledWith(mockEmail);
+      expect(unvoteMock).not.toHaveBeenCalled();
+      expect(mockResponse.status).toHaveBeenCalledWith(200);
+      expect(mockResponse.json).toHaveBeenCalled();
     });
 
     it("should toggle vote when user has already voted", async () => {
@@ -185,10 +186,10 @@ describe("Answer Controller Tests", () => {
       // Assertions
       expect(User.findByEmail).toHaveBeenCalledWith(mockEmail);
       expect(Answer.findById).toHaveBeenCalledWith(mockAid);
-      // expect(mockAnswer.hasUserVoted).toHaveBeenCalledWith(mockEmail);
-      // expect(mockAnswer.unvote).toHaveBeenCalledWith(mockEmail);
-      // expect(mockAnswer.vote).not.toHaveBeenCalled();
-      // expect(mockResponse.status).toHaveBeenCalledWith(200);
+      expect(mockAnswer.hasUserVoted).toHaveBeenCalledWith(mockEmail);
+      expect(mockAnswer.unvote).toHaveBeenCalledWith(mockEmail);
+      expect(mockAnswer.vote).not.toHaveBeenCalled();
+      expect(mockResponse.status).toHaveBeenCalledWith(200);
     });
 
     test("should throw error when email is missing", async () => {
@@ -206,7 +207,7 @@ describe("Answer Controller Tests", () => {
 
       // Assert
       expect(mockNext).toHaveBeenCalled();
-      expect(mockNext.mock.calls[0][0]).toBeInstanceOf(AppError);
+      expect(mockNext.mock.calls[0][0]).toBeInstanceOf(BadRequestError);
       expect(mockNext.mock.calls[0][0].message).toBe(
         "Missing user email in request body"
       );
@@ -241,7 +242,7 @@ describe("Answer Controller Tests", () => {
 
       // Check that next was called with a BadRequestError
       const error = mockNext.mock.calls[0][0];
-      expect(error instanceof AppError).toBeTruthy();
+      expect(error instanceof BadRequestError).toBeTruthy();
       expect(error.message).toBe("Invalid user email");
     });
 
@@ -261,11 +262,7 @@ describe("Answer Controller Tests", () => {
       jest.spyOn(User, "findByEmail").mockImplementation(() => {
         return Promise.resolve(mockUser);
       });
-      // User.findByEmail = jest.fn().mockResolvedValue(mockUser);
       Answer.findById = jest.fn().mockResolvedValue(null);
-      // jest.spyOn(Answer as any, "findById").mockImplementation(() => {
-      //   return Promise.resolve(null);
-      // });
 
       //Act
       const controllerFn = async () => {
@@ -279,13 +276,15 @@ describe("Answer Controller Tests", () => {
       // Execute and capture any errors
       await controllerFn();
 
-      // // Assertions
+      // Assertions
       expect(User.findByEmail).toHaveBeenCalledWith(mockEmail);
       expect(Answer.findById).toHaveBeenCalledWith(mockAid);
-      // expect(mockNext).toHaveBeenCalled();
-      // const error = mockNext.mock.calls[0][0];
-      // expect(error instanceof AppError).toBeTruthy();
-      // expect(error.message).toBe("Answer not found");
+      expect(mockNext).toHaveBeenCalled();
+
+      const error = mockNext.mock.calls[0][0];
+
+      expect(error instanceof NotFoundError).toBeTruthy();
+      expect(error.message).toBe("Answer not found");
     });
   });
 
@@ -375,18 +374,18 @@ describe("Answer Controller Tests", () => {
       expect(Answer.findById).toHaveBeenCalledWith(mockAid);
 
       // Check that addComment was called with the correct parameters
-      // expect(addCommentMethod).toHaveBeenCalledWith({
-      //   text: mockComment.text,
-      //   commented_by: mockUserId,
-      //   comment_date_time: expect.any(Date),
-      // });
+      expect(addCommentMethod).toHaveBeenCalledWith({
+        text: mockComment.text,
+        commented_by: mockUserId,
+        comment_date_time: expect.any(Date),
+      });
 
       // Check the response
-      // expect(mockResponse.status).toHaveBeenCalledWith(200);
-      // expect(mockResponse.json).toHaveBeenCalledWith({
-      //   ...mockPopulatedAnswer,
-      //   _id: mockAid,
-      // });
+      expect(mockResponse.status).toHaveBeenCalledWith(200);
+      expect(mockResponse.json).toHaveBeenCalledWith({
+        ...mockPopulatedAnswer,
+        _id: mockAid,
+      });
     });
 
     it("should throw error when required comment fields are missing", async () => {
@@ -408,7 +407,7 @@ describe("Answer Controller Tests", () => {
 
       // Assertions
       expect(mockNext).toHaveBeenCalled();
-      expect(mockNext.mock.calls[0][0]).toBeInstanceOf(AppError);
+      expect(mockNext.mock.calls[0][0]).toBeInstanceOf(BadRequestError);
       expect(mockNext.mock.calls[0][0].message).toBe(
         "Missing required comment fields"
       );
@@ -442,7 +441,7 @@ describe("Answer Controller Tests", () => {
 
       // Assertions
       expect(mockNext).toHaveBeenCalled();
-      expect(mockNext.mock.calls[0][0]).toBeInstanceOf(AppError);
+      expect(mockNext.mock.calls[0][0]).toBeInstanceOf(BadRequestError);
       expect(mockNext.mock.calls[0][0].message).toBe("Invalid user email");
       expect(Answer.findById).not.toHaveBeenCalled();
     });
@@ -476,14 +475,14 @@ describe("Answer Controller Tests", () => {
       await controllerFn();
 
       // Assertions
-      // expect(mockNext).toHaveBeenCalled();
-      // expect(mockNext.mock.calls[0][0]).toBeInstanceOf(AppError);
-      // expect(mockNext.mock.calls[0][0].message).toBe("Answer not found");
+      expect(mockNext).toHaveBeenCalled();
+      expect(mockNext.mock.calls[0][0]).toBeInstanceOf(NotFoundError);
+      expect(mockNext.mock.calls[0][0].message).toBe("Answer not found");
     });
 
     it("should throw error when answer is not found after adding comment", async () => {
       // Setup mock data
-      const mockAid = "507f1f77bcf86cd799439011"; // Valid ObjectId in string format
+      const mockAid = "507f1f77bcf86cd799439011";
       const mockEmail = "user@example.com";
       const mockComment = {
         text: "This is a test comment",
@@ -526,11 +525,11 @@ describe("Answer Controller Tests", () => {
       await controllerFn();
 
       // Assertions
-      // expect(mockNext).toHaveBeenCalled();
-      // expect(mockNext.mock.calls[0][0]).toBeInstanceOf(AppError);
-      // expect(mockNext.mock.calls[0][0].message).toBe(
-      //   "Answer not found after comment"
-      // );
+      expect(mockNext).toHaveBeenCalled();
+      expect(mockNext.mock.calls[0][0]).toBeInstanceOf(NotFoundError);
+      expect(mockNext.mock.calls[0][0].message).toBe(
+        "Answer not found after comment"
+      );
     });
   });
 });

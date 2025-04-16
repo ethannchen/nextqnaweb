@@ -1,11 +1,8 @@
 import { Request, Response } from "express";
 import Answer from "../models/answers";
 import User from "../models/users";
-import {
-  asyncHandler,
-  BadRequestError,
-  NotFoundError,
-} from "../utils/errorUtils";
+import { BadRequestError, NotFoundError } from "../utils/errorUtils";
+import asyncHandler from "express-async-handler";
 
 /**
  * @route POST /addAnswer
@@ -110,7 +107,7 @@ export const addComment = asyncHandler(async (req: Request, res: Response) => {
   );
 
   if (!updatedAnswer) {
-    return res.status(404).json({ message: "Answer not found after comment" });
+    throw new NotFoundError("Answer not found after comment");
   }
 
   res.status(200).json({ ...updatedAnswer, _id: updatedAnswer._id.toString() });

@@ -2,11 +2,8 @@ import { Request, Response, NextFunction } from "express";
 import jwt from "jsonwebtoken";
 import User from "../models/users";
 import mongoose from "mongoose";
-import {
-  UnauthorizedError,
-  ForbiddenError,
-  asyncHandler,
-} from "../utils/errorUtils";
+import { UnauthorizedError, ForbiddenError } from "../utils/errorUtils";
+import asyncHandler from "express-async-handler";
 
 interface UserPayload {
   id: string;

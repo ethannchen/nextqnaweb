@@ -23,34 +23,31 @@ export class AppError extends Error {
 export class BadRequestError extends AppError {
   constructor(message: string = "Bad request", data?: any) {
     super(message, 400, data);
+    // This is crucial for instanceof to work correctly
+    Object.setPrototypeOf(this, BadRequestError.prototype);
   }
 }
 
 export class UnauthorizedError extends AppError {
   constructor(message: string = "Unauthorized access", data?: any) {
     super(message, 401, data);
+    // This is crucial for instanceof to work correctly
+    Object.setPrototypeOf(this, UnauthorizedError.prototype);
   }
 }
 
 export class ForbiddenError extends AppError {
   constructor(message: string = "Access forbidden", data?: any) {
     super(message, 403, data);
+    // This is crucial for instanceof to work correctly
+    Object.setPrototypeOf(this, ForbiddenError.prototype);
   }
 }
 
 export class NotFoundError extends AppError {
   constructor(message: string = "Resource not found", data?: any) {
     super(message, 404, data);
+    // This is crucial for instanceof to work correctly
+    Object.setPrototypeOf(this, NotFoundError.prototype);
   }
 }
-
-/**
- * Utility function to wrap controller functions with try/catch
- * This eliminates the need for try/catch blocks in every controller
- */
-// eslint-disable-next-line @typescript-eslint/no-unsafe-function-type
-export const asyncHandler = (fn: Function) => {
-  return (req: any, res: any, next: any) => {
-    Promise.resolve(fn(req, res, next)).catch(next);
-  };
-};

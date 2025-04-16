@@ -74,16 +74,15 @@ describe("Tag Controller Tests", () => {
       Tag.getTagsWithQuestionNumber = jest.fn().mockRejectedValue(mockError);
 
       // Call the controller function and expect it to throw
-      await expect(
-        getTagsWithQuestionNumber(
-          mockRequest as Request,
-          mockResponse as Response,
-          mockNext
-        )
-      ).rejects.toThrow("Database error");
+      await getTagsWithQuestionNumber(
+        mockRequest as Request,
+        mockResponse as Response,
+        mockNext
+      );
 
       // Assertions
       expect(Tag.getTagsWithQuestionNumber).toHaveBeenCalled();
+      expect(mockNext).toHaveBeenCalledWith(mockError);
       expect(mockResponse.status).not.toHaveBeenCalled();
       expect(mockResponse.json).not.toHaveBeenCalled();
     });
