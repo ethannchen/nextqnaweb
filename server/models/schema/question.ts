@@ -76,7 +76,7 @@ QuestionSchema.virtual("mostRecentActivity").get(async function () {
   const lastAnswerDate = await Answer.getLatestAnswerDate(
     populatedAnswers.answers
   );
-  return lastAnswerDate;
+  return lastAnswerDate || this.ask_date_time;
 });
 
 /**
@@ -95,7 +95,7 @@ QuestionSchema.statics.addQuestion = async function (
   });
   await questionToAdd.save();
   const tagsToReturn: ITag[] = question.tags.map((t) => ({
-    _id: t._id,
+    _id: t._id?.toString(),
     name: t.name,
     qcnt: t.qcnt,
   }));
