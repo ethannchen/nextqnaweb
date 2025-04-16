@@ -27,12 +27,13 @@ export const signup = asyncHandler(async (req: Request, res: Response) => {
     if (error.message === "Username is already taken") {
       throw new BadRequestError(error.message);
     }
+    throw error;
   });
 
   // Respond with success
   res
     .status(201)
-    .json({ message: `User ${newUser?.username} registered successfully` });
+    .json({ message: `User ${newUser.username} registered successfully` });
 });
 
 /**
