@@ -1,7 +1,7 @@
 import { Request, Response } from "express";
 import mongoose from "mongoose";
-import { getTagsWithQuestionNumber } from "../controllers/tagController";
-import Tag from "../models/tags";
+import { getTagsWithQuestionNumber } from "../../controllers/tagController";
+import Tag from "../../models/tags";
 
 // Define the proper type for the request handler function
 type RequestHandler = (
@@ -11,8 +11,8 @@ type RequestHandler = (
 ) => Promise<void> | void;
 
 // Mock the Tag model
-jest.mock("../models/tags");
-jest.mock("../utils/errorUtils", () => ({
+jest.mock("../../models/tags");
+jest.mock("../../utils/errorUtils", () => ({
   asyncHandler: (fn: RequestHandler) => fn,
 }));
 

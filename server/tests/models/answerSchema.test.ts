@@ -1,6 +1,6 @@
 import mongoose from "mongoose";
-import Answer from "../models/answers";
-import Question from "../models/questions";
+import Answer from "../../models/answers";
+import Question from "../../models/questions";
 import { MongoMemoryServer } from "mongodb-memory-server";
 
 describe("Answer Schema Tests", () => {

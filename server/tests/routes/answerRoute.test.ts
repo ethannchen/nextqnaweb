@@ -1,15 +1,15 @@
 import express, { Application } from "express";
 import request from "supertest";
-import answerRoutes from "../routes/answer";
+import answerRoutes from "../../routes/answer";
 import {
   addAnswer,
   voteAnswer,
   addComment,
-} from "../controllers/answerController";
-import { authenticate } from "../middlewares/authMiddleware";
+} from "../../controllers/answerController";
+import { authenticate } from "../../middlewares/authMiddleware";
 
 // Mock the controller functions and middleware
-jest.mock("../controllers/answerController", () => ({
+jest.mock("../../controllers/answerController", () => ({
   addAnswer: jest.fn((req, res) => {
     res.status(201).json({ success: true, message: "Answer added" });
   }),
@@ -22,7 +22,7 @@ jest.mock("../controllers/answerController", () => ({
 }));
 
 // Mock the authenticate middleware
-jest.mock("../middlewares/authMiddleware", () => ({
+jest.mock("../../middlewares/authMiddleware", () => ({
   authenticate: jest.fn((req, res, next) => {
     // Simulate successful authentication
     req.user = { id: "user123", email: "test@example.com" };

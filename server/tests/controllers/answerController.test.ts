@@ -4,15 +4,15 @@ import {
   addAnswer,
   voteAnswer,
   addComment,
-} from "../controllers/answerController";
-import Answer from "../models/answers";
-import User from "../models/users";
-import { IUserDocument } from "../types/types";
-import { AppError } from "../utils/errorUtils";
+} from "../../controllers/answerController";
+import Answer from "../../models/answers";
+import User from "../../models/users";
+import { IUserDocument } from "../../types/types";
+import { AppError } from "../../utils/errorUtils";
 
 // Mock dependencies
-jest.mock("../models/answers");
-jest.mock("../models/users");
+jest.mock("../../models/answers");
+jest.mock("../../models/users");
 jest.mock("jsonwebtoken");
 
 describe("Answer Controller Tests", () => {

@@ -1,9 +1,9 @@
 import express, { Application } from "express";
 import request from "supertest";
-import tagRoutes from "../routes/tag";
-import { getTagsWithQuestionNumber } from "../controllers/tagController";
+import tagRoutes from "../../routes/tag";
+import { getTagsWithQuestionNumber } from "../../controllers/tagController";
 
-jest.mock("../controllers/tagController", () => ({
+jest.mock("../../controllers/tagController", () => ({
   getTagsWithQuestionNumber: jest.fn((req, res) => {
     res.status(200).json({ success: true });
   }),

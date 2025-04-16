@@ -1,5 +1,5 @@
 import mongoose from "mongoose";
-import Tag from "../models/tags";
+import Tag from "../../models/tags";
 import { MongoMemoryServer } from "mongodb-memory-server";
 
 describe("Tag Schema Tests", () => {
