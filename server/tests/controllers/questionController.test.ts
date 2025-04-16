@@ -1,5 +1,5 @@
+/* eslint-disable @typescript-eslint/no-explicit-any */
 import { Request, Response, NextFunction } from "express";
-import mongoose from "mongoose";
 import Question from "../../models/questions";
 import Tag from "../../models/tags";
 import { BadRequestError, NotFoundError } from "../../utils/errorUtils";
