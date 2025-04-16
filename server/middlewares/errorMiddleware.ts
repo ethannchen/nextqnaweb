@@ -13,20 +13,6 @@ export const errorHandler = (
   // eslint-disable-next-line @typescript-eslint/no-unused-vars
   next: NextFunction
 ): void => {
-  // Handle OpenAPI validation errors
-  const isOpenApiError =
-    err?.constructor?.name === "OpenAPIError" ||
-    ((err as any)?.status === 400 && (err as any)?.errors);
-
-  if (isOpenApiError) {
-    const openApiErr = err as any;
-    res.status(openApiErr.status || 400).json({
-      error: openApiErr.message || "Validation Error",
-      details: openApiErr.errors || [],
-    });
-    return;
-  }
-
   // Handle our custom AppError instances
   if (err instanceof AppError) {
     res.status(err.status).json({

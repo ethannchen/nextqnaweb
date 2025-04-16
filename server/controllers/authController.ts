@@ -27,6 +27,7 @@ export const signup = asyncHandler(async (req: Request, res: Response) => {
     if (error.message === "Username is already taken") {
       throw new BadRequestError(error.message);
     }
+    throw error;
   });
 
   // Respond with success
