@@ -109,7 +109,7 @@ describe("Answer Routes", () => {
 
   test("should handle unauthorized requests", async () => {
     // Override the authenticate middleware to simulate unauthorized access
-    (authenticate as jest.Mock).mockImplementationOnce((req, res, next) => {
+    (authenticate as jest.Mock).mockImplementationOnce((req, res) => {
       return res.status(401).json({ success: false, message: "Unauthorized" });
     });
 

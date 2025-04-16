@@ -33,7 +33,7 @@ export const signup = asyncHandler(async (req: Request, res: Response) => {
   // Respond with success
   res
     .status(201)
-    .json({ message: `User ${newUser?.username} registered successfully` });
+    .json({ message: `User ${newUser.username} registered successfully` });
 });
 
 /**
