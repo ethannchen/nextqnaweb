@@ -52,6 +52,15 @@ jobs:
         working-directory: ./client
         run: npm install
 
+      - name: Start MongoDB via brew
+        run: |
+          brew services start mongodb-community@8.0
+          sleep 5
+      
+      - name: Check MongoDB Status
+        run: |
+          nc -zv 127.0.0.1 27017
+
       - name: Start Server in Background
         working-directory: ./server
         run: |
