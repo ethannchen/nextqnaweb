@@ -1,9 +1,4 @@
-// Run this script to test your schema
-// Start the mongoDB service as a background process before running the script
-// Pass URL of your mongoDB instance as first argument(e.g., mongodb://127.0.0.1:27017/fake_so)
-
 import mongoose from "mongoose";
-import path from "path";
 import Answer from "../models/answers";
 import Question from "../models/questions";
 import Tag from "../models/tags";
@@ -29,13 +24,13 @@ import {
 import User from "../models/users";
 import { users } from "../data/users";
 import { IComment } from "../types/types";
-import dotenv from "dotenv";
+// import dotenv from "dotenv";
 
-dotenv.config({ path: path.resolve(__dirname, "../.env") });
-console.log(
-  "Loaded TEST_USER_PW:",
-  process.env.TEST_USER_PW ? "✓" : "✗ (undefined)"
-);
+// dotenv.config();
+// console.log(
+//   "Loaded TEST_USER_PW:",
+//   process.env.TEST_USER_PW ? "✓" : "✗ (undefined)"
+// );
 
 // Get arguments passed on command line
 const userArgs = process.argv.slice(2);
