@@ -20,7 +20,7 @@ import { loggerMiddleware } from "./middlewares/loggerMiddleware";
 const MONGO_URL: string =
   process.env.MONGO_URL || "mongodb://127.0.0.1:27017/fake_so";
 const CLIENT_URL: string = process.env.CLIENT_URL || "http://localhost:3000";
-const port = process.env.PORT || 8000;
+const PORT = process.env.PORT || 8000;
 
 mongoose.connect(MONGO_URL);
 
@@ -91,8 +91,8 @@ app.use("/logs", logRouter); // Add the logs router for admin users
 // Centralized error handling middleware
 app.use(errorHandler);
 
-const server: Server = app.listen(port, () => {
-  console.log(`Server starts at http://localhost:${port}`);
+const server: Server = app.listen(PORT, () => {
+  console.log(`Server starts at http://localhost:${PORT}`);
 });
 
 // Gracefully shutdown the server and the database connection when the process is terminated.
