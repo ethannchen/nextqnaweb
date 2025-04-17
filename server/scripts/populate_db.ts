@@ -24,13 +24,6 @@ import {
 import User from "../models/users";
 import { users } from "../data/users";
 import { IComment } from "../types/types";
-// import dotenv from "dotenv";
-
-// dotenv.config();
-// console.log(
-//   "Loaded TEST_USER_PW:",
-//   process.env.TEST_USER_PW ? "✓" : "✗ (undefined)"
-// );
 
 // Get arguments passed on command line
 const userArgs = process.argv.slice(2);

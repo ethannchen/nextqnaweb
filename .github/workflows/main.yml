@@ -98,7 +98,7 @@ jobs:
         uses: actions/upload-artifact@v4
         with:
           name: cypress-screenshots
-          path: client/cypress/screenshots
+          path: client/cypress
 
       - name: Shutdown Server and Client
         run: |
