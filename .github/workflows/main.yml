@@ -45,8 +45,8 @@ jobs:
       - name: Create Server .env file
         working-directory: ./server
         run: |
-          echo "JWT_SECRET=${{ secrets.JWT_SECRET }}" > .env
-          echo "TEST_USER_PW=${{ secrets.TEST_USER_PW }}" >> .env
+          echo "JWT_SECRET=${{ secrets.JWT_SECRET }}" | tr -d '\n' > .env
+          echo "TEST_USER_PW=${{ secrets.TEST_USER_PW }}" | tr -d '\n' >> .env
 
       - name: Install Client Dependencies
         working-directory: ./client
