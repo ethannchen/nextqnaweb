@@ -1,9 +1,4 @@
-// Run this script to test your schema
-// Start the mongoDB service as a background process before running the script
-// Pass URL of your mongoDB instance as first argument(e.g., mongodb://127.0.0.1:27017/fake_so)
-
 import mongoose from "mongoose";
-
 import Answer from "../models/answers";
 import Question from "../models/questions";
 import Tag from "../models/tags";
