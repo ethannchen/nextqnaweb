@@ -4,21 +4,21 @@ import { ITag, ITagDocument, ITagModel } from "../../types/types";
 /**
  * The schema for a document in the Tags collection.
  *
- * The schema is created using the constructor in mongoose.Schema class.
- * The schema is defined with two generic parameters: ITagDocument and ITagModel.
- * ITagDocument is used to define the instance methods of the Tag document.
- * ITagModel is used to define the static methods of the Tag model.
+ * Defines the structure and behavior for tag documents in the application.
+ * Tags are used to categorize questions for better searchability.
+ *
+ * @property {string} name - The unique name of the tag (required)
  */
-
 const TagSchema = new mongoose.Schema<ITagDocument, ITagModel>(
   { name: { type: String, required: true } },
   { collection: "Tag" }
 );
 
 /**
- * An async method that finds existing tags by name or creates new tags if they do not exist
- * @param tagNames - the list of tag names
- * @returns the existing tags or newly created tags using the tag name list
+ * Finds existing tags by name or creates new tags if they don't exist
+ *
+ * @param {string[]} tagNames - Array of tag names to find or create
+ * @returns {Promise<ITag[]>} Promise resolving to an array of tag objects
  */
 TagSchema.statics.findOrCreateMany = async function (
   tagNames: string[]
@@ -37,9 +37,10 @@ TagSchema.statics.findOrCreateMany = async function (
 };
 
 /**
- * An async method that validates an array of tag ids is the same as the number of tag documents in the collection
- * @param tagIds - the array of tag ids
- * @returns boolean indicating if the tag id array length is the same as the count of tag documents in the collection
+ * Validates an array of tag IDs by ensuring they exist in the database
+ *
+ * @param {mongoose.Types.ObjectId[]} tagIds - Array of tag ObjectIds to validate
+ * @returns {Promise<boolean>} Promise resolving to true if all tags exist, false otherwise
  */
 TagSchema.statics.validateTags = async function (
   tagIds: mongoose.Types.ObjectId[]
@@ -49,8 +50,10 @@ TagSchema.statics.validateTags = async function (
 };
 
 /**
- * An async method that get all tags with corresponding question count
- * @returns tags array with corresponding question count
+ * Retrieves all tags with their corresponding question counts
+ * Uses MongoDB aggregation to join with the Questions collection
+ *
+ * @returns {Promise<ITag[]>} Promise resolving to array of tags with question counts
  */
 TagSchema.statics.getTagsWithQuestionNumber = async function (): Promise<
   ITag[]
@@ -76,9 +79,10 @@ TagSchema.statics.getTagsWithQuestionNumber = async function (): Promise<
 };
 
 /**
- * An async method that get tags with ID using a tag array that contains tag names
- * @param tags - tag array with tag names
- * @returns tag arrays with tag IDs
+ * Gets or creates tags based on an array of tag objects containing names
+ *
+ * @param {ITag[]} tags - Array of tag objects with name properties
+ * @returns {Promise<ITag[]>} Promise resolving to array of complete tag objects with IDs
  */
 TagSchema.statics.getTags = async function (tags: ITag[]): Promise<ITag[]> {
   const tagNames = tags.map((t) => t.name);

@@ -3,9 +3,16 @@ import { Request } from "express";
 import { AppError } from "../utils/errorUtils";
 
 /**
- * Create a rate limit middleware with custom settings
+ * Factory function to create rate limiter middleware with custom settings
+ * In test environment, applies very high limits that won't be reached
  *
- * @param options Configuration options for the rate limiter
+ * @param options - Configuration options for the rate limiter
+ * @param options.windowMs - Time window in milliseconds
+ * @param options.max - Maximum number of requests per window
+ * @param options.message - Error message when limit is reached
+ * @param options.standardHeaders - Whether to return rate limit info in headers
+ * @param options.legacyHeaders - Whether to use legacy X-RateLimit headers
+ * @param options.keyGenerator - Function to generate keys for rate limiting
  * @returns Rate limiting middleware
  */
 export const createRateLimiter = (options: {
@@ -52,7 +59,7 @@ export const createRateLimiter = (options: {
 };
 
 /**
- * General API rate limiter - apply to all routes
+ * General API rate limiter for all routes
  * Limits to 100 requests per 15 minutes per IP
  */
 export const generalLimiter = createRateLimiter({});

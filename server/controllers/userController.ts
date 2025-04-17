@@ -8,8 +8,16 @@ import {
 import asyncHandler from "express-async-handler";
 
 /**
- * Controller for updating user profile
- * Expects sanitized inputs from the sanitizeInputMiddleware
+ * @route POST /updateProfile
+ * @description Updates the user's profile information
+ * @param {string} username - The new username for the user
+ * @param {string} email - The new email for the user
+ * @param {string} bio - The new bio for the user
+ * @param {string} website - The new website for the user
+ * @returns {200} JSON response with the updated user data if successful
+ * @returns {400} JSON error if required fields are missing or invalid
+ * @returns {401} JSON error if authentication is required
+ * @returns {404} JSON error if the user is not found
  */
 export const updateProfile = asyncHandler(
   async (req: Request, res: Response) => {
@@ -48,8 +56,14 @@ export const updateProfile = asyncHandler(
 );
 
 /**
- * Controller for changing user password
- * Expects sanitized inputs from the sanitizeInputMiddleware
+ * @route POST /changePassword
+ * @description Changes the user's password
+ * @param {string} currentPassword - The current password of the user
+ * @param {string} newPassword - The new password for the user
+ * @returns {200} JSON response with a success message if successful
+ * @returns {400} JSON error if required fields are missing or invalid
+ * @returns {401} JSON error if authentication is required
+ * @returns {404} JSON error if the user is not found
  */
 export const changePassword = asyncHandler(
   async (req: Request, res: Response) => {
@@ -83,7 +97,11 @@ export const changePassword = asyncHandler(
 );
 
 /**
- * Controller for deleting user account
+ * @route DELETE /deleteAccount
+ * @description Deletes the user's account
+ * @returns {200} JSON response with a success message if successful
+ * @returns {401} JSON error if authentication is required
+ * @returns {404} JSON error if the user is not found
  */
 export const deleteAccount = asyncHandler(
   async (req: Request, res: Response) => {

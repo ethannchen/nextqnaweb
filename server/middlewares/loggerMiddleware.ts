@@ -2,8 +2,12 @@ import { Request, Response, NextFunction } from "express";
 import { loggerService } from "../utils/loggerService";
 
 /**
- * Middleware for logging API requests
- * Captures request details at the beginning and completes the log with response details
+ * Middleware for logging API requests and responses
+ * @description Captures request details at the beginning and completes the log with response details
+ * after the response has been sent. Skips logging for the logs endpoints to avoid recursive logging.
+ * @param {Request} req - Express request object
+ * @param {Response} res - Express response object
+ * @param {NextFunction} next - Express next function
  */
 export const loggerMiddleware = (
   req: Request,

@@ -4,10 +4,11 @@ import { IAnswer, IAnswerDocument, IAnswerModel } from "../../types/types";
 import Question from "../questions";
 
 /**
- * @typedef {Object} Comment
- * @property {string} text - The text content of the comment
- * @property {string} commented_by - The username or email of the user who made the comment
- * @property {Date} comment_date_time - The timestamp when the comment was created
+ * Sub-schema for comment documents embedded within answers
+ *
+ * @property {string} text - The text content of the comment (required)
+ * @property {mongoose.Types.ObjectId} commented_by - Reference to the User who made the comment (required)
+ * @property {Date} comment_date_time - When the comment was posted (required)
  */
 const CommentSchema = new mongoose.Schema({
   text: { type: String, required: true },
@@ -20,12 +21,17 @@ const CommentSchema = new mongoose.Schema({
 });
 
 /**
- * The schema for a document in the Answer collection.
+ * Schema for documents in the Answers collection
  *
- * The schema is created using the constructor in mongoose.Schema class.
- * The schema is defined with two generic parameters: IAnswerDocument and IAnswerModel.
- * IAnswerDocument is used to define the instance methods of the Answer document.
- * IAnswerModel is used to define the static methods of the Answer model.
+ * Defines the structure and behavior for answer documents in the application.
+ * Contains answer content, voting data, and embedded comments.
+ *
+ * @property {String} text - The content of the answer (required)
+ * @property {String} ans_by - Username of the person who posted the answer (required)
+ * @property {Date} ans_date_time - When the answer was posted (required)
+ * @property {Number} votes - The net vote count for the answer (required, default: 0)
+ * @property {String[]} voted_by - Array of user emails who have voted for this answer (required, default: [])
+ * @property {Object[]} comments - Array of embedded comment documents
  */
 const AnswerSchema = new mongoose.Schema<IAnswerDocument, IAnswerModel>(
   {
@@ -40,17 +46,21 @@ const AnswerSchema = new mongoose.Schema<IAnswerDocument, IAnswerModel>(
 );
 
 /**
- * Check if a user has voted for this answer
- * @param email - the username or user id
- * @returns - if the user has voted for the answer
+ * Checks if a user has already voted for this answer
+ *
+ * @param {string} email - The user's email address to check
+ * @returns {boolean} True if the user has already voted, false otherwise
  */
 AnswerSchema.methods.hasUserVoted = function (email: string): Promise<boolean> {
   return this.voted_by.includes(email);
 };
 
 /**
- * Upvote the answer by a user
- * @param email - the username or user id
+ * Records an upvote from a user if they haven't already voted
+ * Increments the vote count and adds the user to voted_by array
+ *
+ * @param {string} email - The email of the user upvoting
+ * @returns {Promise<void>} Promise that resolves when the vote is recorded
  */
 AnswerSchema.methods.vote = async function (email: string): Promise<void> {
   if (!this.voted_by.includes(email)) {
@@ -61,8 +71,11 @@ AnswerSchema.methods.vote = async function (email: string): Promise<void> {
 };
 
 /**
- * Remove vote (unvote) by a user
- * @param email - the username or user id
+ * Removes a user's vote if they previously voted
+ * Decrements the vote count and removes the user from voted_by array
+ *
+ * @param {string} email - The email of the user removing their vote
+ * @returns {Promise<void>} Promise that resolves when the vote is removed
  */
 AnswerSchema.methods.unvote = async function (email: string): Promise<void> {
   if (this.voted_by.includes(email)) {
@@ -73,8 +86,13 @@ AnswerSchema.methods.unvote = async function (email: string): Promise<void> {
 };
 
 /**
- * Add comment to an answer
- * @param comment - the comment to be added
+ * Adds a new comment to the answer
+ *
+ * @param {Object} comment - The comment to add
+ * @param {string} comment.text - The text content of the comment
+ * @param {mongoose.Types.ObjectId} comment.commented_by - Reference to the commenter's user ID
+ * @param {Date} comment.comment_date_time - When the comment was posted
+ * @returns {Promise<void>} Promise that resolves when the comment is added
  */
 AnswerSchema.methods.addComment = async function (comment: {
   text: string;
@@ -86,9 +104,10 @@ AnswerSchema.methods.addComment = async function (comment: {
 };
 
 /**
- * An async method that returns an array with the most recent answer document for a list of answer ids
- * @param answers - the list of answer ids
- * @returns the most recent answers with those ids
+ * Retrieves the most recent answers from a list of answer IDs
+ *
+ * @param {mongoose.Types.ObjectId[]} answers - Array of answer IDs to find
+ * @returns {Promise<IAnswerDocument[]>} Promise resolving to array of answer documents sorted by date (newest first)
  */
 AnswerSchema.statics.getMostRecent = async function (
   answers: mongoose.Types.ObjectId[]
@@ -99,9 +118,10 @@ AnswerSchema.statics.getMostRecent = async function (
 };
 
 /**
- * An async method that returns the latest answer date for a list of answer documents
- * @param answers - the list of answer documents
- * @returns the latest answer date
+ * Finds the most recent date from a list of answer documents
+ *
+ * @param {Array<IAnswerDB | object>} answers - Array of answer documents or objects
+ * @returns {Promise<Date | undefined>} Promise resolving to the most recent date or undefined if no answers
  */
 AnswerSchema.statics.getLatestAnswerDate = async function (
   answers: Array<IAnswerDB | object>
@@ -121,10 +141,12 @@ AnswerSchema.statics.getLatestAnswerDate = async function (
 };
 
 /**
- * An async method that adds an answer to a specific question represented by question id
- * @param qid - question id
- * @param answerData - data of the answer
- * @returns the saved answer data
+ * Creates a new answer and adds it to the specified question
+ *
+ * @param {string} qid - ID of the question to add the answer to
+ * @param {IAnswer} answerData - Data for the new answer
+ * @returns {Promise<IAnswer>} Promise resolving to the created answer
+ * @throws {Error} If the question is not found
  */
 AnswerSchema.statics.addAnswerToQuestion = async function (
   qid: string,
