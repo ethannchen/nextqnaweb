@@ -55,3 +55,6 @@ jobs:
           install-command: npm install
           start: npm start
           component: true
+          wait-on: http://localhost:3000
+          wait-on-timeout: 60
+          cache-key: ''
