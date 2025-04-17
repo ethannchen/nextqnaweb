@@ -26,6 +26,8 @@ mongoose.connect(MONGO_URL);
 
 const app: Express = express();
 
+app.set("trust proxy", 1);
+
 // The middleware function to allow cross-origin requests from the client URL.
 app.use(
   cors({
