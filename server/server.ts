@@ -18,7 +18,7 @@ import { generalLimiter } from "./middlewares/rateLimitMiddleware";
 import { loggerMiddleware } from "./middlewares/loggerMiddleware";
 
 const MONGO_URL: string =
-  process.env.MONGO_DB_URL || "mongodb://127.0.0.1:27017/fake_so";
+  process.env.MONGO_URL || "mongodb://127.0.0.1:27017/fake_so";
 const CLIENT_URL: string = process.env.CLIENT_URL || "http://localhost:3000";
 const port = process.env.PORT || 8000;
 
