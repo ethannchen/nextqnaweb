@@ -1,6 +1,4 @@
 import { IUser } from "../scripts/script_types";
-import dotenv from "dotenv";
-dotenv.config();
 
 const user1: IUser = {
   username: "carly",
