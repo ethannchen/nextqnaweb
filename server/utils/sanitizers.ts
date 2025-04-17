@@ -31,11 +31,11 @@ export const sanitizeUsername = (
 export const sanitizeEmail = (email: string | undefined): string | null => {
   if (typeof email !== "string") return null;
 
-  // Trim any whitespace and convert to lowercase
-  const trimmed = email.trim().toLowerCase();
+  const trimmed = email.trim();
 
-  // Validate email format (basic validation)
-  return /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(trimmed) ? trimmed : null;
+  const emailRegex = /^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/;
+
+  return emailRegex.test(trimmed) ? trimmed.toLowerCase() : null;
 };
 
 /**
