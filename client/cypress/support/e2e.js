@@ -14,7 +14,18 @@
 // ***********************************************************
 
 // Import commands.js using ES2015 syntax:
-import './commands'
+import "./commands";
 
 // Alternatively you can use CommonJS syntax:
 // require('./commands')
+
+beforeEach(() => {
+  cy.log("Resetting and populating DB...");
+  cy.exec("npm run remove_db", { cwd: "../server" });
+  cy.exec("npm run populate_db", { cwd: "../server" });
+});
+
+afterEach(() => {
+  cy.log("Cleaning DB...");
+  cy.exec("npm run remove_db", { cwd: "../server" });
+});
