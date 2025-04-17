@@ -24,6 +24,11 @@ jobs:
       - name: Install Dependencies
         run: npm install
 
+      - name: Create .env file
+        run: |
+          echo "JWT_SECRET=${{ secrets.JWT_SECRET }}" > .env
+          echo "TEST_USER_PW=${{ secrets.TEST_USER_PW }}" > .env
+
       - name: Run Tests
         run: npm run test
 
@@ -36,6 +41,11 @@ jobs:
       - name: Install Server Dependencies
         working-directory: ./server
         run: npm install
+      
+      - name: Create Server .env file
+        run: |
+          echo "JWT_SECRET=${{ secrets.JWT_SECRET }}" > .env
+          echo "TEST_USER_PW=${{ secrets.TEST_USER_PW }}" > .env
 
       - name: Install Client Dependencies
         working-directory: ./client
