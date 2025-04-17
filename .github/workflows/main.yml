@@ -70,6 +70,14 @@ jobs:
           # Give the server time to start
           sleep 5
       
+      - name: Remove Database in the server
+        working-directory: ./server
+        run: npx ts-node scripts/remove_db.ts mongodb://127.0.0.1:27017/fake_so
+      
+      - name: Insert Sample Data in the server
+        working-directory: ./server
+        run: npx ts-node scripts/populate_db.ts mongodb://127.0.0.1:27017/fake_so
+      
       - name: Start Client in Background
         working-directory: ./client
         run: |
