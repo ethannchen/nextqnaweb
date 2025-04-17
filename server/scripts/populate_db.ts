@@ -3,7 +3,7 @@
 // Pass URL of your mongoDB instance as first argument(e.g., mongodb://127.0.0.1:27017/fake_so)
 
 import mongoose from "mongoose";
-
+import path from "path";
 import Answer from "../models/answers";
 import Question from "../models/questions";
 import Tag from "../models/tags";
@@ -31,7 +31,7 @@ import { users } from "../data/users";
 import { IComment } from "../types/types";
 import dotenv from "dotenv";
 
-dotenv.config();
+dotenv.config({ path: path.resolve(__dirname, "../.env") });
 console.log(
   "Loaded TEST_USER_PW:",
   process.env.TEST_USER_PW ? "✓" : "✗ (undefined)"
