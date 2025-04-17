@@ -84,13 +84,6 @@ jobs:
       - name: Run BDD Tests
         working-directory: ./client
         run: npm run test
-      
-      - name: Upload Cypress Screenshots
-        if: always()
-        uses: actions/upload-artifact@v4
-        with:
-          name: cypress-screenshots
-          path: client/cypress
 
       - name: Shutdown Server and Client
         run: |
