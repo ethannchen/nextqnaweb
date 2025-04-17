@@ -41,11 +41,16 @@ const getQuestionById = asyncHandler(async (req: Request, res: Response) => {
 
 const getQuestion = asyncHandler(async (req: Request, res: Response) => {
   const { order, search } = req.query;
-  const strategyFunction = strategies[order?.toString() || "newest"];
 
-  if (!strategyFunction) {
-    throw new BadRequestError("Invalid order");
-  }
+  // Use a whitelist of allowed order values
+  const allowedOrders = ["newest", "active", "unanswered"];
+
+  const orderString = order?.toString() || "newest";
+  const orderValue = allowedOrders.includes(orderString)
+    ? orderString
+    : "newest";
+
+  const strategyFunction = strategies[orderValue];
 
   // sort questions
   let questions = await strategyFunction();

@@ -300,6 +300,33 @@ describe("Question Controller", () => {
       expect(next).not.toHaveBeenCalled();
     });
 
+    it("should get questions with newest order when order is invalid", async () => {
+      // Arrange
+      req.query = {
+        order: "invalid_order",
+      };
+      const questionsData = [
+        mockQuestionData,
+        { ...mockQuestionData, _id: "60d21b4667d0d8992e610c86" },
+      ];
+
+      (strategies.newest as jest.Mock).mockResolvedValue(questionsData);
+
+      // Act
+      await questionController.getQuestion(
+        req as Request,
+        res as Response,
+        next
+      );
+
+      // Assert
+      expect(strategies.newest).toHaveBeenCalled();
+      expect(searchQuestion).not.toHaveBeenCalled();
+      expect(res.status).toHaveBeenCalledWith(200);
+      expect(res.json).toHaveBeenCalledWith(questionsData);
+      expect(next).not.toHaveBeenCalled();
+    });
+
     it("should get questions with active order", async () => {
       // Arrange
       req.query = {
@@ -352,26 +379,6 @@ describe("Question Controller", () => {
       expect(res.status).toHaveBeenCalledWith(200);
       expect(res.json).toHaveBeenCalledWith(questionsData);
       expect(next).not.toHaveBeenCalled();
-    });
-
-    it("should throw BadRequestError when order is invalid", async () => {
-      // Arrange
-      req.query = {
-        order: "invalid_order",
-      };
-
-      // Act
-      await questionController.getQuestion(
-        req as Request,
-        res as Response,
-        next
-      );
-
-      // Assert
-      expect(next).toHaveBeenCalledWith(expect.any(BadRequestError));
-      expect(next.mock.calls[0][0].message).toBe("Invalid order");
-      expect(res.status).not.toHaveBeenCalled();
-      expect(res.json).not.toHaveBeenCalled();
     });
 
     it("should filter questions by search query", async () => {

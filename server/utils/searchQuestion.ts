@@ -6,7 +6,14 @@ import { IQuestion } from "../types/types";
  * @returns array of tag names
  */
 function extractTags(search: string): string[] {
-  return [...search.matchAll(/\[([^\]]+)\]/g)].map((match) => match[1]);
+  const words = search.split(/\s+/);
+
+  // Filter words that start with '[', end with ']', and have length > 2
+  const tags = words.filter((word) => {
+    return word.startsWith("[") && word.endsWith("]") && word.length > 2;
+  });
+
+  return tags.map((tag) => tag.substring(1, tag.length - 1));
 }
 
 /**
@@ -15,11 +22,13 @@ function extractTags(search: string): string[] {
  * @returns array of words
  */
 function extractWords(search: string): string[] {
-  return search
-    .replace(/\[[^\]]+\]/g, "")
-    .trim()
-    .split(/\s+/)
-    .filter((word) => word !== "");
+  const words = search.split(/\s+/);
+
+  const filteredWords = words.filter((word) => {
+    return !word.includes("[") && !word.includes("]");
+  });
+
+  return filteredWords;
 }
 
 /**
