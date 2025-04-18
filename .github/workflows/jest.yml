@@ -2,7 +2,7 @@ name: Jest Test
 
 on:
   push:
-    branches: [main]
+    branches: [main, ci-ethan-fork]
 
   pull_request:
     branches: [main]
@@ -12,7 +12,6 @@ jobs:
     runs-on: self-hosted
     env:
       JWT_SECRET: ${{ secrets.JWT_SECRET }}
-      TEST_USER_PW: ${{ secrets.TEST_USER_PW }}
     defaults:
       run:
         working-directory: ./server
