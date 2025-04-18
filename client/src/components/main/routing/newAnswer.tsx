@@ -3,6 +3,14 @@ import PageClass, { PageClassProps } from ".";
 import NewAnswer from "../newAnswer/newAnswerView";
 import { IdFunctionType } from "../../../types/functionTypes";
 
+/**
+ * Interface defining the properties required to initialize a NewAnswerPageClass instance.
+ * Extends PageClassProps but specifies that qid and handleAnswer must be provided with
+ * specific types for this page class.
+ *
+ * @interface NewAnswerPageClassProps
+ * @extends {Omit<PageClassProps, "qid" | "handleAnswer">}
+ */
 interface NewAnswerPageClassProps
   extends Omit<PageClassProps, "qid" | "handleAnswer"> {
   qid: string;
@@ -17,7 +25,12 @@ export default class NewAnswerPageClass extends PageClass {
   qid: string;
   handleAnswer: IdFunctionType;
 
-  // the constructor needs to set the question id and the function to render the new answer for a question
+  /**
+   * Creates an instance of NewAnswerPageClass.
+   * Sets up the question ID and the function to render the new answer for a question.
+   *
+   * @param {NewAnswerPageClassProps} props - The properties required to initialize the new answer page
+   */
   constructor(props: NewAnswerPageClassProps) {
     super({
       search: props.search,
@@ -52,17 +65,28 @@ export default class NewAnswerPageClass extends PageClass {
       },
       handleDeleteAccount: function (): void {
         throw new Error("Function not implemented.");
-      }
+      },
     });
 
     this.qid = props.qid;
     this.handleAnswer = props.handleAnswer;
   }
 
+  /**
+   * Renders the NewAnswer component with the necessary props.
+   *
+   * @returns {React.ReactNode} The rendered NewAnswer component
+   */
   getContent(): React.ReactNode {
     return <NewAnswer qid={this.qid} handleAnswer={this.handleAnswer} />;
   }
 
+  /**
+   * Returns the identifier for the selected navigation item.
+   * This implementation returns an empty string, indicating no specific nav item is selected.
+   *
+   * @returns {string} The selected navigation item identifier (empty string in this implementation)
+   */
   getSelected(): string {
     return "";
   }

@@ -8,11 +8,14 @@ import { TagResponseType } from "../types/entityTypes";
  * @returns the list of tags with the number of questions associated with each tag
  */
 export const useTagPage = () => {
+  /**
+   * manage the state of the tag list on tag page
+   */
   const [tlist, setTlist] = useState<TagResponseType[]>([]);
 
   /**
    * the effect interacts with the tag service to fetch the tags with the number of questions associated with each tag.
-   * 
+   *
    * It has no dependencies and runs only once when the component renders.
    */
   useEffect(() => {

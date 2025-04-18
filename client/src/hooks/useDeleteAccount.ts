@@ -10,13 +10,24 @@ import { VoidFunctionType } from "../types/functionTypes";
  * @returns Delete account state and handlers
  */
 export const useDeleteAccount = (handleQuestions: VoidFunctionType) => {
+  /** The confirmation text input value ("DELETE" is required) */
   const [confirmText, setConfirmText] = useState("");
+  /** Error message for confirmation text field */
   const [confirmTextError, setConfirmTextError] = useState("");
+  /** Loading state during API call */
   const [loading, setLoading] = useState(false);
+  /** General error message */
   const [error, setError] = useState("");
 
+  /** Function to update user context after logout */
   const updateUser = useUserUpdate();
 
+  /**
+   * Validates the confirmation text input.
+   * Checks that the user has typed "DELETE" exactly to confirm their intention.
+   *
+   * @returns {boolean} True if confirmation text is valid, false otherwise
+   */
   const validateInputs = (): boolean => {
     setConfirmTextError("");
     setError("");
@@ -29,6 +40,14 @@ export const useDeleteAccount = (handleQuestions: VoidFunctionType) => {
     return true;
   };
 
+  /**
+   * Handles the account deletion process.
+   * Validates input, calls the API to delete the account, logs the user out,
+   * updates the user context, and navigates to the homepage.
+   *
+   * @async
+   * @returns {Promise<void>}
+   */
   const handleDelete = async () => {
     if (!validateInputs()) return;
 

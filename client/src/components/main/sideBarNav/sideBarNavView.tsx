@@ -3,7 +3,9 @@ import { useUser } from "../../../contexts/UserContext";
 import { VoidFunctionType } from "../../../types/functionTypes";
 import Box from "@mui/material/Box";
 
-// The type definition for the SideBarNav component props
+/**
+ * The type definition for the SideBarNav component props
+ */
 interface SideBarNavProps {
   selected?: string;
   handleQuestions: VoidFunctionType;
@@ -23,6 +25,9 @@ const SideBarNav = ({
   handleTags,
   handleProfile,
 }: SideBarNavProps) => {
+  /**
+   * read current user from context
+   */
   const currentUser = useUser();
 
   return (

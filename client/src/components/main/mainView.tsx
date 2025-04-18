@@ -3,7 +3,9 @@ import SideBarNav from "./sideBarNav/sideBarNavView";
 import PageClass from "./routing";
 import Box from "@mui/material/Box";
 
-// The type definition for the Main component props.
+/**
+ * The type definition for the Main component props.
+ */
 interface MainProps {
   page: PageClass;
   handleQuestions: () => void;
@@ -18,7 +20,12 @@ interface MainProps {
  * @param props contains the page object and handler functions
  * @returns the Main component.
  */
-const Main = ({ page, handleQuestions, handleTags, handleProfile }: MainProps) => {
+const Main = ({
+  page,
+  handleQuestions,
+  handleTags,
+  handleProfile,
+}: MainProps) => {
   return (
     <Box id="main" className="main">
       <SideBarNav

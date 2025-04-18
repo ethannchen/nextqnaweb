@@ -8,18 +8,38 @@ import { VoidFunctionType } from "../types/functionTypes";
  * @returns Change password state and handlers
  */
 export const useChangePassword = (handleProfile: VoidFunctionType) => {
+  /** Current password input value */
   const [currentPassword, setCurrentPassword] = useState("");
+  /** New password input value */
   const [newPassword, setNewPassword] = useState("");
+  /** Confirm password input value */
   const [confirmPassword, setConfirmPassword] = useState("");
 
+  // Validation error states
+  /** Error message for current password field */
   const [currentPasswordError, setCurrentPasswordError] = useState("");
+  /** Error message for new password field */
   const [newPasswordError, setNewPasswordError] = useState("");
+  /** Error message for confirm password field */
   const [confirmPasswordError, setConfirmPasswordError] = useState("");
 
+  // Form status states
+  /** Loading state during API call */
   const [loading, setLoading] = useState(false);
+  /** General error message */
   const [error, setError] = useState("");
+  /** Success message */
   const [success, setSuccess] = useState("");
 
+  /**
+   * Validates all input fields and sets appropriate error messages.
+   * Checks for:
+   * - Empty fields
+   * - Password length and complexity requirements
+   * - Password confirmation match
+   *
+   * @returns {boolean} True if all inputs are valid, false otherwise
+   */
   const validateInputs = (): boolean => {
     let isValid = true;
 
@@ -58,6 +78,14 @@ export const useChangePassword = (handleProfile: VoidFunctionType) => {
     return isValid;
   };
 
+  /**
+   * Handles form submission for password change.
+   * Validates inputs, calls the API, and manages success/error states.
+   * On success, clears the form and navigates back to profile after a delay.
+   *
+   * @async
+   * @returns {Promise<void>}
+   */
   const handleSubmit = async () => {
     if (!validateInputs()) return;
 

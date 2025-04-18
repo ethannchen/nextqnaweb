@@ -3,7 +3,20 @@ import { InputProps } from "../../../../types/pageTypes";
 import TextField from "@mui/material/TextField";
 import { Typography } from "@mui/material";
 
-// A generic reusble component for the input field of a form.
+/**
+ * A generic reusble component for the input field of a form.
+ *
+ * @param {InputProps} {
+ *   title - title of the input
+ *   hint - hint of the input
+ *   id - id of the input component
+ *   mandatory - if the input is mandatory, default to true
+ *   val - value of the input
+ *   setState - state setter of the input value
+ *   err - input error
+ * }
+ * @return the input component
+ */
 const Input = ({
   title,
   hint,

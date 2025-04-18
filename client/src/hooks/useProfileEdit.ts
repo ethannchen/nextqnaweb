@@ -9,24 +9,43 @@ import { VoidFunctionType } from "../types/functionTypes";
  * @returns Profile edit state and handlers
  */
 export const useProfileEdit = (handleProfile: VoidFunctionType) => {
+  /** Current logged-in user data from context */
   const currentUser = useUser();
+  /** Function to update user context with updated profile data */
   const updateUser = useUserUpdate();
 
+  // Form input states
+  /** Username input value */
   const [username, setUsername] = useState("");
+  /** Email input value */
   const [email, setEmail] = useState("");
+  /** Bio input value (optional) */
   const [bio, setBio] = useState("");
+  /** Website input value (optional) */
   const [website, setWebsite] = useState("");
 
+  // Validation error states
+  /** Error message for username field */
   const [usernameError, setUsernameError] = useState("");
+  /** Error message for email field */
   const [emailError, setEmailError] = useState("");
+  /** Error message for bio field */
   const [bioError, setBioError] = useState("");
+  /** Error message for website field */
   const [websiteError, setWebsiteError] = useState("");
 
+  // Form status states
+  /** Loading state during API call */
   const [loading, setLoading] = useState(false);
+  /** General error message */
   const [error, setError] = useState("");
+  /** Success message */
   const [success, setSuccess] = useState("");
 
-  // Initialize form with current user data
+  /**
+   * Effect hook to initialize form fields with current user data when component mounts or user changes.
+   * Populates the form fields with the current user's profile information.
+   */
   useEffect(() => {
     if (currentUser) {
       setUsername(currentUser.username || "");
@@ -36,6 +55,16 @@ export const useProfileEdit = (handleProfile: VoidFunctionType) => {
     }
   }, [currentUser]);
 
+  /**
+   * Validates all form input fields and sets appropriate error messages.
+   * Checks for:
+   * - Username: Required, 3-30 characters, alphanumeric + underscores only
+   * - Email: Required, valid email format
+   * - Bio: Optional, max 1000 characters
+   * - Website: Optional, valid URL format
+   *
+   * @returns {boolean} True if all inputs are valid, false otherwise
+   */
   const validateInputs = (): boolean => {
     let isValid = true;
 
@@ -88,6 +117,14 @@ export const useProfileEdit = (handleProfile: VoidFunctionType) => {
     return isValid;
   };
 
+  /**
+   * Handles form submission for profile update.
+   * Validates inputs, calls the API, updates user context on success,
+   * and navigates to profile page after a brief delay.
+   *
+   * @async
+   * @returns {Promise<void>}
+   */
   const handleSubmit = async () => {
     if (!validateInputs()) return;
 

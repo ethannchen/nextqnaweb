@@ -17,6 +17,9 @@ import { Typography } from "@mui/material";
  * @returns the NewQuestion component.
  */
 const NewQuestion = ({ handleQuestions }: NewQuestionProps) => {
+  /**
+   * use custom hook to manage the state of new question page
+   */
   const {
     title,
     setTitle,

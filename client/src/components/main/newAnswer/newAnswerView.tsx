@@ -16,6 +16,9 @@ import { Typography } from "@mui/material";
  * @returns the NewAnswer component
  */
 const NewAnswer = ({ qid, handleAnswer }: NewAnswerProps) => {
+  /**
+   * use custom hook to manage the state of new answer page
+   */
   const { text, setText, textErr, postAnswer } = useNewAnswer(
     qid,
     handleAnswer

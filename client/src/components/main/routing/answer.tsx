@@ -3,7 +3,12 @@ import PageClass, { PageClassProps } from ".";
 import AnswerPage from "../answerPage/answerPageView";
 import { VoidFunctionType } from "../../../types/functionTypes";
 
-// The type definition for the constructor parameter.
+/**
+ * The type definition for the constructor parameter.
+ *
+ * @interface AnswerPageClassProps
+ * @extends {(Omit<PageClassProps, "handleNewQuestion" | "handleNewAnswer">)}
+ */
 interface AnswerPageClassProps
   extends Omit<PageClassProps, "handleNewQuestion" | "handleNewAnswer"> {
   qid: string;
@@ -20,7 +25,7 @@ export default class AnswerPageClass extends PageClass {
   handleNewAnswer: VoidFunctionType;
 
   /**
-   * The constructor for the class set the question id, 
+   * The constructor for the class set the question id,
    * and the functions to render newly created questions and answers.
    * @param props The properties of the class.
    */
@@ -58,7 +63,7 @@ export default class AnswerPageClass extends PageClass {
       },
       handleDeleteAccount: function (): void {
         throw new Error("Function not implemented.");
-      }
+      },
     });
 
     this.qid = props.qid;
@@ -66,6 +71,11 @@ export default class AnswerPageClass extends PageClass {
     this.handleNewAnswer = props.handleNewAnswer;
   }
 
+  /**
+   * Renders the AnswerPage component with the necessary props.
+   *
+   * @returns {React.ReactNode} The rendered AnswerPage component
+   */
   getContent(): React.ReactNode {
     return (
       <AnswerPage
@@ -76,6 +86,12 @@ export default class AnswerPageClass extends PageClass {
     );
   }
 
+  /**
+   * Returns the identifier for the currently selected item.
+   * This implementation returns an empty string, suggesting no item is selected by default.
+   *
+   * @returns {string} The selected item identifier (empty string in this implementation)
+   */
   getSelected(): string {
     return "";
   }

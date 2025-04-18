@@ -7,6 +7,7 @@ import { AnswerType } from "../types/entityTypes";
  * @returns An object containing the handleVote function
  */
 export const useAnswerVote = () => {
+  /** read current user from context */
   const currentUser = useUser();
 
   /**
