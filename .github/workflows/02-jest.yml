@@ -1,11 +1,10 @@
 name: Jest Test
 
 on:
-  push:
-    branches: [main, ci-ethan-fork]
-
-  pull_request:
-    branches: [main]
+  workflow_run:
+    workflows: ["Eslint Test"]
+    types:
+      - completed
 
 jobs:
   "run-jest-tests":

@@ -1,0 +1,24 @@
+name: Eslint Test
+
+on:
+  push:
+    branches: [main, ci-ethan-fork]
+
+  pull_request:
+    branches: [main]
+
+jobs:
+  "run-eslint-tests":
+    runs-on: self-hosted
+
+    steps:
+      - name: Checkout Repository
+        uses: actions/checkout@v3
+
+      - name: Test Server Eslint
+        working-directory: ./server
+        run: npx eslint
+
+      - name: Test Client Eslint
+        working-directory: ./client
+        run: npx eslint
