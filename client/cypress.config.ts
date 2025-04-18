@@ -10,5 +10,10 @@ export default defineConfig({
       "cypress/e2e/**/*.cy.js", // For regular Cypress tests
     ],
     supportFile: false,
+
+    defaultCommandTimeout: 10000, // 10 seconds
+    pageLoadTimeout: 60000, // 60 seconds
+    requestTimeout: 10000,
+    responseTimeout: 30000,
   },
 });
