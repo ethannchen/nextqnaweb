@@ -105,7 +105,7 @@ When(
 );
 
 Then(
-  "The user should see all questions in the database that are unanswered in newest order",
+  "The user should see all questions in the database that are unanswered in the newest order",
   () => {
     cy.get(".postTitle").first().should("contain", newQuestion1.title);
   }
