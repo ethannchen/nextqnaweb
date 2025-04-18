@@ -79,11 +79,15 @@ export const useNewQuestion = (handleQuestions: VoidFunctionType) => {
       return;
     }
 
+    if (!currentUser) {
+      return;
+    }
+
     const question = {
       title: title,
       text: text,
       tags: tagObjects,
-      asked_by: currentUser!.username,
+      asked_by: currentUser.username,
       ask_date_time: new Date(),
     };
 

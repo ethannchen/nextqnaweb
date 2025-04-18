@@ -126,8 +126,12 @@ export const useAnswerView = ({
       return;
     }
 
+    if (!aid) {
+      return;
+    }
+
     try {
-      await commentAnswer(aid!, {
+      await commentAnswer(aid, {
         text: comment,
         commented_by: currentUser.email,
         comment_date_time: new Date().toISOString(),
