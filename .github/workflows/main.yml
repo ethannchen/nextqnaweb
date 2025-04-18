@@ -17,12 +17,11 @@ jobs:
       - name: Checkout code
         uses: actions/checkout@v3
 
-      # Install MongoDB
-      - name: Start MongoDB
-        uses: supercharge/mongodb-github-action@1.10.0
-        with:
-          mongodb-version: "6.0"
-          mongodb-port: 27017
+      # start MongoDB
+      - name: Start MongoDB via brew
+        run: |
+          brew services start mongodb-community@8.0
+          sleep 5
 
       # Install server dependencies and populate DB
       - name: Install server dependencies
@@ -48,13 +47,23 @@ jobs:
         run: npm install
 
       # Start client in background (if needed for the tests)
-      - name: Start client
+      - name: Start Client in Background
         working-directory: ./client
         run: |
-          npm start &
-          sleep 10
+          npm start > client.log 2>&1 &
+          echo $! > ../client_pid.txt
+
+      - name: Wait for Client to be Ready
+        run: |
+          npm install -g wait-on
+          wait-on http://localhost:3000
 
       # Run Cypress tests
       - name: Run Cypress tests
         working-directory: ./client
         run: npm run test
+
+      - name: Shutdown Server and Client
+        run: |
+          if [ -f server/server_pid.txt ]; then kill $(cat server/server_pid.txt); fi
+          if [ -f client_pid.txt ]; then kill $(cat client_pid.txt); fi
