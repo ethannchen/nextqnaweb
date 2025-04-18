@@ -55,7 +55,7 @@ jobs:
 
       - name: Run BDD Tests
         working-directory: ./client
-        run: npx cypress run
+        run: npx cypress run --headless --no-sandbox --disable-gpu
 
       - name: Upload Cypress Screenshots
         if: always()
