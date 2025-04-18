@@ -5,7 +5,9 @@
 import { REACT_APP_API_URL, api } from "./config";
 import { AnswerType } from "../types/entityTypes";
 
-// The base URL for the answers API
+/**
+ * The base URL for the answers API
+ */
 const ANSWER_API_URL = `${REACT_APP_API_URL}/answer`;
 
 /**

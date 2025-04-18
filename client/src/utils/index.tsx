@@ -16,12 +16,12 @@ const months: string[] = [
 /**
  * The function formats a date to a readable string format.
  * The format is as follows:
- * For a post posted on Day X, 
- * the post date should appear in seconds (if posted 0 mins. ago), 
- * minutes (if posted 0 hours ago), 
- * or hours (if posted less than 24 hours ago). 
+ * For a post posted on Day X,
+ * the post date should appear in seconds (if posted 0 mins. ago),
+ * minutes (if posted 0 hours ago),
+ * or hours (if posted less than 24 hours ago).
  * The displayed string should read "<Month><day> at <hh:min>"
- * after 24 hours of posting. 
+ * after 24 hours of posting.
  * Date should be displayed as "<Month><day>, <year> at <hh:min>"
  * if viewed after a year of posting.
  * @param date the posted date
@@ -49,6 +49,11 @@ const getMetaData = (date: Date): string => {
   }
 };
 
+/**
+ * helper method to get days display
+ * @param date - the date input
+ * @returns "0 day" within 10 days or "day" if equal to or longer than 10 days
+ */
 const getDateHelper = (date: Date): string => {
   const day = date.getDate();
   if (day < 10) {

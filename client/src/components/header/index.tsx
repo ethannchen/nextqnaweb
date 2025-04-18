@@ -6,6 +6,12 @@ import { Typography, Button, Link } from "@mui/material";
 import Box from "@mui/material/Box";
 import TextField from "@mui/material/TextField";
 
+/**
+ * Props used in the Header component
+ *
+ * @interface UpdatedHeaderProps
+ * @extends {HeaderProps}
+ */
 interface UpdatedHeaderProps extends HeaderProps {
   handleLogin: () => void;
   handleLogout: () => void;
@@ -17,7 +23,12 @@ interface UpdatedHeaderProps extends HeaderProps {
  * @param props with search string and handler functions
  * @returns the header component
  */
-const Header = ({ search, setQuestionPage, handleLogin, handleLogout }: UpdatedHeaderProps) => {
+const Header = ({
+  search,
+  setQuestionPage,
+  handleLogin,
+  handleLogout,
+}: UpdatedHeaderProps) => {
   /**
    * use the custom hook to manage state of search string and question page
    */
@@ -26,6 +37,9 @@ const Header = ({ search, setQuestionPage, handleLogin, handleLogout }: UpdatedH
     setQuestionPage
   );
 
+  /**
+   * read current user from context
+   */
   const currentUser = useUser();
 
   return (

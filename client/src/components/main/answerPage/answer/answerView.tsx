@@ -31,6 +31,9 @@ const Answer = ({
   aid,
   comments,
 }: AnswerProps) => {
+  /**
+   * use the custom hook to manage state of answer view
+   */
   const {
     voteCount,
     hasVoted,

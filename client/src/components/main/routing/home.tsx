@@ -8,6 +8,11 @@ import QuestionPage from "../questionPage/questionPageView";
  * based on a specific order and the search query.
  */
 export default class HomePageClass extends PageClass {
+  /**
+   * Renders the QuestionPage component with the necessary props.
+   *
+   * @returns {React.ReactNode} The rendered QuestionPage component
+   */
   getContent(): React.ReactNode {
     return (
       <QuestionPage
@@ -22,7 +27,11 @@ export default class HomePageClass extends PageClass {
     );
   }
 
-  // The tab questions tab in the sidebar must be selected
+  /**
+   * Returns the identifier for the currently selected item.
+   *
+   * @returns {string} The selected item identifier (empty string in this implementation)
+   */
   getSelected(): string {
     return "q";
   }

@@ -4,6 +4,11 @@ import DialogContent from "@mui/material/DialogContent";
 import DialogActions from "@mui/material/DialogActions";
 import Button from "@mui/material/Button";
 
+/**
+ * interface for the props of the login dialog component
+ *
+ * @interface LoginDialogProps
+ */
 interface LoginDialogProps {
   open: boolean;
   onClose: () => void;

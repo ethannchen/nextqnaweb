@@ -19,6 +19,9 @@ const QuestionHeader = ({
   setQuestionOrder,
   handleNewQuestion,
 }: QuestionHeaderProps) => {
+  /**
+   * use custom hook to manage the state of new question header page
+   */
   const { onAddQuestionClick, openDialog, setOpenDialog } =
     useQuestionHeader(handleNewQuestion);
 

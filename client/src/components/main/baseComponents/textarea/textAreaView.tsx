@@ -3,7 +3,20 @@ import { TextareaProps } from "../../../../types/pageTypes";
 import { Typography } from "@mui/material";
 import TextField from "@mui/material/TextField";
 
-// A generic component for a textarea input field in a form
+/**
+ * A generic component for a textarea input field in a form
+ *
+ * @param {TextareaProps} {
+ *   title - title of the text area
+ *   mandatory - if this field is mandatory, default to true
+ *   hint - hint for the text area
+ *   id - id of the text area component
+ *   val - value of the text area
+ *   setState - state setter for the value
+ *   err - text area error
+ * }
+ * @return the text area component
+ */
 const Textarea = ({
   title,
   mandatory = true,

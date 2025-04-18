@@ -3,7 +3,9 @@ import { ClickTagFunctionType } from "../../../../types/functionTypes";
 import Box from "@mui/material/Box";
 import { Typography } from "@mui/material";
 
-// The type definition for the props of the Tag component
+/**
+ * The type definition for the props of the Tag component
+ */
 interface TagProps {
   t: {
     name: string;

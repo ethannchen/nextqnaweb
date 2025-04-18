@@ -4,7 +4,9 @@
 
 import { REACT_APP_API_URL, api } from "./config";
 
-// The base URL for the auth API
+/**
+ * The base URL for the auth API
+ */
 const AUTH_API_URL = `${REACT_APP_API_URL}/auth`;
 
 interface LoginResponse {

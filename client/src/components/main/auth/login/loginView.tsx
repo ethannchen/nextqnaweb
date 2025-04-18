@@ -22,6 +22,9 @@ const LoginView: React.FC<LoginViewProps> = ({
   handleQuestions,
   handleSignup,
 }) => {
+  /**
+   * use custom hook to manage the state of login page
+   */
   const {
     email,
     setEmail,
