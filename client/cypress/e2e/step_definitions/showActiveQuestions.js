@@ -1,28 +1,6 @@
 // cucumber does not support typescript yet
-import {
-  Given,
-  When,
-  Then,
-  And,
-  Before,
-  After,
-} from "cypress-cucumber-preprocessor/steps";
+import { Given, When, Then, And } from "cypress-cucumber-preprocessor/steps";
 import { createQuestion, createAnswer } from "./sharedSteps";
-
-Before(() => {
-  cy.exec(
-    "npm run --prefix ../server remove_db mongodb://127.0.0.1:27017/fake_so"
-  );
-  cy.exec(
-    "npm run --prefix ../server populate_db mongodb://127.0.0.1:27017/fake_so"
-  );
-});
-
-After(() => {
-  cy.exec(
-    "npm run --prefix ../server remove_db mongodb://127.0.0.1:27017/fake_so"
-  );
-});
 
 const Q1_TITLE = "Programmatically navigate using React router";
 const Q2_TITLE =
