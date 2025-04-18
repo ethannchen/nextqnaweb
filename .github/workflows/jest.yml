@@ -1,0 +1,27 @@
+name: Jest Test
+
+on:
+  push:
+    branches: [main]
+
+  pull_request:
+    branches: [main]
+
+jobs:
+  "run-jest-tests":
+    runs-on: self-hosted
+    env:
+      JWT_SECRET: ${{ secrets.JWT_SECRET }}
+      TEST_USER_PW: ${{ secrets.TEST_USER_PW }}
+    defaults:
+      run:
+        working-directory: ./server
+    steps:
+      - name: Checkout Repository
+        uses: actions/checkout@v3
+
+      - name: Install Dependencies
+        run: npm install
+
+      - name: Run Tests
+        run: npm run test
