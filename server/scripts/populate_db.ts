@@ -2,7 +2,7 @@ import mongoose from "mongoose";
 import Answer from "../models/answers";
 import Question from "../models/questions";
 import Tag from "../models/tags";
-import { ITagDB, IAnswerDB, IQuestionDB, IUser } from "./script_types";
+import { ITagDB, IAnswerDB, IQuestionDB } from "./script_types";
 import {
   Q1_DESC,
   Q1_TXT,
