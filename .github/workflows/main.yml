@@ -2,38 +2,18 @@ name: CI
 
 on:
   push:
-    branches:
-      - main
-      - deploy
+    branches: [main]
 
   pull_request:
-    branches:
-      - deploy
-      - main
+    branches: [main]
 
 jobs:
-  "run-jest-tests":
-    runs-on: self-hosted
-    defaults:
-      run:
-        working-directory: ./server
-    steps:
-      - name: Checkout Repository
-        uses: actions/checkout@v3
-
-      - name: Install Dependencies
-        run: npm install
-
-      - name: Create .env file
-        run: |
-          echo "JWT_SECRET=${{ secrets.JWT_SECRET }}" | tr -d '\n' > .env
-          echo "TEST_USER_PW=${{ secrets.TEST_USER_PW }}" | tr -d '\n' >> .env
-
-      - name: Run Tests
-        run: npm run test
-
   "run-bdd-tests":
     runs-on: self-hosted
+    env:
+      JWT_SECRET: ${{ secrets.JWT_SECRET }}
+      TEST_USER_PW: ${{ secrets.TEST_USER_PW }}
+
     steps:
       - name: Checkout Repository
         uses: actions/checkout@v3
@@ -41,12 +21,6 @@ jobs:
       - name: Install Server Dependencies
         working-directory: ./server
         run: npm install
-      
-      - name: Create Server .env file
-        working-directory: ./server
-        run: |
-          echo "JWT_SECRET=${{ secrets.JWT_SECRET }}" | tr -d '\n' > .env
-          echo "TEST_USER_PW=${{ secrets.TEST_USER_PW }}" | tr -d '\n' >> .env
 
       - name: Install Client Dependencies
         working-directory: ./client
@@ -65,19 +39,9 @@ jobs:
         working-directory: ./server
         run: |
           NODE_ENV=test npx ts-node server.ts &
-          # Save the PID so we can kill the server later
           echo $! > ../server_pid.txt
-          # Give the server time to start
           sleep 5
-      
-      - name: Remove Database in the server
-        working-directory: ./server
-        run: npx ts-node scripts/remove_db.ts mongodb://127.0.0.1:27017/fake_so
-      
-      - name: Insert Sample Data in the server
-        working-directory: ./server
-        run: npx ts-node scripts/populate_db.ts mongodb://127.0.0.1:27017/fake_so
-      
+
       - name: Start Client in Background
         working-directory: ./client
         run: |
@@ -91,8 +55,8 @@ jobs:
 
       - name: Run BDD Tests
         working-directory: ./client
-        run: npm run test
-      
+        run: npx cypress run
+
       - name: Upload Cypress Screenshots
         if: always()
         uses: actions/upload-artifact@v4
@@ -103,4 +67,4 @@ jobs:
       - name: Shutdown Server and Client
         run: |
           if [ -f server/server_pid.txt ]; then kill $(cat server/server_pid.txt); fi
-          if [ -f client_pid.txt ]; then kill $(cat client_pid.txt); fi
+          if [ -f client/client_pid.txt ]; then kill $(cat client_pid.txt); fi
