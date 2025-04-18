@@ -27,6 +27,13 @@ function verifyUnansweredOrder() {
   });
 }
 
+function verifyNewUnansweredOrder() {
+  const newUnansweredOrder = [newQuestion2.title];
+  cy.get(".postTitle").each(($el, index, $list) => {
+    cy.wrap($el).should("contain", newUnansweredOrder[index]);
+  });
+}
+
 // Scenario: Show all unanswered questions in newest order
 //     Given The user has write access to the application "http://localhost:3000"
 //     And The user has logged in
@@ -107,6 +114,6 @@ When(
 Then(
   "The user should see all questions in the database that are unanswered in the newest order",
   () => {
-    cy.get(".postTitle").first().should("contain", newQuestion1.title);
+    verifyNewUnansweredOrder();
   }
 );
