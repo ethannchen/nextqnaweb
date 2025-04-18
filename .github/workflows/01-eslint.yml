@@ -2,7 +2,7 @@ name: Eslint Test
 
 on:
   push:
-    branches: [main, ci-ethan-fork]
+    branches: [main, cicd-ethan3]
 
   pull_request:
     branches: [main]
