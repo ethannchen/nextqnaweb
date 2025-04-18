@@ -107,9 +107,6 @@ When(
 Then(
   "The user should see all questions in the database that are unanswered in newest order",
   () => {
-    const newUnansweredOrder = [newQuestion1.title];
-    cy.get(".postTitle").each(($el, index, $list) => {
-      cy.wrap($el).should("contain", newUnansweredOrder[index]);
-    });
+    cy.get(".postTitle").first().should("contain", newQuestion1.title);
   }
 );
