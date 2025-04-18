@@ -151,6 +151,8 @@ And(
   "The user answers an existing question from the {string} page",
   (pageName) => {
     cy.contains(pageName).click();
+    // Wait for the question to load before proceeding
+    cy.contains(Q4_TITLE).should("exist");
     createAnswer({ title: Q4_TITLE }, newAnswer2);
   }
 );
