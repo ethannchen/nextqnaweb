@@ -5,7 +5,7 @@
 import { REACT_APP_API_URL, api } from "./config";
 import { TagResponseType } from "../types/entityTypes";
 
-// The base URL for the tags API
+/** The base URL for the tags API */
 const TAG_API_URL = `${REACT_APP_API_URL}/tag`;
 
 /**

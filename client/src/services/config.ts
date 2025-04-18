@@ -10,7 +10,7 @@ import axios, {
   AxiosResponse,
 } from "axios";
 
-// Base URL for the REST API of the server.
+/** Base URL for the REST API of the server. */
 const REACT_APP_API_URL =
   process.env.REACT_APP_API_URL || "http://localhost:8000";
 
