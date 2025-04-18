@@ -21,6 +21,9 @@ const QuestionPage = ({
   handleAnswer,
   handleNewQuestion,
 }: QuestionPageProps) => {
+  /**
+   * use custom hook to manage the state of question page
+   */
   const { qlist } = useQuestionPage({ order, search });
 
   return (

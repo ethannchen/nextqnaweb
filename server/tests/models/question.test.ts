@@ -8,7 +8,6 @@ import {
   IAnswerDocument,
   IQuestion,
   IQuestionDocument,
-  ITagDocument,
   IUserDocument,
 } from "../../types/types";
 
@@ -129,6 +128,19 @@ describe("Question Model", () => {
       expect(activity).toEqual(question.ask_date_time);
     });
 
+    it("should return the ask_date_time if Answer.getLatestAnswerDate returns nothing", async () => {
+      const question = new Question(mockQuestion);
+      // Mock the populate method
+      question.populate = jest.fn().mockReturnValue({
+        ...question,
+        answers: [{ ans_date_time: new Date("2022-01-01") }],
+      });
+      Answer.getLatestAnswerDate = jest.fn().mockResolvedValue(null);
+
+      const activity = await question.mostRecentActivity;
+      expect(activity).toEqual(question.ask_date_time);
+    });
+
     it("should return the latest answer date if there are answers", async () => {
       const question = new Question(mockQuestion);
       const latestDate = new Date("2023-01-01");
@@ -220,16 +232,12 @@ describe("Question Model", () => {
       expect(result.tags[1].name).toBe("react");
     });
 
-    it("should properly handle tag IDs when adding a question", async () => {
-      // Setup mock data
-      const mockTagIds = [
-        new mongoose.Types.ObjectId().toString(),
-        new mongoose.Types.ObjectId().toString(),
-      ];
+    it("should properly handle when a tag does not have id", async () => {
+      const tagId = new mongoose.Types.ObjectId();
 
       const mockTags = [
-        { _id: mockTagIds[0], name: "javascript", qcnt: 5 },
-        { _id: mockTagIds[1], name: "react", qcnt: 3 },
+        { name: "javascript", qcnt: 5 },
+        { _id: tagId.toString(), name: "react", qcnt: 3 },
       ];
 
       const mockQuestionData = {
@@ -243,51 +251,20 @@ describe("Question Model", () => {
         mostRecentActivity: new Date(),
       };
 
-      // Mock the save method
-      const savedQuestion = {
-        _id: new mongoose.Types.ObjectId(),
-        ...mockQuestionData,
-        tags: mockTagIds, // In the DB, tags are stored as IDs
-        ask_date_time: new Date(mockQuestionData.ask_date_time),
-        save: jest.fn().mockResolvedValue(true),
-      };
-
-      // Mock the Question constructor
-      jest
+      const saveSpy = jest
         .spyOn(Question.prototype, "save")
-        .mockImplementationOnce(() => Promise.resolve(savedQuestion));
+        .mockResolvedValueOnce(undefined as any);
 
-      // Mock the new Question() call
-      jest
-        .spyOn(Question.prototype, "constructor")
-        .mockImplementationOnce(() => savedQuestion as any);
-
-      // Use a more direct approach to mock the static method
-      const originalAddQuestion = Question.addQuestion;
-      Question.addQuestion = jest
-        .fn()
-        .mockImplementation(async (questionData) => {
-          // This simulates what the real addQuestion does internally
-          const tagIds = questionData.tags.map((t: any) => t._id);
-          const result = {
-            ...questionData,
-            _id: savedQuestion._id.toString(),
-            tags: questionData.tags, // Return the tags as they were to simulate the method's behavior
-          };
-          return result;
-        });
-
-      // Call the method being tested
       const result = await Question.addQuestion(mockQuestionData);
 
-      // Restore the original method
-      Question.addQuestion = originalAddQuestion;
+      // Restore the original save
+      saveSpy.mockRestore();
 
-      // Assertions
       expect(result).toBeDefined();
-      expect(result._id).toBeDefined();
-      expect(result.title).toBe(mockQuestionData.title);
-      expect(result.tags).toEqual(mockTags); // Tags should be returned as objects
+      expect(result.tags).toEqual([
+        { name: "javascript", qcnt: 5 },
+        { _id: tagId.toString(), name: "react", qcnt: 3 },
+      ]);
     });
 
     it("should handle errors when adding a question", async () => {
@@ -480,7 +457,6 @@ describe("Question Model", () => {
 
   describe("convertToIQuestion", () => {
     let mockQuestion: Partial<IQuestionDocument> | any;
-    let mockTags: Partial<ITagDocument>[];
     let mockAnswers: Partial<IAnswerDocument>[];
     let mockUsers: Partial<IUserDocument>[];
 
@@ -531,18 +507,6 @@ describe("Question Model", () => {
           mostRecentActivity: "2023-01-05T15:30:00Z",
         }),
       };
-
-      // Mock tag data
-      mockTags = [
-        {
-          _id: tagId1,
-          name: "javascript",
-        },
-        {
-          _id: tagId2,
-          name: "react",
-        },
-      ];
 
       const mockComments = [
         {
@@ -596,7 +560,7 @@ describe("Question Model", () => {
       ];
 
       // Create a more robust Tag.findById mock that doesn't rely on toString
-      Tag.findById = jest.fn().mockImplementation((id) => {
+      Tag.findById = jest.fn().mockImplementation(() => {
         // Create a generic mock tag that will work regardless of the ID format
         const mockTag = {
           _id: {
@@ -620,6 +584,7 @@ describe("Question Model", () => {
             const idStr = id?.toString() || "";
             return aIdStr === idStr;
           } catch (e) {
+            console.error("Error comparing IDs:", e);
             return false;
           }
         });
@@ -1272,296 +1237,6 @@ describe("Question Model", () => {
       expect(result.answers[0].comments[0].commented_by.username).toBe(
         "commenter1"
       );
-    });
-  });
-  // Add this to the convertToIQuestion test section in tests/models/question.test.ts
-
-  describe("convertToIQuestion", () => {
-    it("should convert a question document to IQuestion type with all related data", async () => {
-      // Create mocks for necessary dependencies
-      const mockTagObjects = [
-        {
-          _id: new mongoose.Types.ObjectId("60d21b4667d0d8992e610c86"),
-          name: "javascript",
-        },
-        {
-          _id: new mongoose.Types.ObjectId("60d21b4667d0d8992e610c87"),
-          name: "react",
-        },
-      ];
-
-      const mockCommentedBy = new mongoose.Types.ObjectId(
-        "60d21b4667d0d8992e610c88"
-      );
-
-      const mockAnswerObjects = [
-        {
-          _id: new mongoose.Types.ObjectId("60d21b4667d0d8992e610c89"),
-          text: "Answer 1",
-          ans_by: "user1",
-          ans_date_time: new Date("2023-01-01"),
-          votes: 5,
-          voted_by: ["user2@example.com", "user3@example.com"],
-          comments: [
-            {
-              _id: new mongoose.Types.ObjectId("60d21b4667d0d8992e610c8a"),
-              text: "Comment 1",
-              commented_by: mockCommentedBy,
-              comment_date_time: new Date("2023-01-02"),
-            },
-          ],
-        },
-      ];
-
-      const mockUserDocs = [
-        {
-          _id: mockCommentedBy,
-          username: "commenter1",
-        },
-      ];
-
-      // Mock Tag.findById
-      jest.spyOn(Tag, "findById").mockImplementation((id) => {
-        const tagObj = mockTagObjects.find(
-          (t) => t._id.toString() === id.toString()
-        );
-        return {
-          exec: jest.fn().mockResolvedValue(tagObj),
-        } as any;
-      });
-
-      // Mock Answer.findById
-      jest.spyOn(Answer, "findById").mockImplementation((id) => {
-        const ansObj = mockAnswerObjects.find(
-          (a) => a._id.toString() === id.toString()
-        );
-        return {
-          exec: jest.fn().mockResolvedValue(ansObj),
-        } as any;
-      });
-
-      // Mock User.find for getting commenter usernames
-      jest.spyOn(User, "find").mockImplementation(() => {
-        return {
-          select: jest.fn().mockReturnValue({
-            exec: jest.fn().mockResolvedValue(mockUserDocs),
-          }),
-        } as any;
-      });
-
-      // Create a question document with the mock IDs
-      const question = new Question({
-        _id: new mongoose.Types.ObjectId("60d21b4667d0d8992e610c8b"),
-        title: "Test Question",
-        text: "Test content",
-        tags: [mockTagObjects[0]._id, mockTagObjects[1]._id],
-        answers: [mockAnswerObjects[0]._id],
-        asked_by: "testuser",
-        ask_date_time: new Date("2023-01-01"),
-        views: 10,
-      });
-
-      // Set up mostRecentActivity virtual
-      const mockRecentActivity = new Date("2023-01-02");
-      question.toObject = jest.fn().mockReturnValue({
-        ...question,
-        mostRecentActivity: mockRecentActivity,
-      });
-
-      // Call the method being tested
-      const result = await question.convertToIQuestion();
-
-      // Verify the converted question structure
-      expect(result).toHaveProperty("_id", question._id.toString());
-      expect(result).toHaveProperty("title", "Test Question");
-      expect(result).toHaveProperty("text", "Test content");
-      expect(result).toHaveProperty("asked_by", "testuser");
-      expect(result).toHaveProperty("views", 10);
-      expect(result).toHaveProperty("mostRecentActivity", mockRecentActivity);
-
-      // Verify tags are correctly transformed
-      expect(result.tags).toHaveLength(2);
-      expect(result.tags[0]).toHaveProperty(
-        "_id",
-        mockTagObjects[0]._id.toString()
-      );
-      expect(result.tags[0]).toHaveProperty("name", "javascript");
-      expect(result.tags[1]).toHaveProperty(
-        "_id",
-        mockTagObjects[1]._id.toString()
-      );
-      expect(result.tags[1]).toHaveProperty("name", "react");
-
-      // Verify answers are correctly transformed
-      expect(result.answers).toHaveLength(1);
-      expect(result.answers[0]).toHaveProperty(
-        "_id",
-        mockAnswerObjects[0]._id.toString()
-      );
-      expect(result.answers[0]).toHaveProperty("text", "Answer 1");
-      expect(result.answers[0]).toHaveProperty("ans_by", "user1");
-      expect(result.answers[0]).toHaveProperty("votes", 5);
-    });
-
-    it("should handle questions with no answers", async () => {
-      // Create mocks for tags
-      const mockTagObjects = [
-        {
-          _id: new mongoose.Types.ObjectId("60d21b4667d0d8992e610c86"),
-          name: "javascript",
-        },
-      ];
-
-      // Mock Tag.findById
-      jest.spyOn(Tag, "findById").mockImplementation((id) => {
-        const tagObj = mockTagObjects.find(
-          (t) => t._id.toString() === id.toString()
-        );
-        return {
-          exec: jest.fn().mockResolvedValue(tagObj),
-        } as any;
-      });
-
-      // Create a question document with no answers
-      const question = new Question({
-        _id: new mongoose.Types.ObjectId("60d21b4667d0d8992e610c8b"),
-        title: "Test Question No Answers",
-        text: "Test content",
-        tags: [mockTagObjects[0]._id],
-        answers: [], // Empty answers array
-        asked_by: "testuser",
-        ask_date_time: new Date("2023-01-01"),
-        views: 5,
-      });
-
-      // Set up mostRecentActivity virtual to be same as ask_date_time since no answers
-      const mockAskDate = new Date("2023-01-01");
-      question.toObject = jest.fn().mockReturnValue({
-        ...question,
-        mostRecentActivity: mockAskDate,
-      });
-
-      // Call the method being tested
-      const result = await question.convertToIQuestion();
-
-      // Verify the converted question has the right structure
-      expect(result).toHaveProperty("_id", question._id.toString());
-      expect(result).toHaveProperty("title", "Test Question No Answers");
-      expect(result).toHaveProperty("answers", []);
-      expect(result).toHaveProperty("mostRecentActivity", mockAskDate);
-      expect(result.tags).toHaveLength(1);
-      expect(result.tags[0]).toHaveProperty("name", "javascript");
-    });
-    it("should sort answers by votes (descending) and then by date (most recent first)", async () => {
-      // Create mocks for tag
-      const mockTagObject = {
-        _id: new mongoose.Types.ObjectId("60d21b4667d0d8992e610c86"),
-        name: "javascript",
-      };
-
-      // Create multiple answer objects with different vote counts and dates
-      const mockAnswerObjects = [
-        {
-          _id: new mongoose.Types.ObjectId("60d21b4667d0d8992e610c89"),
-          text: "Answer with 3 votes, older",
-          ans_by: "user1",
-          ans_date_time: new Date("2023-01-01"), // Older
-          votes: 3,
-          voted_by: [
-            "user1@example.com",
-            "user2@example.com",
-            "user3@example.com",
-          ],
-          comments: [],
-        },
-        {
-          _id: new mongoose.Types.ObjectId("60d21b4667d0d8992e610c90"),
-          text: "Answer with 3 votes, newer",
-          ans_by: "user2",
-          ans_date_time: new Date("2023-01-05"), // Newer
-          votes: 3, // Same votes as first answer
-          voted_by: [
-            "user4@example.com",
-            "user5@example.com",
-            "user6@example.com",
-          ],
-          comments: [],
-        },
-        {
-          _id: new mongoose.Types.ObjectId("60d21b4667d0d8992e610c91"),
-          text: "Answer with 5 votes",
-          ans_by: "user3",
-          ans_date_time: new Date("2022-12-15"), // Oldest
-          votes: 5, // Highest votes
-          voted_by: [
-            "user1@example.com",
-            "user2@example.com",
-            "user3@example.com",
-            "user4@example.com",
-            "user5@example.com",
-          ],
-          comments: [],
-        },
-        {
-          _id: new mongoose.Types.ObjectId("60d21b4667d0d8992e610c92"),
-          text: "Answer with 1 vote",
-          ans_by: "user4",
-          ans_date_time: new Date("2023-01-10"), // Newest
-          votes: 1, // Lowest votes
-          voted_by: ["user1@example.com"],
-          comments: [],
-        },
-      ];
-
-      // Mock Tag.findById
-      jest.spyOn(Tag, "findById").mockImplementation(() => {
-        return {
-          exec: jest.fn().mockResolvedValue(mockTagObject),
-        } as any;
-      });
-
-      // Mock Answer.findById with a lookup map
-      const answerMap = new Map(
-        mockAnswerObjects.map((a) => [a._id.toString(), a])
-      );
-      jest.spyOn(Answer, "findById").mockImplementation((id) => {
-        return {
-          exec: jest.fn().mockResolvedValue(answerMap.get(id.toString())),
-        } as any;
-      });
-
-      // Create a question document with all the mock answers
-      const question = new Question({
-        _id: new mongoose.Types.ObjectId("60d21b4667d0d8992e610c8b"),
-        title: "Test Question with multiple answers",
-        text: "Test content for sorting",
-        tags: [mockTagObject._id],
-        answers: mockAnswerObjects.map((a) => a._id), // Include all answer IDs
-        asked_by: "testuser",
-        ask_date_time: new Date("2022-12-01"),
-        views: 20,
-      });
-
-      // Mock any needed virtuals
-      question.toObject = jest.fn().mockReturnValue({
-        ...question,
-        mostRecentActivity: new Date("2023-01-10"),
-      });
-
-      // Mock User.find for simplicity since we're not testing comments here
-      jest.spyOn(User, "find").mockImplementation(() => {
-        return {
-          select: jest.fn().mockReturnValue({
-            exec: jest.fn().mockResolvedValue([]),
-          }),
-        } as any;
-      });
-
-      // Call the method being tested
-      const result = await question.convertToIQuestion();
-
-      // Verify the answers array is correctly sorted
-      expect(result.answers).toHaveLength(4);
     });
   });
 });

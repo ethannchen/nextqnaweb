@@ -4,9 +4,24 @@
 
 import { REACT_APP_API_URL, api } from "./config";
 
-// The base URL for the auth API
+/**
+ * The base URL for the auth API
+ */
 const AUTH_API_URL = `${REACT_APP_API_URL}/auth`;
 
+/**
+ * Interface representing the response from a successful login request
+ *
+ * @interface LoginResponse
+ * @property {string} token - JWT authentication token
+ * @property {Object} user - User information
+ * @property {string} user.id - Unique identifier for the user
+ * @property {string} user.username - User's chosen username
+ * @property {string} user.email - User's email address
+ * @property {string} user.role - User's role/access level
+ * @property {string} [user.bio] - User's optional biography
+ * @property {string} [user.website] - User's optional website URL
+ */
 interface LoginResponse {
   token: string;
   user: {
@@ -19,6 +34,15 @@ interface LoginResponse {
   };
 }
 
+/**
+ * Interface representing the required credentials for user registration
+ *
+ * @interface SignupCredentials
+ * @property {string} username - Desired username
+ * @property {string} email - User's email address
+ * @property {string} password - User's chosen password
+ * @property {string} [role] - Optional user role (defaults to regular user if not specified)
+ */
 interface SignupCredentials {
   username: string;
   email: string;
@@ -26,6 +50,13 @@ interface SignupCredentials {
   role?: string;
 }
 
+/**
+ * Interface representing the required credentials for user login
+ *
+ * @interface LoginCredentials
+ * @property {string} email - User's email address
+ * @property {string} password - User's password
+ */
 interface LoginCredentials {
   email: string;
   password: string;

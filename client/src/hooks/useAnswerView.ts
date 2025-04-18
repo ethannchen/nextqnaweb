@@ -34,6 +34,7 @@ export const useAnswerView = ({
   AnswerProps,
   "votes" | "voted_by" | "handleVote" | "aid" | "comments"
 >) => {
+  /** read current user from context */
   const currentUser = useUser();
 
   /** State to store the current vote count */
@@ -60,7 +61,7 @@ export const useAnswerView = ({
   const [comment, setComment] = useState<string>("");
   const [commentErr, setCommentErr] = useState<string>("");
 
-  // Update hasVoted state when user or voters list changes
+  /** Update hasVoted state when user or voters list changes */
   useEffect(() => {
     if (currentUser && voters) {
       setHasVoted(voters.includes(currentUser.email));
@@ -125,8 +126,12 @@ export const useAnswerView = ({
       return;
     }
 
+    if (!aid) {
+      return;
+    }
+
     try {
-      await commentAnswer(aid!, {
+      await commentAnswer(aid, {
         text: comment,
         commented_by: currentUser.email,
         comment_date_time: new Date().toISOString(),

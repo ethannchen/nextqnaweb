@@ -1,17 +1,14 @@
-/* Add CSS */
-
-/* Add global CSS here */
-/* Add CSS stylesheet */
+/* global CSS file */
 
 * {
-    font-family: Arial, Helvetica, sans-serif;
+  font-family: Arial, Helvetica, sans-serif;
 }
 
 html {
-    height: 99%;
+  height: 99%;
 }
 
 body,
 #root {
-    height: 100%;
+  height: 100%;
 }

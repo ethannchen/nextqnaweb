@@ -13,7 +13,9 @@ export const useAnswerPage = (
   qid: string,
   handleNewAnswer: VoidFunctionType
 ) => {
+  /** read current user from context */
   const currentUser = useUser();
+  /** manage the state of current question */
   const [question, setQuestion] = useState<QuestionResponseType | null>(null);
   /** Whether to show the login-required dialog */
   const [openDialog, setOpenDialog] = useState(false);
@@ -39,6 +41,10 @@ export const useAnswerPage = (
     fetchData();
   }, [qid]);
 
+  /**
+   * handles on answer question click
+   * @returns directly if user not logged in, otherwise execute handleNewAnswer method
+   */
   const onAnswerQuestionClick = () => {
     if (!currentUser) {
       setOpenDialog(true);

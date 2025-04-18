@@ -15,10 +15,23 @@ export const useNewAnswer = (
   qid: string,
   handleAnswer: QuestionIdFunctionType
 ) => {
+  /** Current logged-in user data from context */
   const currentUser = useUser();
+  /** The answer text input value */
   const [text, setText] = useState<string>("");
+  /** Error message for the text field */
   const [textErr, setTextErr] = useState<string>("");
 
+  /**
+   * Validates the answer form and submits it to the API if valid.
+   * After successful creation, navigates back to the question page.
+   *
+   * Validation checks:
+   * - Answer text cannot be empty
+   *
+   * @async
+   * @returns {Promise<void>}
+   */
   const postAnswer = async () => {
     let isValid = true;
 
@@ -31,9 +44,13 @@ export const useNewAnswer = (
       return;
     }
 
+    if (!currentUser) {
+      return;
+    }
+
     const answer = {
       text: text,
-      ans_by: currentUser!.username,
+      ans_by: currentUser.username,
       ans_date_time: new Date(),
       votes: 0,
       voted_by: [],

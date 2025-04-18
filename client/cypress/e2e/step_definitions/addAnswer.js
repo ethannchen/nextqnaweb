@@ -1,4 +1,11 @@
-import { Given, When, Then, And } from "cypress-cucumber-preprocessor/steps";
+import {
+  Given,
+  When,
+  Then,
+  And,
+  Before,
+  After,
+} from "cypress-cucumber-preprocessor/steps";
 import {
   fillQuestionForm,
   fillAnswerForm,
@@ -55,6 +62,21 @@ function verifyActiveOrder() {
     cy.wrap($el).should("contain", qTitles[index]);
   });
 }
+
+Before(() => {
+  cy.exec(
+    "npm run --prefix ../server remove_db mongodb://127.0.0.1:27017/fake_so"
+  );
+  cy.exec(
+    "npm run --prefix ../server populate_db mongodb://127.0.0.1:27017/fake_so"
+  );
+});
+
+After(() => {
+  cy.exec(
+    "npm run --prefix ../server remove_db mongodb://127.0.0.1:27017/fake_so"
+  );
+});
 
 // Scenario: Unable to add a new answer if not logged in
 //     Given The user has read access to the application "http://localhost:3000"

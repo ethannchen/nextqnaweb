@@ -21,10 +21,20 @@ const AnswerPage = ({
   handleNewQuestion,
   handleNewAnswer,
 }: AnswerPageProps) => {
+  /**
+   * use custom hook to manage the state of answer page
+   */
   const { question, openDialog, setOpenDialog, onAnswerQuestionClick } =
     useAnswerPage(qid, handleNewAnswer);
+
+  /**
+   * use custom hook to manage the state of voting for an answer
+   */
   const handleVote = useAnswerVote();
 
+  /**
+   * do not render this component if question is null
+   */
   if (!question) {
     return null;
   }

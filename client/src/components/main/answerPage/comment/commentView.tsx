@@ -3,6 +3,12 @@ import Box from "@mui/material/Box";
 import { Typography } from "@mui/material";
 import { CommentType } from "../../../../types/entityTypes";
 
+/**
+ * Comment component to render answer comments
+ *
+ * @param {CommentType} comment
+ * @return the comment component
+ */
 const Comment = (comment: CommentType) => {
   return (
     <Box className="comment">

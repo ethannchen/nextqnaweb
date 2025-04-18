@@ -1,11 +1,4 @@
-import {
-  Given,
-  When,
-  Then,
-  And,
-  Before,
-  After,
-} from "cypress-cucumber-preprocessor/steps";
+import { Given, When, Then, And } from "cypress-cucumber-preprocessor/steps";
 
 // ========= COMMON STEPS =========
 Given("The application server is running at {string}", (url) => {

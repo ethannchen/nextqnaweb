@@ -9,7 +9,9 @@ import Button from "@mui/material/Button";
 import Box from "@mui/material/Box";
 import { Typography } from "@mui/material";
 
-// The type definition for the props of the TagPage component
+/**
+ * The type definition for the props of the TagPage component
+ */
 interface TagPageProps {
   clickTag: ClickTagFunctionType;
   handleNewQuestion: VoidFunctionType;
@@ -22,6 +24,9 @@ interface TagPageProps {
  * @returns the TagPage component
  */
 const TagPage = ({ clickTag, handleNewQuestion }: TagPageProps) => {
+  /**
+   * use custom hook to manage the state of the tag page
+   */
   const { tlist } = useTagPage();
 
   return (

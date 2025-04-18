@@ -22,8 +22,12 @@ const newAnswer = {
 
 function verifyUnansweredOrder() {
   const qTitleByUnanswered = [newQuestion2.title, newQuestion1.title];
-  cy.get(".postTitle").each(($el, index, $list) => {
-    cy.wrap($el).should("contain", qTitleByUnanswered[index]);
+
+  cy.get(".postTitle").then(($els) => {
+    const actualTitles = [...$els].map((el) => el.textContent?.trim());
+    expect(actualTitles.slice(0, qTitleByUnanswered.length)).to.deep.equal(
+      qTitleByUnanswered
+    );
   });
 }
 
@@ -107,9 +111,6 @@ When(
 Then(
   "The user should see all questions in the database that are unanswered in newest order",
   () => {
-    const newUnansweredOrder = [newQuestion1.title];
-    cy.get(".postTitle").each(($el, index, $list) => {
-      cy.wrap($el).should("contain", newUnansweredOrder[index]);
-    });
+    cy.get(".postTitle").first().should("contain", newQuestion1.title);
   }
 );

@@ -40,10 +40,7 @@ When("The user search for a string text {string}", (searchText) => {
 Then(
   "The user should see corresponding question {string} in the result in newest order",
   (question) => {
-    const qTitles = [question];
-    cy.get(".postTitle").each(($el, index, $list) => {
-      cy.wrap($el).should("contain", qTitles[index]);
-    });
+    cy.get(".postTitle").first().should("contain", question);
   }
 );
 
@@ -64,8 +61,9 @@ Then(
   "The user should see corresponding questions {string} in the result in newest order",
   (question) => {
     const questions = question.split(";").map((q) => q.trim());
-    cy.get(".postTitle").each(($el, index) => {
-      cy.wrap($el).should("contain", questions[index]);
+    cy.get(".postTitle").then(($els) => {
+      const actualTexts = [...$els].map((el) => el.textContent?.trim());
+      expect(actualTexts.slice(0, questions.length)).to.deep.equal(questions);
     });
   }
 );

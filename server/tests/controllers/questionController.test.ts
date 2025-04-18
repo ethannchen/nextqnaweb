@@ -8,7 +8,6 @@ import { strategies } from "../../utils/sortQuestion";
 import * as questionController from "../../controllers/questionController";
 
 // Mock express-async-handler
-// eslint-disable-next-line @typescript-eslint/no-explicit-any
 jest.mock("express-async-handler", () => (fn: any) => {
   return async (req: Request, res: Response, next: NextFunction) => {
     try {
