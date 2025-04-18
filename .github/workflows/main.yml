@@ -32,7 +32,7 @@ jobs:
         working-directory: ./server
         run: |
           npx ts-node scripts/remove_db.ts mongodb://127.0.0.1:27017/fake_so
-          npx ts-node scripts/populate_db.js mongodb://127.0.0.1:27017/fake_so
+          npx ts-node scripts/populate_db.ts mongodb://127.0.0.1:27017/fake_so
 
       # Start server in background
       - name: Start server
