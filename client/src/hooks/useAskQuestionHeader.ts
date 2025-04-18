@@ -13,14 +13,14 @@ import { VoidFunctionType } from "../types/functionTypes";
  * @returns {boolean} returns.openDialog - Whether the login-required dialog is open
  * @returns {Function} returns.setOpenDialog - Setter for the dialog open state
  */
-export const useQuestionHeader = (handleNewQuestion: VoidFunctionType) => {
+export const useAskQuestionHeader = (handleNewQuestion: VoidFunctionType) => {
   /** Current logged-in user data from context */
   const currentUser = useUser();
   /** Whether to show the login-required dialog */
   const [openDialog, setOpenDialog] = useState(false);
 
   /**
-   * Handles the "Add Question" button click.
+   * Handles the "Add a Question" button click.
    * If the user is not logged in, shows a login dialog.
    * Otherwise, navigates to the new question form.
    *

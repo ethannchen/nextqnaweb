@@ -5,7 +5,7 @@ import Button from "@mui/material/Button";
 import Box from "@mui/material/Box";
 import { Typography } from "@mui/material";
 import LoginDialog from "../../loginDialog/loginDialog";
-import { useQuestionHeader } from "../../../../hooks/useQuestionHeader";
+import { useAskQuestionHeader } from "../../../../hooks/useAskQuestionHeader";
 
 /**
  * A container component for th header of the page that displays a list of questions
@@ -23,7 +23,7 @@ const QuestionHeader = ({
    * use custom hook to manage the state of new question header page
    */
   const { onAddQuestionClick, openDialog, setOpenDialog } =
-    useQuestionHeader(handleNewQuestion);
+    useAskQuestionHeader(handleNewQuestion);
 
   return (
     <Box>

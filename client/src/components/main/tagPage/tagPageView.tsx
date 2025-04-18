@@ -8,6 +8,7 @@ import {
 import Button from "@mui/material/Button";
 import Box from "@mui/material/Box";
 import { Typography } from "@mui/material";
+import LoginDialog from "../loginDialog/loginDialog";
 
 /**
  * The type definition for the props of the TagPage component
@@ -27,7 +28,8 @@ const TagPage = ({ clickTag, handleNewQuestion }: TagPageProps) => {
   /**
    * use custom hook to manage the state of the tag page
    */
-  const { tlist } = useTagPage();
+  const { tlist, openDialog, setOpenDialog, onAddQuestionClick } =
+    useTagPage(handleNewQuestion);
 
   return (
     <>
@@ -38,7 +40,7 @@ const TagPage = ({ clickTag, handleNewQuestion }: TagPageProps) => {
         <Typography className="bold_title" variant="h5">
           All Tags
         </Typography>
-        <Button variant="contained" onClick={handleNewQuestion}>
+        <Button variant="contained" onClick={onAddQuestionClick}>
           Ask a Question
         </Button>
       </Box>
@@ -47,6 +49,7 @@ const TagPage = ({ clickTag, handleNewQuestion }: TagPageProps) => {
           <Tag key={idx} t={t} clickTag={clickTag} />
         ))}
       </Box>
+      <LoginDialog open={openDialog} onClose={() => setOpenDialog(false)} />
     </>
   );
 };
