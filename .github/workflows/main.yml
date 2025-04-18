@@ -1,37 +1,13 @@
-name: CI
+name: Cypress Tests
 
 on:
   push:
-    branches:
-      - main
-      - deploy
-
+    branches: [cicd-ethan]
   pull_request:
-    branches:
-      - deploy
-      - main
+    branches: [cicd-ethan]
+  workflow_dispatch: # Allows manual triggering of the workflow
 
 jobs:
-  "run-jest-tests":
-    runs-on: self-hosted
-    defaults:
-      run:
-        working-directory: ./server
-    steps:
-      - name: Checkout Repository
-        uses: actions/checkout@v3
-
-      - name: Install Dependencies
-        run: npm install
-
-      - name: Create .env file
-        run: |
-          echo "JWT_SECRET=${{ secrets.JWT_SECRET }}" | tr -d '\n' > .env
-          echo "TEST_USER_PW=${{ secrets.TEST_USER_PW }}" | tr -d '\n' >> .env
-
-      - name: Run Tests
-        run: npm run test
-
   "run-bdd-tests":
     runs-on: self-hosted
     steps:
@@ -41,13 +17,12 @@ jobs:
       - name: Install Server Dependencies
         working-directory: ./server
         run: npm install
-      
+
       - name: Create Server .env file
         working-directory: ./server
         run: |
           echo "JWT_SECRET=${{ secrets.JWT_SECRET }}" | tr -d '\n' > .env
           echo "TEST_USER_PW=${{ secrets.TEST_USER_PW }}" | tr -d '\n' >> .env
-
       - name: Install Client Dependencies
         working-directory: ./client
         run: npm install
@@ -56,34 +31,48 @@ jobs:
         run: |
           brew services start mongodb-community@8.0
           sleep 5
-      
+
       - name: Check MongoDB Status
         run: |
           nc -zv 127.0.0.1 27017
-
       - name: Start Server in Background
         working-directory: ./server
         run: |
           NODE_ENV=test npx ts-node server.ts &
           # Save the PID so we can kill the server later
-          echo $! > server_pid.txt
+          echo $! > ../server_pid.txt
           # Give the server time to start
           sleep 5
-      
+
+      - name: Remove Database in the server
+        working-directory: ./server
+        run: npx ts-node scripts/remove_db.ts mongodb://127.0.0.1:27017/fake_so
+
+      - name: Insert Sample Data in the server
+        working-directory: ./server
+        run: npx ts-node scripts/populate_db.ts mongodb://127.0.0.1:27017/fake_so
+
       - name: Start Client in Background
         working-directory: ./client
         run: |
           npm start > client.log 2>&1 &
           echo $! > ../client_pid.txt
-
       - name: Wait for Client to be Ready
         run: |
           npm install -g wait-on
           wait-on http://localhost:3000
 
-      - name: Run BDD Tests
+      - name: Run BDD Tests One by One
         working-directory: ./client
-        run: npm run test
+        run: |
+          # List all spec files
+          SPEC_FILES=$(find cypress/e2e -type f -name "*.cy.js" -o -name "*.cy.ts" -o -name "*.feature")
+
+          # Run each spec file individually
+          for spec in $SPEC_FILES; do
+            echo "Running test: $spec"
+            npx cypress run --spec "$spec"
+          done
 
       - name: Shutdown Server and Client
         run: |
