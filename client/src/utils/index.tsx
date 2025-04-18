@@ -1,3 +1,6 @@
+/**
+ * months string to be used in date and time display
+ */
 const months: string[] = [
   "Jan",
   "Feb",

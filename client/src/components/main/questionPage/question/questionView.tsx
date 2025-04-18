@@ -4,7 +4,6 @@ import { QuestionProps } from "../../../../types/pageTypes";
 import Box from "@mui/material/Box";
 import Button from "@mui/material/Button";
 import { Typography } from "@mui/material";
-import React from "react";
 
 /**
  * A component to display a question
