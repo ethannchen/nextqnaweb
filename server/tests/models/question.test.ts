@@ -8,10 +8,8 @@ import {
   IAnswerDocument,
   IQuestion,
   IQuestionDocument,
-  ITagDocument,
   IUserDocument,
 } from "../../types/types";
-import QuestionSchema from "../../models/schema/question";
 
 // Mock the dependencies
 jest.mock("../../models/tags");
@@ -459,7 +457,6 @@ describe("Question Model", () => {
 
   describe("convertToIQuestion", () => {
     let mockQuestion: Partial<IQuestionDocument> | any;
-    let mockTags: Partial<ITagDocument>[];
     let mockAnswers: Partial<IAnswerDocument>[];
     let mockUsers: Partial<IUserDocument>[];
 
@@ -510,18 +507,6 @@ describe("Question Model", () => {
           mostRecentActivity: "2023-01-05T15:30:00Z",
         }),
       };
-
-      // Mock tag data
-      mockTags = [
-        {
-          _id: tagId1,
-          name: "javascript",
-        },
-        {
-          _id: tagId2,
-          name: "react",
-        },
-      ];
 
       const mockComments = [
         {
@@ -575,7 +560,7 @@ describe("Question Model", () => {
       ];
 
       // Create a more robust Tag.findById mock that doesn't rely on toString
-      Tag.findById = jest.fn().mockImplementation((id) => {
+      Tag.findById = jest.fn().mockImplementation(() => {
         // Create a generic mock tag that will work regardless of the ID format
         const mockTag = {
           _id: {
@@ -599,6 +584,7 @@ describe("Question Model", () => {
             const idStr = id?.toString() || "";
             return aIdStr === idStr;
           } catch (e) {
+            console.error("Error comparing IDs:", e);
             return false;
           }
         });

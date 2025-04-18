@@ -36,7 +36,7 @@ export interface IAnswerDB {
   text: string;
   ans_by: string;
   ans_date_time: Date;
-  votes: Number;
+  votes: number;
   voted_by: string[];
   comments: IComment[];
 }
