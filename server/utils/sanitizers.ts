@@ -1,14 +1,18 @@
 /**
- * Utility functions for sanitizing user inputs
- * These functions validate and sanitize inputs, returning null if validation fails
+ * Utility functions for sanitizing and validating user inputs
+ * Provides consistent validation and sanitization for various input types
+ * @module sanitizers
  */
 
 /**
  * Sanitizes and validates a username
- * Must be 3-30 alphanumeric characters or underscores
+ * Ensures username follows required format rules:
+ * - 3-30 characters in length
+ * - Contains only alphanumeric characters and underscores
+ * - No spaces or special characters
  *
- * @param username - The username to sanitize
- * @returns The sanitized username or null if invalid
+ * @param {string|undefined} username - The username to sanitize
+ * @returns {string|null} The sanitized username or null if invalid
  */
 export const sanitizeUsername = (
   username: string | undefined
@@ -24,9 +28,10 @@ export const sanitizeUsername = (
 
 /**
  * Sanitizes and validates an email address
+ * Checks for proper email format and converts to lowercase
  *
- * @param email - The email to sanitize
- * @returns The sanitized email or null if invalid
+ * @param {string|undefined} email - The email to sanitize
+ * @returns {string|null} The sanitized email (lowercase) or null if invalid
  */
 export const sanitizeEmail = (email: string | undefined): string | null => {
   if (typeof email !== "string") return null;
@@ -40,10 +45,14 @@ export const sanitizeEmail = (email: string | undefined): string | null => {
 
 /**
  * Sanitizes and validates a password
- * Must be at least 8 characters with at least one letter and one number
+ * Ensures password meets security requirements:
+ * - At least 8 characters long
+ * - Contains at least one letter
+ * - Contains at least one number
+ * - May contain special characters
  *
- * @param password - The password to sanitize
- * @returns The sanitized password or null if invalid
+ * @param {string|undefined} password - The password to sanitize
+ * @returns {string|null} The sanitized password or null if invalid
  */
 export const sanitizePassword = (
   password: string | undefined
@@ -57,10 +66,11 @@ export const sanitizePassword = (
 };
 
 /**
- * Sanitizes text content to prevent XSS
+ * Sanitizes text content to prevent XSS attacks
+ * Escapes HTML special characters to prevent script injection
  *
- * @param text - The text to sanitize
- * @returns The sanitized text or empty string if undefined
+ * @param {string|undefined} text - The text to sanitize
+ * @returns {string} The sanitized text with HTML characters escaped, or empty string if undefined
  */
 export const sanitizeText = (text: string | undefined): string => {
   if (typeof text !== "string") return "";
@@ -74,10 +84,11 @@ export const sanitizeText = (text: string | undefined): string => {
 };
 
 /**
- * Validates a URL
+ * Validates a URL string
+ * Uses URL constructor to verify proper URL format
  *
- * @param url - The URL to validate
- * @returns The validated URL or null if invalid
+ * @param {string|undefined|null} url - The URL to validate
+ * @returns {string|null} The validated URL or null if invalid
  */
 export const validateUrl = (url: string | undefined | null): string | null => {
   if (!url) return null;

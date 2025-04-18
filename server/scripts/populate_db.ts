@@ -44,9 +44,10 @@ const db = mongoose.connection;
 db.on("error", console.error.bind(console, "MongoDB connection error:"));
 
 /**
- * an asynchronous function to create a tag in the Tags collection of the database
- * @param name tag name
- * @returns a promise that resolves to the tag object created in the database
+ * Creates a tag in the Tags collection
+ *
+ * @param name - The name of the tag to create
+ * @returns A promise that resolves to the created tag object
  */
 async function tagCreate(name: string): Promise<ITagDB> {
   const tagDoc = await new Tag({ name }).save();
@@ -60,11 +61,15 @@ async function tagCreate(name: string): Promise<ITagDB> {
 }
 
 /**
- * an asynchronous function to create an answer in the Answers collection of the database
- * @param text answer text
- * @param ans_by username of the user who answered the question
- * @param ans_date_time date and time when the answer was posted
- * @returns a promise that resolves to the answer object created in the database
+ * Creates an answer in the Answers collection
+ *
+ * @param text - The content of the answer
+ * @param ans_by - Username of the user who provided the answer
+ * @param ans_date_time - Date and time when the answer was posted
+ * @param votes - Optional vote count for the answer
+ * @param voted_by - Optional array of user emails who voted on the answer
+ * @param comments - Optional array of comments on the answer
+ * @returns A promise that resolves to the created answer object
  */
 function answerCreate(
   text: string,
@@ -87,15 +92,16 @@ function answerCreate(
 }
 
 /**
- * an asynchronous function to create a question in the Questions collection of the database
- * @param title question title
- * @param text question text
- * @param tags an array of tag objects
- * @param answers an array of answer objects
- * @param asked_by username of the user who asked the question
- * @param ask_date_time date and time when the question was posted
- * @param views number of views on the question
- * @returns a promise that resolves to the question object created in the database
+ * Creates a question in the Questions collection
+ *
+ * @param title - The title of the question
+ * @param text - The content of the question
+ * @param tags - Array of tag objects associated with the question
+ * @param answers - Array of answer objects associated with the question
+ * @param asked_by - Username of the user who asked the question
+ * @param ask_date_time - Date and time when the question was posted
+ * @param views - View count for the question
+ * @returns A promise that resolves to the created question object
  */
 function questionCreate(
   title: string,
@@ -123,7 +129,8 @@ function questionCreate(
 }
 
 /**
- * an asynchronous function to populate the database with tags, answers, and questions
+ * Main function to populate the database with sample data
+ * Creates users, tags, answers, and questions
  */
 const populate = async () => {
   try {

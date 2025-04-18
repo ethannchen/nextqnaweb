@@ -1,9 +1,17 @@
+/**
+ * Utility functions for searching questions by tags and text content
+ * These functions provide a flexible search mechanism for question filtering
+ * @module searchQuestion
+ */
+
 import { IQuestion } from "../types/types";
 
 /**
- * Extract tags from search text
- * @param search - search text
- * @returns array of tag names
+ * Extract tag references from search text
+ * Tags are identified by square brackets, e.g. [javascript]
+ *
+ * @param {string} search - The search text containing potential tag references
+ * @returns {string[]} Array of tag names without the brackets
  */
 function extractTags(search: string): string[] {
   const words = search.split(/\s+/);
@@ -17,9 +25,11 @@ function extractTags(search: string): string[] {
 }
 
 /**
- * Extract search words from search text
- * @param search - search text
- * @returns array of words
+ * Extract normal search words from search text
+ * Filters out tag references (words in square brackets)
+ *
+ * @param {string} search - The search text containing potential search words
+ * @returns {string[]} Array of search words (excluding tag references)
  */
 function extractWords(search: string): string[] {
   const words = search.split(/\s+/);
@@ -32,10 +42,12 @@ function extractWords(search: string): string[] {
 }
 
 /**
- * Helper method to filter question by tags
- * @param questions - questions to filter
- * @param tags - tags to be used for filtering
- * @returns filtered questions
+ * Filter questions by tags using AND logic
+ * Questions must contain ALL specified tags to be included in results
+ *
+ * @param {IQuestion[]} questions - Questions to filter
+ * @param {string[]} tags - Tag names to filter by
+ * @returns {IQuestion[]} Questions that contain all specified tags
  */
 function filterByTags(questions: IQuestion[], tags: string[]): IQuestion[] {
   const filteredQuestionsByTag = questions.filter(
@@ -54,10 +66,12 @@ function filterByTags(questions: IQuestion[], tags: string[]): IQuestion[] {
 }
 
 /**
- * Helper method to filter question by words
- * @param questions - questions to filter
- * @param words - words to be used for filtering
- * @returns filtered questions
+ * Filter questions by search words using OR logic
+ * Questions matching ANY of the search words in title or text will be included
+ *
+ * @param {IQuestion[]} questions - Questions to filter
+ * @param {string[]} words - Words to search for
+ * @returns {IQuestion[]} Questions containing any of the specified words
  */
 function filterByWords(questions: IQuestion[], words: string[]): IQuestion[] {
   const filteredQuestionsByWords = questions.filter((question) =>
@@ -73,10 +87,15 @@ function filterByWords(questions: IQuestion[], words: string[]): IQuestion[] {
 }
 
 /**
- * method to filter questions by search text and tags
- * @param questions - the questions to search from
- * @param search - search text
- * @returns filtered questions
+ * Search questions by text and tags using a combination of filters
+ * - If both tags and words are provided, returns questions matching ANY filter
+ * - If only tags are provided, returns questions matching ALL tags
+ * - If only words are provided, returns questions matching ANY word
+ * - If no search criteria, returns all questions unfiltered
+ *
+ * @param {IQuestion[]} questions - The collection of questions to search
+ * @param {string} search - Search text potentially containing words and tag references
+ * @returns {IQuestion[]} Filtered questions matching the search criteria
  */
 export function searchQuestion(
   questions: IQuestion[],

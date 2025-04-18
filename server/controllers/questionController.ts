@@ -6,6 +6,18 @@ import { strategies } from "../utils/sortQuestion";
 import { BadRequestError, NotFoundError } from "../utils/errorUtils";
 import asyncHandler from "express-async-handler";
 
+/**
+ * @route POST /addQuestion
+ * @description Adds a new question to the database
+ * @param {string} title - The title of the question
+ * @param {string} text - The text content of the question
+ * @param {Array<string>} tags - An array of tags associated with the question
+ * @param {string} asked_by - The username of the person asking the question
+ * @param {string} ask_date_time - The date and time when the question was asked
+ * @returns {200} JSON response with the added question if successful
+ * @returns {400} JSON error if required fields are missing
+ * @returns {500} JSON error if there is an internal server error
+ */
 const addQuestion = asyncHandler(async (req: Request, res: Response) => {
   const { title, text, tags, asked_by, ask_date_time } = req.body;
   if (!title || !text || !tags || !asked_by || !ask_date_time) {

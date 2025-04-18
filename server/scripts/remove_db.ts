@@ -9,6 +9,11 @@ mongoose.connect(mongoDB);
 const db = mongoose.connection;
 db.on("error", console.error.bind(console, "MongoDB connection error:"));
 
+/**
+ * Clears the connected database by dropping it entirely
+ *
+ * @returns A Promise that resolves when the database has been dropped
+ */
 const clearDatabase = async (): Promise<void> => {
   try {
     await db.dropDatabase();

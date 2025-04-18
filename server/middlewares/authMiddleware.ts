@@ -19,6 +19,14 @@ declare module "express" {
   }
 }
 
+/**
+ * Authentication middleware that verifies JWT tokens from request headers
+ *
+ * @param req - Express request object
+ * @param res - Express response object
+ * @param next - Express next function
+ * @throws {UnauthorizedError} If token is missing, invalid, or user not found
+ */
 export const authenticate = asyncHandler(
   async (req: Request, res: Response, next: NextFunction) => {
     // Get token from header
@@ -51,7 +59,14 @@ export const authenticate = asyncHandler(
   }
 );
 
-// Middleware to check if user is admin
+/**
+ * Middleware to verify user has admin role
+ *
+ * @param req - Express request object
+ * @param res - Express response object
+ * @param next - Express next function
+ * @throws {ForbiddenError} If user is not an admin
+ */
 export const isAdmin = (req: Request, res: Response, next: NextFunction) => {
   if (req.user && req.user.role === "admin") {
     next();
