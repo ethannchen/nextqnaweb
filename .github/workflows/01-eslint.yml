@@ -17,8 +17,12 @@ jobs:
 
       - name: Test Server Eslint
         working-directory: ./server
-        run: npx eslint
+        run: |
+          npm i eslint
+          npx eslint
 
       - name: Test Client Eslint
         working-directory: ./client
-        run: npx eslint
+        run: |
+          npm i eslint
+          npx eslint
