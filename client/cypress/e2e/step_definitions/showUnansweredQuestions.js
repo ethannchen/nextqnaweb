@@ -22,12 +22,8 @@ const newAnswer = {
 
 function verifyUnansweredOrder() {
   const qTitleByUnanswered = [newQuestion2.title, newQuestion1.title];
-
-  cy.get(".postTitle").then(($els) => {
-    const actualTitles = [...$els].map((el) => el.textContent?.trim());
-    expect(actualTitles.slice(0, qTitleByUnanswered.length)).to.deep.equal(
-      qTitleByUnanswered
-    );
+  cy.get(".postTitle").each(($el, index, $list) => {
+    cy.wrap($el).should("contain", qTitleByUnanswered[index]);
   });
 }
 
