@@ -4,7 +4,12 @@ import { AppError } from "../utils/errorUtils";
 
 /**
  * Central error handling middleware
- * This middleware should be registered after all routes
+ * Processes different types of errors and returns appropriate HTTP responses
+ *
+ * @param err - Error or AppError object
+ * @param req - Express request object
+ * @param res - Express response object
+ * @param next - Express next function (unused but required by Express)
  */
 export const errorHandler = (
   err: Error | AppError,

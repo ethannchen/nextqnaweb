@@ -64,6 +64,9 @@ export interface ITag {
  * A type representing a tag document schema in the tags collection
  * except the _id field, which is explicitly defined to have the type
  * mongoose.Types.ObjectId
+ * @extends {Omit<mongoose.Document, "_id">}
+ * @extends {Omit<ITagDB, "_id">}
+ * @property {mongoose.Types.ObjectId} _id - The unique identifier for the tag document
  */
 export interface ITagDocument
   extends Omit<mongoose.Document, "_id">,
@@ -156,10 +159,10 @@ export interface IAnswerModel extends mongoose.Model<IAnswerDocument> {
 /**
  * A type representing a model for a comment for the answer
  *
- * @property _id - the comment id
- * @property text - the comment text
- * @property commented_by: the user who post the comment
- * @property comment_date_time: the date and time of the comment
+ * @property {mongoose.Types.ObjectId} _id - The comment id
+ * @property {string} text - The comment text
+ * @property {mongoose.Types.ObjectId} commented_by - The user who posted the comment
+ * @property {Date} comment_date_time - The date and time of the comment
  */
 export interface IComment {
   _id?: mongoose.Types.ObjectId;
@@ -170,7 +173,15 @@ export interface IComment {
 
 /**
  * A type representing an answer document schema in the answers collection
- * except the _id field, which is explicitly defined to have the type
+ * except the _id field, which is explicitly defined to have the type mongoose.Types.ObjectId
+ *
+ * @extends {Omit<mongoose.Document, "_id">}
+ * @extends {Omit<IAnswerDB, "_id">}
+ * @property {mongoose.Types.ObjectId} _id - The unique identifier of the answer
+ * @property {boolean} hasUserVoted - A method that checks if a user has voted for this answer
+ * @property {Promise<void>} vote - A method that adds a user's vote to the answer
+ * @property {Promise<void>} unvote - A method that removes a user's vote from the answer
+ * @property {Promise<void>} addComment - A method that adds a comment to the answer
  */
 export interface IAnswerDocument
   extends Omit<mongoose.Document, "_id">,
@@ -208,6 +219,17 @@ export interface IUser {
 /**
  * A type representing a user document schema in the users collection
  * except the _id field, which is explicitly defined to have the type mongoose.Types.ObjectId
+ *
+ * @extends {mongoose.Document}
+ * @property {mongoose.Types.ObjectId} _id - The unique identifier of the user
+ * @property {string} username - The username of the user
+ * @property {string} email - The email address of the user
+ * @property {string} password - The hashed password of the user
+ * @property {string} role - The role of the user (user or admin)
+ * @property {string} bio - Optional user biography
+ * @property {string} website - Optional user website URL
+ * @property {Date} createdAt - The date when the user account was created
+ * @property {Promise<boolean>} comparePassword - A method that compares a candidate password with the stored hashed password
  */
 export interface IUserDocument extends mongoose.Document {
   _id: mongoose.Types.ObjectId;
@@ -227,9 +249,13 @@ export interface IUserDocument extends mongoose.Document {
  * A type representing the model for the users collection
  * The interface also defines static methods for the model
  *
- * @property findByEmail - An async method that finds a user by email
- * @property findByUsername - An async method that finds a user by username
- * @property createUser - An async method that creates a new user
+ * @property {Promise<IUserDocument | null>} findByEmail - An async method that finds a user by email
+ * @property {Promise<IUserDocument | null>} findByUsername - An async method that finds a user by username
+ * @property {Promise<IUserDocument>} createUser - An async method that creates a new user
+ * @property {Promise<IUserDocument>} addNewUser - An async method that handles the complete user registration process
+ * @property {Promise<IUserDocument>} updateProfile - An async method that updates a user's profile information
+ * @property {Promise<IUserDocument>} changePassword - An async method that changes a user's password
+ * @property {Promise<IUserDocument>} deleteUser - An async method that deletes a user account
  */
 export interface IUserModel extends mongoose.Model<IUserDocument> {
   findByEmail(email: string): Promise<IUserDocument | null>;
@@ -250,6 +276,15 @@ export interface IUserModel extends mongoose.Model<IUserDocument> {
 
 /**
  * Log entry structure containing request and response information
+ *
+ * @property {Date} timestamp - The time when the log entry was created
+ * @property {string} method - The HTTP method of the request (GET, POST, etc.)
+ * @property {string} path - The requested URL path
+ * @property {string} ip - The IP address of the client
+ * @property {string} userId - Optional user ID if the request was authenticated
+ * @property {number} statusCode - Optional HTTP status code of the response
+ * @property {number} responseTime - Optional time taken to process the request in ms
+ * @property {string} userAgent - Optional user agent string from the request
  */
 export interface LogEntry {
   timestamp: Date;

@@ -10,13 +10,14 @@ import { BadRequestError } from "../utils/errorUtils";
 import asyncHandler from "express-async-handler";
 
 /**
- * A general middleware for sanitizing common inputs in requests
- * This replaces individual validation middlewares since OpenAPI validation
- * handles schema compliance checks
- *
- * @param req - Express request object
- * @param res - Express response object
- * @param next - Express next function
+ * Middleware for sanitizing and validating common input fields in requests
+ * @description Processes and sanitizes common user input fields (username, email, password, bio, website)
+ * from the request body. Throws appropriate error if validation fails. Replaces individual validation
+ * middlewares since OpenAPI validation handles schema compliance checks.
+ * @param {Request} req - Express request object
+ * @param {Response} res - Express response object
+ * @param {NextFunction} next - Express next function
+ * @throws {BadRequestError} When validation of input fields fails
  */
 export const sanitizeInputMiddleware = asyncHandler(
   async (req: Request, res: Response, next: NextFunction) => {

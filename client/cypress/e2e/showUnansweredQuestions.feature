@@ -19,4 +19,4 @@ So that I can try to answer those questions
         And The user has created another new question
         And answers the new question
         When The user clicks on the "Unanswered" tab in the "Questions" page
-        Then The user should see all questions in the database that are unanswered in newest order
+        Then The user should see all questions in the database that are unanswered in the newest order

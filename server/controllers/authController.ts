@@ -8,8 +8,15 @@ import asyncHandler from "express-async-handler";
 dotenv.config();
 
 /**
- * Controller for user signup
- * Expects sanitized inputs from the sanitizeInputMiddleware
+ * @route POST /signup
+ * @description Registers a new user
+ * @param {string} username - The username of the new user
+ * @param {string} email - The email of the new user
+ * @param {string} password - The password of the new user
+ * @param {string} role - The role of the new user (e.g., "user", "admin")
+ * @returns {201} JSON response with success message
+ * @returns {400} JSON error if required fields are missing or if email/username already exists
+ * @returns {500} JSON error if there is an internal server error
  */
 export const signup = asyncHandler(async (req: Request, res: Response) => {
   const { username, email, password, role } = req.body;
@@ -37,8 +44,13 @@ export const signup = asyncHandler(async (req: Request, res: Response) => {
 });
 
 /**
- * Controller for user login
- * Expects sanitized inputs from the sanitizeInputMiddleware
+ * @route POST /login
+ * @description Authenticates a user and returns a JWT token
+ * @param {string} email - The email of the user
+ * @param {string} password - The password of the user
+ * @returns {200} JSON response with the JWT token and user data
+ * @returns {401} JSON error if credentials are invalid
+ * @returns {500} JSON error if there is an internal server error
  */
 export const login = asyncHandler(async (req: Request, res: Response) => {
   const { email, password } = req.body;

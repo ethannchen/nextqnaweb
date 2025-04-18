@@ -3,8 +3,11 @@ import { loggerService } from "../utils/loggerService";
 import asyncHandler from "express-async-handler";
 
 /**
- * Get all logs
- * Accessible only by admin users
+ * @route GET /logs
+ * @description Retrieves all logs with optional limit
+ * @param {number} limit - Optional limit for the number of logs to return
+ * @returns {200} JSON response with the count and logs
+ * @returns {500} JSON error if there is an internal server error
  */
 export const getLogs = asyncHandler(async (req: Request, res: Response) => {
   // Get all logs
@@ -21,8 +24,10 @@ export const getLogs = asyncHandler(async (req: Request, res: Response) => {
 });
 
 /**
- * Clear all logs
- * Accessible only by admin users
+ * @route DELETE /logs
+ * @description Clears all logs
+ * @returns {200} JSON response with a success message
+ * @returns {500} JSON error if there is an internal server error
  */
 export const clearLogs = asyncHandler(async (req: Request, res: Response) => {
   loggerService.clearLogs();

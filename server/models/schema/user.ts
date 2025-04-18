@@ -2,6 +2,20 @@ import mongoose from "mongoose";
 import bcrypt from "bcryptjs";
 import { IUser, IUserDocument, IUserModel } from "../../types/types";
 
+/**
+ * Schema for documents in the Users collection
+ *
+ * Defines the structure and behavior for user documents in the application.
+ * Contains user account information, authentication methods, and profile data.
+ *
+ * @property {String} username - Unique username for the user (required)
+ * @property {String} email - Unique email address for the user (required)
+ * @property {String} password - Hashed password for authentication (required)
+ * @property {String} role - User role for access control (enum: ['user', 'admin'], default: 'user')
+ * @property {String} bio - Optional user biography
+ * @property {String} website - Optional user website URL
+ * @property {Date} createdAt - When the user account was created (default: Date.now)
+ */
 const UserSchema = new mongoose.Schema<IUserDocument, IUserModel>(
   {
     username: { type: String, required: true, unique: true },
@@ -20,24 +34,45 @@ const UserSchema = new mongoose.Schema<IUserDocument, IUserModel>(
   { collection: "Users" }
 );
 
-// Instance method to compare password (used for authentication)
+/**
+ * Instance method to compare a candidate password with the stored hashed password
+ * Used for authentication during login
+ *
+ * @param {string} candidatePassword - The plaintext password to check
+ * @returns {Promise<boolean>} Promise resolving to true if passwords match, false otherwise
+ */
 UserSchema.methods.comparePassword = async function (
   candidatePassword: string
 ): Promise<boolean> {
   return await bcrypt.compare(candidatePassword, this.password);
 };
 
-// Static method to find a user by email
+/**
+ * Static method to find a user by email address
+ *
+ * @param {string} email - The email address to search for
+ * @returns {Promise<IUserDocument | null>} Promise resolving to the user document or null if not found
+ */
 UserSchema.statics.findByEmail = function (email: string) {
   return this.findOne({ email });
 };
 
-// Static method to find a user by username
+/**
+ * Static method to find a user by username
+ *
+ * @param {string} username - The username to search for
+ * @returns {Promise<IUserDocument | null>} Promise resolving to the user document or null if not found
+ */
 UserSchema.statics.findByUsername = function (username: string) {
   return this.findOne({ username });
 };
 
-// Static method to create a new user
+/**
+ * Static method to create a new user with password hashing
+ *
+ * @param {IUser} userData - The user data to create
+ * @returns {Promise<IUserDocument>} Promise resolving to the created user document
+ */
 UserSchema.statics.createUser = async function (userData: IUser) {
   // Hash the password before saving it
   const salt = await bcrypt.genSalt(10);
@@ -52,7 +87,14 @@ UserSchema.statics.createUser = async function (userData: IUser) {
   return newUser.save();
 };
 
-// Static method to handle the complete user addition process
+/**
+ * Static method to handle the complete user registration process
+ * Validates that username and email are unique before creating the user
+ *
+ * @param {IUser} userData - The user data to register
+ * @returns {Promise<IUserDocument>} Promise resolving to the created user document
+ * @throws {Error} If email is already registered or username is already taken
+ */
 UserSchema.statics.addNewUser = async function (userData: IUser) {
   // Check if the email already exists
   const existingUserByEmail = await this.findByEmail(userData.email);
@@ -76,7 +118,14 @@ UserSchema.statics.addNewUser = async function (userData: IUser) {
   return this.createUser(userDataWithDefaults);
 };
 
-// Static method to update a user profile
+/**
+ * Static method to update a user's profile information
+ *
+ * @param {string} userId - The ID of the user to update
+ * @param {Partial<IUser>} profileData - The profile data to update
+ * @returns {Promise<Object>} Promise resolving to the updated user data (without password)
+ * @throws {Error} If user not found, username already taken, or email already registered
+ */
 UserSchema.statics.updateProfile = async function (
   userId: string,
   profileData: Partial<IUser>
@@ -123,7 +172,16 @@ UserSchema.statics.updateProfile = async function (
   };
 };
 
-// Static method to change user password
+/**
+ * Static method to change a user's password
+ * Verifies the current password before allowing the change
+ *
+ * @param {string} userId - The ID of the user to update
+ * @param {string} currentPassword - The user's current password for verification
+ * @param {string} newPassword - The new password to set
+ * @returns {Promise<boolean>} Promise resolving to true if password was changed
+ * @throws {Error} If user not found, inputs missing, or current password incorrect
+ */
 UserSchema.statics.changePassword = async function (
   userId: string,
   currentPassword: string,
@@ -156,7 +214,13 @@ UserSchema.statics.changePassword = async function (
   return true;
 };
 
-// Static method to delete a user
+/**
+ * Static method to delete a user account
+ *
+ * @param {string} userId - The ID of the user to delete
+ * @returns {Promise<IUserDocument>} Promise resolving to the deleted user document
+ * @throws {Error} If user not found
+ */
 UserSchema.statics.deleteUser = async function (userId: string) {
   // Find and delete the user
   const deletedUser = await this.findByIdAndDelete(userId);

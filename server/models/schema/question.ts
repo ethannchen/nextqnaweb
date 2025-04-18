@@ -11,12 +11,19 @@ import Tag from "../tags";
 import User from "../users";
 
 /**
- * The schema for a document in the Question collection.
+ * Schema for documents in the Questions collection
  *
- * The schema is created using the constructor in mongoose.Schema class.
- * The schema is defined with two generic parameters: IQuestionDocument and IQuestionModel.
- * IQQuestionDocument is used to define the instance methods of the Question document.
- * IQuestionModel is used to define the static methods of the Question model.
+ * Defines the structure and behavior for question documents in the application.
+ * Contains core question data, references to related entities like answers and tags,
+ * and methods for common operations.
+ *
+ * @property {String} title - The question title (required)
+ * @property {String} text - The detailed content of the question (required)
+ * @property {mongoose.Types.ObjectId[]} tags - Array of references to Tag documents (required)
+ * @property {mongoose.Types.ObjectId[]} answers - Array of references to Answer documents (required)
+ * @property {String} asked_by - Username of the person who asked the question (required)
+ * @property {Date} ask_date_time - When the question was posted (required)
+ * @property {Number} views - Count of how many times the question has been viewed (required, default: 0)
  */
 const QuestionSchema = new mongoose.Schema<IQuestionDocument, IQuestionModel>(
   {
@@ -32,8 +39,9 @@ const QuestionSchema = new mongoose.Schema<IQuestionDocument, IQuestionModel>(
 );
 
 /**
- * An async method that increments the views of a question by 1
- * @returns the question object that has been saved
+ * Increments the views count of a question by 1
+ *
+ * @returns {Promise<IQuestionDocument>} Promise resolving to the updated question document
  */
 QuestionSchema.methods.incrementViews =
   async function (): Promise<IQuestionDocument> {
@@ -42,9 +50,10 @@ QuestionSchema.methods.incrementViews =
   };
 
 /**
- * An async method that adds an answer to a question
- * @param answerId - the id of the answer
- * @returns the question object that has been saved
+ * Adds an answer reference to the question's answers array if not already present
+ *
+ * @param {mongoose.Types.ObjectId} answerId - The ID of the answer to add
+ * @returns {Promise<IQuestionDocument>} Promise resolving to the updated question document
  */
 QuestionSchema.methods.addAnswer = async function (
   answerId: mongoose.Types.ObjectId
@@ -57,16 +66,19 @@ QuestionSchema.methods.addAnswer = async function (
 };
 
 /**
- * A boolean virtual property that indicates whether the question has answers
- * @returns a boolean indicating if the question has answers
+ * Virtual property that indicates whether the question has any answers
+ *
+ * @returns {boolean} True if the question has at least one answer, false otherwise
  */
 QuestionSchema.virtual("hasAnswers").get(function () {
   return this.answers.length > 0;
 });
 
 /**
- * A Date virtual property that represents the most recent answer on the question
- * @returns a Dare virtual property for the most recent answer
+ * Virtual property that represents the timestamp of the most recent activity on this question
+ * Either the ask_date_time if no answers, or the most recent answer's timestamp
+ *
+ * @returns {Promise<Date>} Promise resolving to the date of the most recent activity
  */
 QuestionSchema.virtual("mostRecentActivity").get(async function () {
   if (this.answers.length === 0) {
@@ -80,9 +92,10 @@ QuestionSchema.virtual("mostRecentActivity").get(async function () {
 });
 
 /**
- * An async method that adds a new question to the collection
- * @param question - the data of the new question
- * @returns the saved question
+ * Creates a new question in the database
+ *
+ * @param {IQuestion} question - The question data to add
+ * @returns {Promise<IQuestion>} Promise resolving to the created question
  */
 QuestionSchema.statics.addQuestion = async function (
   question: IQuestion
@@ -103,8 +116,9 @@ QuestionSchema.statics.addQuestion = async function (
 };
 
 /**
- * An async method that returns all questions in newest order
- * @returns all questions in newest order
+ * Retrieves all questions sorted by creation date (newest first)
+ *
+ * @returns {Promise<IQuestion[]>} Promise resolving to array of questions in newest-first order
  */
 QuestionSchema.statics.getNewestQuestions = async function (): Promise<
   IQuestion[]
@@ -114,8 +128,9 @@ QuestionSchema.statics.getNewestQuestions = async function (): Promise<
 };
 
 /**
- * An async method that returns all questions that have no answers
- * @returns all questions that have no answers
+ * Retrieves all questions that have no answers
+ *
+ * @returns {Promise<IQuestion[]>} Promise resolving to array of unanswered questions
  */
 QuestionSchema.statics.getUnansweredQuestions = async function (): Promise<
   IQuestion[]
@@ -128,8 +143,10 @@ QuestionSchema.statics.getUnansweredQuestions = async function (): Promise<
 };
 
 /**
- * An async method that returns all questions in active order
- * @returns all questions in active order
+ * Retrieves all questions sorted by most recent activity
+ * Activity is defined as either a new answer or the original question posting
+ *
+ * @returns {Promise<IQuestion[]>} Promise resolving to array of questions sorted by activity
  */
 QuestionSchema.statics.getActiveQuestions = async function (): Promise<
   IQuestion[]
@@ -148,9 +165,10 @@ QuestionSchema.statics.getActiveQuestions = async function (): Promise<
 };
 
 /**
- * An async method that finds a question by id and increments its views by 1
- * @param qid - the id of the question
- * @returns the question of that id or null if that id does not exist
+ * Finds a question by ID, increments its view count, and returns the populated question
+ *
+ * @param {string} qid - The question ID to find
+ * @returns {Promise<IQuestion | null>} Promise resolving to the found question or null
  */
 QuestionSchema.statics.findByIdAndIncrementViews = async function (
   qid: string
@@ -174,9 +192,10 @@ QuestionSchema.statics.findByIdAndIncrementViews = async function (
 };
 
 /**
- * convert the question document to IQuestion type
- * @param question - the question document
- * @returns the converted question of the IQuestion type
+ * Converts a Question document to the IQuestion interface format
+ * Populates tags and answers with their full data and prepares the question for client use
+ *
+ * @returns {Promise<IQuestion>} Promise resolving to the converted question
  */
 QuestionSchema.methods.convertToIQuestion =
   async function (): Promise<IQuestion> {

@@ -1,18 +1,18 @@
 import mongoose from "mongoose";
 
 /**
- * The types in this file are used to define the shape of the documents
- * in the database. These types are used to define the schema of a document
- * in the questions, answers, and tags collections.
+ * User document interface
+ * Defines the shape of user documents in the Users collection
  *
- * They are similar to the types defined in types.ts, but the id field is
- * explicitly defined to have the type mongoose.Types.ObjectId, which is
- * the type of the _id field used by Mongoose in a MongoDB document.
- *
- * These types are used only the scripts used to populate the database with
- * test data.
+ * @property _id - Optional MongoDB ObjectId for the user document
+ * @property username - Username for the user account
+ * @property email - Email address for the user account
+ * @property password - Hashed password for the user account
+ * @property role - Optional user role (default: 'user')
+ * @property bio - Optional user biography
+ * @property website - Optional user website URL
+ * @property createdAt - Optional creation date for the user account
  */
-
 export interface IUser {
   _id?: mongoose.Types.ObjectId;
   username: string;
@@ -24,6 +24,15 @@ export interface IUser {
   createdAt?: Date;
 }
 
+/**
+ * Comment interface
+ * Defines the shape of comment objects stored within answer documents
+ *
+ * @property _id - Optional MongoDB ObjectId for the comment
+ * @property text - Text content of the comment
+ * @property commented_by - MongoDB ObjectId reference to the user who made the comment
+ * @property comment_date_time - Date and time when the comment was posted
+ */
 export interface IComment {
   _id?: mongoose.Types.ObjectId;
   text: string;
@@ -31,6 +40,18 @@ export interface IComment {
   comment_date_time: Date;
 }
 
+/**
+ * Answer document interface
+ * Defines the shape of answer documents in the Answer collection
+ *
+ * @property _id - Optional MongoDB ObjectId for the answer document
+ * @property text - Text content of the answer
+ * @property ans_by - Username of the user who provided the answer
+ * @property ans_date_time - Date and time when the answer was posted
+ * @property votes - Number of votes for the answer
+ * @property voted_by - Array of user emails who voted on the answer
+ * @property comments - Array of comments on the answer
+ */
 export interface IAnswerDB {
   _id?: mongoose.Types.ObjectId;
   text: string;
@@ -41,6 +62,19 @@ export interface IAnswerDB {
   comments: IComment[];
 }
 
+/**
+ * Question document interface
+ * Defines the shape of question documents in the Question collection
+ *
+ * @property _id - Optional MongoDB ObjectId for the question document
+ * @property title - Title of the question
+ * @property text - Text content of the question
+ * @property tags - Array of tag objects associated with the question
+ * @property answers - Array of answer objects (or their IDs) associated with the question
+ * @property asked_by - Optional username of the user who asked the question
+ * @property ask_date_time - Date and time when the question was posted
+ * @property views - Number of views for the question
+ */
 export interface IQuestionDB {
   _id?: mongoose.Types.ObjectId;
   title: string;
@@ -52,6 +86,13 @@ export interface IQuestionDB {
   views: number;
 }
 
+/**
+ * Tag document interface
+ * Defines the shape of tag documents in the Tags collection
+ *
+ * @property _id - Optional MongoDB ObjectId for the tag document
+ * @property name - Name of the tag
+ */
 export interface ITagDB {
   _id?: mongoose.Types.ObjectId;
   name: string;
