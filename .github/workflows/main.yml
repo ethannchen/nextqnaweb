@@ -56,14 +56,14 @@ jobs:
       - name: Run BDD Tests One by One
         working-directory: ./client
         run: |
-        # List all spec files
-        SPEC_FILES=$(find cypress/e2e -type f -name "*.cy.js" -o -name "*.cy.ts" -o -name "*.feature")
+          # List all spec files
+          SPEC_FILES=$(find cypress/e2e -type f -name "*.cy.js" -o -name "*.cy.ts" -o -name "*.feature")
 
-        # Run each spec file individually
-        for spec in $SPEC_FILES; do
-          echo "Running test: $spec"
-          npx cypress run --spec "$spec"
-        done
+          # Run each spec file individually
+          for spec in $SPEC_FILES; do
+            echo "Running test: $spec"
+            npx cypress run --spec "$spec"
+          done
 
       - name: Upload Cypress Screenshots
         if: always()
