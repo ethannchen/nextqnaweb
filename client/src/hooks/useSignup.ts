@@ -8,20 +8,44 @@ import { VoidFunctionType } from "../types/functionTypes";
  * @returns Signup state and handlers
  */
 export const useSignup = (handleQuestions: VoidFunctionType) => {
+  // Form input states
+  /** Username input value */
   const [username, setUsername] = useState("");
+  /** Email input value */
   const [email, setEmail] = useState("");
+  /** Password input value */
   const [password, setPassword] = useState("");
+  /** Confirm password input value */
   const [confirmPassword, setConfirmPassword] = useState("");
 
+  // Validation error states
+  /** Error message for username field */
   const [usernameError, setUsernameError] = useState("");
+  /** Error message for email field */
   const [emailError, setEmailError] = useState("");
+  /** Error message for password field */
   const [passwordError, setPasswordError] = useState("");
+  /** Error message for confirm password field */
   const [confirmPasswordError, setConfirmPasswordError] = useState("");
 
+  // Form status states
+  /** Loading state during API call */
   const [loading, setLoading] = useState(false);
+  /** General error message */
   const [error, setError] = useState("");
+  /** Success message */
   const [success, setSuccess] = useState("");
 
+  /**
+   * Validates all form input fields and sets appropriate error messages.
+   * Checks for:
+   * - Username: Required, 3-30 characters, alphanumeric + underscores only
+   * - Email: Required, valid email format
+   * - Password: Required, min 8 characters, contains uppercase, lowercase, and number
+   * - Confirm password: Matches password
+   *
+   * @returns {boolean} True if all inputs are valid, false otherwise
+   */
   const validateInputs = (): boolean => {
     let isValid = true;
 
@@ -78,6 +102,14 @@ export const useSignup = (handleQuestions: VoidFunctionType) => {
     return isValid;
   };
 
+  /**
+   * Handles form submission for user signup.
+   * Validates inputs, calls the API to create the account,
+   * sets success message, and navigates to homepage after a delay.
+   *
+   * @async
+   * @returns {Promise<void>}
+   */
   const handleSubmit = async () => {
     if (!validateInputs()) return;
 

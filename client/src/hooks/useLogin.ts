@@ -10,15 +10,30 @@ import { VoidFunctionType } from "../types/functionTypes";
  * @returns Login state and handlers
  */
 export const useLogin = (handleQuestions: VoidFunctionType) => {
+  /** Email input value */
   const [email, setEmail] = useState("");
+  /** Password input value */
   const [password, setPassword] = useState("");
+  /** Error message for email field */
   const [emailError, setEmailError] = useState("");
+  /** Error message for password field */
   const [passwordError, setPasswordError] = useState("");
+  /** Loading state during API call */
   const [loading, setLoading] = useState(false);
+  /** General error message */
   const [error, setError] = useState("");
 
+  /** Function to update user context with logged-in user data */
   const updateUser = useUserUpdate();
 
+  /**
+   * Validates the login form inputs.
+   * Checks for:
+   * - Email format and presence
+   * - Password presence
+   *
+   * @returns {boolean} True if all inputs are valid, false otherwise
+   */
   const validateInputs = (): boolean => {
     let isValid = true;
 
@@ -45,6 +60,14 @@ export const useLogin = (handleQuestions: VoidFunctionType) => {
     return isValid;
   };
 
+  /**
+   * Handles form submission for login.
+   * Validates inputs, calls the login API, updates user context on success,
+   * and navigates to homepage.
+   *
+   * @async
+   * @returns {Promise<void>}
+   */
   const handleSubmit = async () => {
     if (!validateInputs()) return;
 
