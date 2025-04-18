@@ -44,9 +44,13 @@ export const useNewAnswer = (
       return;
     }
 
+    if (!currentUser) {
+      return;
+    }
+
     const answer = {
       text: text,
-      ans_by: currentUser!.username,
+      ans_by: currentUser.username,
       ans_date_time: new Date(),
       votes: 0,
       voted_by: [],
