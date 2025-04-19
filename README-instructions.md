@@ -70,6 +70,7 @@ $ npx cypress run
 # optionally
 $ npx cypress open
 ```
+<img width="483" alt="Screenshot 2025-04-18 at 10 28 05 PM" src="https://github.com/user-attachments/assets/d19a4ff4-abed-4bb0-9a4f-538e5b096bff" />
 
 ## Run the jest test cases
 ```bash
@@ -83,10 +84,12 @@ $ NODE_ENV=test npx jest </path/to/test-file>.test.js
 $ NODE_ENV=test npx jest tests/
 ```
 
+
 ## Generate the coverage report for jest tests
 ```bash
 $ NODE_ENV=test npx jest --coverage
 ```
+<img width="675" alt="Screenshot 2025-04-18 at 10 28 13 PM" src="https://github.com/user-attachments/assets/6104d1c6-ec93-4617-8c89-bb77647181ce" />
 
 ## Generate the CodeQL report for server
 ```bash
@@ -102,3 +105,10 @@ npx ts-node codeql-quick-stats.ts <path/to/report/report.sarif> -t
 npx ts-node codeql-quick-stats.ts <path/to/report/report.sarif> -n
 npx ts-node codeql-quick-stats.ts <path/to/report/report.sarif> -d
 ```
+<img width="674" alt="Screenshot 2025-04-18 at 10 28 25 PM" src="https://github.com/user-attachments/assets/d03d8c35-301a-4206-85b1-2b9b309135b9" />
+
+## Passed all CI workflows
+<img width="628" alt="Screenshot 2025-04-18 at 10 28 45 PM" src="https://github.com/user-attachments/assets/5868fdc1-4470-4628-b26a-c0486c09b64b" />
+<img width="631" alt="Screenshot 2025-04-18 at 10 28 52 PM" src="https://github.com/user-attachments/assets/47c34610-b269-4671-b858-f7e772eb7175" />
+<img width="632" alt="Screenshot 2025-04-18 at 10 28 58 PM" src="https://github.com/user-attachments/assets/89232c32-b6d0-4e11-bd8e-4c29910dd98d" />
+
