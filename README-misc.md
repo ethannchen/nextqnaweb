@@ -1,3 +1,3 @@
 ##
-Note: Dropped "Browse User Activity" due to time constraints and because we already have enough user stories.
+Note: Dropped "Browse User Activity" due to time constraints and because we already have enough user stories. Had confirmed with the professor and TAs.
 
