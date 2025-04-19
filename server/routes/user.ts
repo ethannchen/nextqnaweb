@@ -10,6 +10,11 @@ import { userLimiter } from "../middlewares/rateLimitMiddleware"; // Import user
 
 const router = express.Router();
 
+/**
+ * routes to create user profile and change password
+ * use middlewares to enable the rate limiter, authenticate
+ * and sanitize input
+ */
 router.put(
   "/profile",
   userLimiter,

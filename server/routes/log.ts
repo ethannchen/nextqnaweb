@@ -4,13 +4,13 @@ import { authenticate, isAdmin } from "../middlewares/authMiddleware";
 
 const router = express.Router();
 
-// Apply authentication and admin middleware to all log routes
+/**  Apply authentication and admin middleware to all log routes */
 router.use(authenticate, isAdmin);
 
-// Get all logs
+/**  Get all logs */
 router.get("/", getLogs);
 
-// Clear all logs
+/** Clear all logs */
 router.delete("/", clearLogs);
 
 export default router;

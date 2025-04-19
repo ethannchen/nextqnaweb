@@ -53,7 +53,6 @@ const AnswerPage = ({
         meta={getMetaData(new Date(question.ask_date_time))}
       />
       {question.answers.map((a, idx) => {
-        console.log(a);
         return (
           <Answer
             aid={a._id}

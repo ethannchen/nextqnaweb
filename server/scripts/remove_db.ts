@@ -1,5 +1,3 @@
-// Pass URL of your mongoDB instance as first argument
-
 import mongoose from "mongoose";
 const userArgs = process.argv.slice(2);
 const mongoDB = userArgs[0];

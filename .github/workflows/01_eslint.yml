@@ -2,10 +2,10 @@ name: Eslint Test
 
 on:
   push:
-    branches: [main, cicd-ethan3]
+    branches: [main, deploy]
 
   pull_request:
-    branches: [main]
+    branches: [main, deploy]
 
 jobs:
   "run-eslint-tests":

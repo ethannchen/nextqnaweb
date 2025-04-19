@@ -1,3 +1,7 @@
+/**
+ * This file includes example question title, text and answer titles
+ * for populating database and testing purposes
+ */
 const Q1_DESC = "Programmatically navigate using React router";
 const Q1_TXT =
   "the alert shows the proper index for the li clicked, and when I alert the variable within the last function Im calling, moveToNextImage(stepClicked), the same value shows but the animation isnt happening. This works many other ways, but Im trying to pass the index value of the list item clicked to use for the math to calculate.";
