@@ -43,8 +43,7 @@ const Header = ({
   const currentUser = useUser();
 
   return (
-    <Box id="header" className="header">
-      <Box></Box>
+    <Box id="header" className="header" >
       <Typography variant="h4" className="title">
         Fake Stack Overflow
       </Typography>
