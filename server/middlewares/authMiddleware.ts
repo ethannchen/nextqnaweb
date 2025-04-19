@@ -9,7 +9,9 @@ interface UserPayload {
   id: string;
 }
 
-// Extend the Express Request interface to include user property
+/**
+ * Extend the Express Request interface to include user property
+ */
 declare module "express" {
   interface Request {
     user?: {

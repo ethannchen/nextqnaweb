@@ -14,8 +14,8 @@ import DeleteAccountPageClass from "./deleteAccount";
 
 /**
  * build a corresponding page instance
- * @param param0 page name
- * @param parameters for the page class
+ * @param pageName - page name
+ * @param params - parameters for the page class
  * @returns an object of page class
  */
 export default function getPage({

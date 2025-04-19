@@ -156,7 +156,6 @@ export const useAnswerView = ({
       setComment("");
       setCommentErr("");
     } catch (error) {
-      console.error("Failed to post comment:", error);
       setCommentErr("Failed to post comment. Please try again.");
     }
   };

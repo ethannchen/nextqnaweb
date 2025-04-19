@@ -5,6 +5,9 @@ import { authLimiter } from "../middlewares/rateLimitMiddleware";
 
 const router = express.Router();
 
+/**
+ * routes to sign up and log in
+ */
 router.post("/signup", authLimiter, sanitizeInputMiddleware, signup);
 router.post("/login", authLimiter, sanitizeInputMiddleware, login);
 

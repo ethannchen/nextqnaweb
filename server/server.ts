@@ -28,7 +28,7 @@ const app: Express = express();
 
 app.set("trust proxy", 1);
 
-// The middleware function to allow cross-origin requests from the client URL.
+/**  The middleware function to allow cross-origin requests from the client URL. */
 app.use(
   cors({
     credentials: true,
@@ -36,20 +36,20 @@ app.use(
   })
 );
 
-// Apply general rate limiting to all requests
+/**  Apply general rate limiting to all requests */
 app.use(generalLimiter);
 
-// The middleware function to parse the request body.
+/**  The middleware function to parse the request body. */
 app.use(express.json());
 
-// Apply logging middleware to all requests
+/**  Apply logging middleware to all requests */
 app.use(loggerMiddleware);
 
-// Defining the path to the Open API specification file and parsing it.
+/**  Defining the path to the Open API specification file and parsing it. */
 const openApiPath = path.join(__dirname, "openapi.yaml");
 const openApiDocument = yaml.parse(fs.readFileSync(openApiPath, "utf8"));
 
-// Defining the Swagger UI options. Swagger UI renders the Open API specification file.
+/**  Defining the Swagger UI options. Swagger UI renders the Open API specification file. */
 const swaggerOptions = {
   customSiteTitle: "Fake Stack Overflow API Documentation",
   customCss:
@@ -61,14 +61,14 @@ const swaggerOptions = {
   },
 };
 
-// The middleware function to serve the Swagger UI with the Open API specification file.
+/** The middleware function to serve the Swagger UI with the Open API specification file. */
 app.use(
   "/api-docs",
   swaggerUi.serve,
   swaggerUi.setup(openApiDocument, swaggerOptions)
 );
 
-// The middleware function to validate the request and response against the Open API specification.
+/**  The middleware function to validate the request and response against the Open API specification. */
 app.use(
   middleware({
     apiSpec: openApiPath,
@@ -80,7 +80,7 @@ app.use(
   })
 );
 
-// Route handlers
+/**  Route handlers */
 app.use("/tag", tagRouter);
 app.use("/question", questionRouter);
 app.use("/answer", answerRouter);
@@ -88,14 +88,14 @@ app.use("/auth", authRouter);
 app.use("/user", userRouter);
 app.use("/logs", logRouter); // Add the logs router for admin users
 
-// Centralized error handling middleware
+/**  Centralized error handling middleware */
 app.use(errorHandler);
 
 const server: Server = app.listen(PORT, () => {
   console.log(`Server starts at http://localhost:${PORT}`);
 });
 
-// Gracefully shutdown the server and the database connection when the process is terminated.
+/**  Gracefully shutdown the server and the database connection when the process is terminated. */
 process.on("SIGINT", () => {
   server.close(() => {
     console.log("Server closed.");
