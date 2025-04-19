@@ -8,11 +8,13 @@
 - server: https://fakeso-server.onrender.com
 
 **Functional Features**
-1. Login 
+1. Signup
+   - sign up with required info
+2. Login 
    - Optionally, you can use `testuser` to login without signing up 
      - Username: testuser@test.com
      - Password: Ptestuser1
-2. Signup
+
 3. View/manage profile 
    - After login, click Profile tag on the sidebar 
    - Profile management options
